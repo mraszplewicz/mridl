@@ -1,0 +1,18 @@
+grammar pl.mrasoft.mridl.Mridl with org.eclipse.xtext.common.Terminals
+
+generate mridl "http://mrasoft.pl/mridl/Mridl"
+
+Mridl:
+	'namespace' nsUri=STRING
+	(operations+=Operation)*;
+
+Operation:
+	'operation' returnType=OperationParameter name=ID
+	'(' (params+=OperationParameter
+	(',' params+=OperationParameter)*)? ')';
+
+OperationParameter:
+	type=XsdBuiltinType name=ID;
+
+enum XsdBuiltinType:
+	string;
