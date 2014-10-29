@@ -6,21 +6,30 @@ import org.eclipse.xtext.generator.IGenerator
 import pl.mrasoft.mridl.mridl.Mridl
 import pl.mrasoft.mridl.mridl.Operation
 import pl.mrasoft.mridl.mridl.OperationParameter
+import org.eclipse.xtext.generator.IFileSystemAccessExtension2
 
 class MridlGenerator implements IGenerator {
 
-	static final val DSL_EXTENSION = "mridl"
+
 
 	override void doGenerate(Resource resource, IFileSystemAccess fsa) {
-		val modelName = fileNameWithoutExtension(resource.URI.lastSegment)
-		val model = resource.contents.head as Mridl
+		val modelName = resource.URI.trimFileExtension.lastSegment;
+		val model = resource.contents.head as Mridl 
+					
+		val pathWithoutExtension = resource.containingFolder(fsa) + "/" + modelName
 
-		fsa.generateFile(modelName + ".wsdl", model.wsdlFile(modelName))
-		fsa.generateFile(modelName + ".xsd", model.xsdFile(modelName))
+		fsa.generateFile(pathWithoutExtension + ".wsdl", model.wsdlFile(modelName))
+		fsa.generateFile(pathWithoutExtension + ".xsd", model.xsdFile(modelName))
 	}
-
-	def fileNameWithoutExtension(String fileName) {
-		fileName.substring(0, fileName.length - DSL_EXTENSION.length - 1)
+	
+	def containingFolder(Resource it, IFileSystemAccess fsa) {
+		//implementacja jest tak na prawde bledna, ale nie widze lepszego sposobu
+		val srcGenURI = (fsa as IFileSystemAccessExtension2).getURI(".")
+		val projectPath = srcGenURI.trimSegments(1).toString	
+		val filePath = URI.trimSegments(1).toString		
+		
+		val pathWithSrc = filePath.replaceFirst(projectPath, "");
+		pathWithSrc.substring(pathWithSrc.indexOf('/', 1) + 1)
 	}
 
 	def wsdlFile(Mridl it, String modelName) '''
