@@ -2,34 +2,40 @@ package pl.mrasoft.mridl.generator
 
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.generator.IFileSystemAccess
+import org.eclipse.xtext.generator.IFileSystemAccessExtension2
 import org.eclipse.xtext.generator.IGenerator
 import pl.mrasoft.mridl.mridl.Mridl
 import pl.mrasoft.mridl.mridl.Operation
 import pl.mrasoft.mridl.mridl.OperationParameter
-import org.eclipse.xtext.generator.IFileSystemAccessExtension2
 
 class MridlGenerator implements IGenerator {
 
-
+	final static val CLASSPATH_PREFIX = "classpath:/"
 
 	override void doGenerate(Resource resource, IFileSystemAccess fsa) {
 		val modelName = resource.URI.trimFileExtension.lastSegment;
-		val model = resource.contents.head as Mridl 
-					
+		val model = resource.contents.head as Mridl
+
 		val pathWithoutExtension = resource.containingFolder(fsa) + "/" + modelName
 
 		fsa.generateFile(pathWithoutExtension + ".wsdl", model.wsdlFile(modelName))
 		fsa.generateFile(pathWithoutExtension + ".xsd", model.xsdFile(modelName))
 	}
-	
+
 	def containingFolder(Resource it, IFileSystemAccess fsa) {
-		//implementacja jest tak na prawde bledna, ale nie widze lepszego sposobu
-		val srcGenURI = (fsa as IFileSystemAccessExtension2).getURI(".")
-		val projectPath = srcGenURI.trimSegments(1).toString	
-		val filePath = URI.trimSegments(1).toString		
+		val filePath = URI.trimSegments(1).toString
 		
-		val pathWithSrc = filePath.replaceFirst(projectPath, "");
-		pathWithSrc.substring(pathWithSrc.indexOf('/', 1) + 1)
+		if (filePath.startsWith(CLASSPATH_PREFIX)) {
+			//for unit testing
+			filePath.replaceFirst(CLASSPATH_PREFIX, "/")
+		} else {
+			//implementacja jest tak na prawde bledna, ale nie widze lepszego sposobu
+			val srcGenURI = (fsa as IFileSystemAccessExtension2).getURI(".")
+			val projectPath = srcGenURI.trimSegments(1).toString
+
+			val pathWithSrc = filePath.replaceFirst(projectPath, "");
+			pathWithSrc.substring(pathWithSrc.indexOf('/', 1) + 1)
+		}
 	}
 
 	def wsdlFile(Mridl it, String modelName) '''

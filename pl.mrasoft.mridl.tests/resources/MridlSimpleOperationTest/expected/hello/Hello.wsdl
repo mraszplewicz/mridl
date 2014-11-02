@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions name="Hello"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:tns="http://mrasoft.pl/mridl/examples"
+                  targetNamespace="http://mrasoft.pl/mridl/examples">		
+    <wsdl:types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema">
+            <import namespace="http://mrasoft.pl/mridl/examples" schemaLocation="Hello.xsd"/>
+        </schema>
+    </wsdl:types>
+	<wsdl:message name="sayHello2">
+		<wsdl:part element="tns:sayHello2" name="parameters"/>
+	</wsdl:message>	
+	<wsdl:message name="sayHello2Response">
+		<wsdl:part element="tns:sayHello2Response" name="parameters"/>
+	</wsdl:message>		    
+	<wsdl:portType name="Hello">
+		<wsdl:operation name="sayHello2">
+			<wsdl:input message="tns:sayHello2" name="sayHello2"/>
+			<wsdl:output message="tns:sayHello2Response" name="sayHello2Response"/>
+		</wsdl:operation>		    
+	</wsdl:portType>
+</wsdl:definitions>
