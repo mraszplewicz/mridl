@@ -8,7 +8,7 @@
 	<xs:complexType name="sayHello2">
 		<xs:sequence>
 			<xs:element name="text" type="xs:string"/>
-			<xs:element name="text2" type="xs:string"/>
+			<xs:element name="test" type="xs:int"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="sayHello2Response">
