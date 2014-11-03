@@ -6,7 +6,10 @@ import org.eclipse.xtext.generator.IFileSystemAccessExtension2
 import org.eclipse.xtext.generator.IGenerator
 import pl.mrasoft.mridl.mridl.Mridl
 import pl.mrasoft.mridl.mridl.Operation
-import pl.mrasoft.mridl.mridl.OperationParameter
+import pl.mrasoft.mridl.mridl.Element
+import pl.mrasoft.mridl.mridl.ComplexType
+import pl.mrasoft.mridl.mridl.XsdBuiltinTypeReference
+import pl.mrasoft.mridl.mridl.SimpleType
 
 class MridlGenerator implements IGenerator {
 
@@ -18,17 +21,21 @@ class MridlGenerator implements IGenerator {
 
 		val pathWithoutExtension = resource.containingFolder(fsa) + "/" + modelName
 
-		fsa.generateFile(pathWithoutExtension + ".wsdl", model.wsdlFile(modelName))
+		if (!model.operations.empty) {
+			fsa.generateFile(pathWithoutExtension + ".wsdl", model.wsdlFile(modelName))
+		}
 		fsa.generateFile(pathWithoutExtension + ".xsd", model.xsdFile(modelName))
 	}
 
 	def containingFolder(Resource it, IFileSystemAccess fsa) {
 		val filePath = URI.trimSegments(1).toString
-		
+
 		if (filePath.startsWith(CLASSPATH_PREFIX)) {
+
 			//for unit testing
 			filePath.replaceFirst(CLASSPATH_PREFIX, "/")
 		} else {
+
 			//implementacja jest tak na prawde bledna, ale nie widze lepszego sposobu
 			val srcGenURI = (fsa as IFileSystemAccessExtension2).getURI(".")
 			val projectPath = srcGenURI.trimSegments(1).toString
@@ -49,7 +56,7 @@ class MridlGenerator implements IGenerator {
 		            <import namespace="«nsUri»" schemaLocation="«modelName».xsd"/>
 		        </schema>
 		    </wsdl:types>
-			«FOR operation : operations»
+			«FOR operation : operations»				
 				«operation.operationMessages»
 			«ENDFOR»		
 			<wsdl:portType name="«modelName»">
@@ -83,10 +90,17 @@ class MridlGenerator implements IGenerator {
 				         xmlns:tns="«nsUri»"
 				         targetNamespace="«nsUri»">
 			«FOR operation : operations»
-				«operation.operationRootElements»
+				«IF operation instanceof Operation»
+					«(operation as Operation).operationRootElements»
+				«ENDIF»
 			«ENDFOR»
 			«FOR operation : operations»
-				«operation.operationComplexTypes»
+				«IF operation instanceof Operation»
+					«(operation as Operation).operationComplexTypes»
+				«ENDIF»
+			«ENDFOR»
+			«FOR type : types»				
+				«type.type»
 			«ENDFOR»	         								
 		</xs:schema>
 	'''
@@ -96,22 +110,41 @@ class MridlGenerator implements IGenerator {
 		<xs:element name="«name»Response" type="tns:«name»Response"/>
 	'''
 
+	//TODO zmiana complextype na jeden szablon?
 	def operationComplexTypes(Operation it) '''
 		<xs:complexType name="«name»">
 			<xs:sequence>
 				«FOR param : params»
-					«param.paramElement»
+					«param.element»
 				«ENDFOR»
 			</xs:sequence>
 		</xs:complexType>
 		<xs:complexType name="«name»Response">
 			<xs:sequence>
-				«returnType.paramElement»
+				«returnType.element»
 			</xs:sequence>
 		</xs:complexType>
 	'''
 
-	def paramElement(OperationParameter it) '''
-		<xs:element name="«name»" type="xs:«type»"/>
+	def dispatch type(ComplexType it) '''
+		<xs:complexType name="«name»">
+			<xs:sequence>
+				«FOR element : elements»
+					«element.element»
+				«ENDFOR»
+			</xs:sequence>
+		</xs:complexType>
 	'''
+
+	def dispatch type(SimpleType it) '''
+
+	'''
+
+	def element(Element it) '''
+		<xs:element name="«name»" type="«type.typeRef»"/>
+	'''
+
+	def dispatch typeRef(XsdBuiltinTypeReference it) '''xs:«builtin»'''
+
+	def dispatch typeRef(ComplexType it) '''tns:«name»'''
 }

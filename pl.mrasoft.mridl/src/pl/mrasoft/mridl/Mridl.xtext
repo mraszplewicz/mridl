@@ -4,17 +4,36 @@ generate mridl "http://mrasoft.pl/mridl/Mridl"
 
 Mridl:
 	'namespace' nsUri=STRING
-	(operations+=Operation)*;
+	(operations+=Operation)*
+	(types+=Type)*;
 
+Type:
+	ComplexType | SimpleType;
+
+//to jest do zmiany, ale jeszcze nie wiem jak
 Operation:
-	'operation' returnType=OperationParameter name=ID
-	'(' (params+=OperationParameter
-	(',' params+=OperationParameter)*)? ')';
+	'operation' returnType=Element name=ID
+	'(' (params+=Element
+	(',' params+=Element)*)? ')';
 
-OperationParameter:
-	type=XsdBuiltinType name=ID;
+Element:
+	type=TypeReference name=ID;
 
-//some types will not be fully supported
+TypeReference:
+	XsdBuiltinTypeReference | Type;
+
+XsdBuiltinTypeReference:
+	builtin=XsdBuiltinType;
+
+ComplexType:
+	"complex" name=ID "{"
+	(elements+=Element)*
+	"}";
+
+SimpleType:
+	"simple" name=ID;
+
+	//some types will not be fully supported
 enum XsdBuiltinType:
 	anyType
 	| anySimpleType
@@ -50,7 +69,7 @@ enum XsdBuiltinType:
 	| gYear
 	| gYearMonth
 	| hexBinary
-	| NOTATION 
+	| NOTATION
 	| precisionDecimal
 	| QName
 	| string
@@ -66,5 +85,4 @@ enum XsdBuiltinType:
 	| time
 	| ENTITIES
 	| IDREFS
-	| NMTOKENS
-	;
+	| NMTOKENS;

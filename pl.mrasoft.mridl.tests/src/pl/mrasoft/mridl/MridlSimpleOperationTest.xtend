@@ -44,6 +44,23 @@ class MridlSimpleOperationTest extends BaseMridlTest {
 			getActual(fsa, "hello/HelloParameterLess.wsdl")
 		)
 	}
+	
+	@Test
+	def void moreThanOneOperation() {
+		val fsa = generate("hello/HelloMoreThanOneOperation.mridl")
+
+		assertEquals(2, fsa.allFiles.size)
+
+		assertEquals(
+			getExpected("hello/HelloMoreThanOneOperation.xsd"),
+			getActual(fsa, "hello/HelloMoreThanOneOperation.xsd")
+		)
+
+		assertEquals(
+			getExpected("hello/HelloMoreThanOneOperation.wsdl"),
+			getActual(fsa, "hello/HelloMoreThanOneOperation.wsdl")
+		)
+	}
 
 	@Test
 	def void checkOperationParameterNameIsUnique() {
