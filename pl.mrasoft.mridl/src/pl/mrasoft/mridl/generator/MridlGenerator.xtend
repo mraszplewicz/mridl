@@ -10,6 +10,7 @@ import pl.mrasoft.mridl.mridl.Element
 import pl.mrasoft.mridl.mridl.ComplexType
 import pl.mrasoft.mridl.mridl.XsdBuiltinTypeReference
 import pl.mrasoft.mridl.mridl.SimpleType
+import pl.mrasoft.mridl.mridl.TypeReference
 
 class MridlGenerator implements IGenerator {
 
@@ -146,5 +147,5 @@ class MridlGenerator implements IGenerator {
 
 	def dispatch typeRef(XsdBuiltinTypeReference it) '''xs:«builtin»'''
 
-	def dispatch typeRef(ComplexType it) '''tns:«name»'''
+	def dispatch typeRef(TypeReference it) '''tns:«ref.name»'''
 }

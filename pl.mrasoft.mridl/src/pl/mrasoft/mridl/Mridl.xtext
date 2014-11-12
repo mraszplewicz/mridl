@@ -10,25 +10,26 @@ Mridl:
 Type:
 	ComplexType | SimpleType;
 
-//to jest do zmiany, ale jeszcze nie wiem jak
+	//to jest do zmiany, ale jeszcze nie wiem jak
 Operation:
 	'operation' returnType=Element name=ID
 	'(' (params+=Element
 	(',' params+=Element)*)? ')';
 
 Element:
-	type=TypeReference name=ID;
+	type=NamedTypeReference name=ID;
+
+NamedTypeReference:
+	XsdBuiltinTypeReference | TypeReference;
 
 TypeReference:
-	XsdBuiltinTypeReference | Type;
+	ref=[Type];
 
 XsdBuiltinTypeReference:
 	builtin=XsdBuiltinType;
 
 ComplexType:
-	"complex" name=ID "{"
-	(elements+=Element)*
-	"}";
+	"complex" name=ID "{" (elements+=Element)* "}";
 
 SimpleType:
 	"simple" name=ID;
