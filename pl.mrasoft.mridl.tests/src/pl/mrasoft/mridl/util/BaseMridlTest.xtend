@@ -13,7 +13,7 @@ import org.eclipse.xtext.generator.IFileSystemAccess
 
 @InjectWith(MridlInjectorProvider)
 @RunWith(XtextRunner2)
-class BaseMridlTest extends XtextTest {
+abstract class BaseMridlTest extends XtextTest {
 
 	@Inject
 	IGenerator generator
