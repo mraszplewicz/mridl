@@ -4,8 +4,12 @@ generate mridl "http://mrasoft.pl/mridl/Mridl"
 
 Mridl:
 	'namespace' nsUri=STRING
+	(imports+=Import)*
 	(operations+=Operation)*
 	(types+=Type)*;
+
+Import:
+	"import" importURI=STRING "as" nsPrefix=ID;
 
 Type:
 	ComplexType | SimpleType;
@@ -23,6 +27,10 @@ NamedTypeReference:
 	XsdBuiltinTypeReference | TypeReference;
 
 TypeReference:
+	DirectTypeReference | ImportedTypeReference 
+;
+
+DirectTypeReference:
 	ref=[Type];
 
 XsdBuiltinTypeReference:
@@ -33,6 +41,9 @@ ComplexType:
 
 SimpleType:
 	"simple" name=ID;
+
+ImportedTypeReference:
+	^import=[Import|ID] ":" ref=[Type];
 
 	//some types will not be fully supported
 enum XsdBuiltinType:

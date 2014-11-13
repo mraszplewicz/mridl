@@ -1,15 +1,14 @@
 namespace "http://mrasoft.pl/mridl/examples"
 
-complex TestComplexType1 {
-	
-	string aaa
-	TestComplexType2 bbb
-	
-}
+import "HelloOperationComplexTypeParam.mridl" as h2
+import "../testns/Hello.mridl" as h
 
+operation string a op1(h2:TestComplexType text)
 complex TestComplexType2 {
 	
 	string aaa
-	int bbb
+	h:TestComplexType bbb	
+	h2:TestComplexType ccc
+	
 	
 }

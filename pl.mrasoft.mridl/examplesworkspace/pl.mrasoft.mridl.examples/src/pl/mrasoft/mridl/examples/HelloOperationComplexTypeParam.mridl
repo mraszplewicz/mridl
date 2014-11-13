@@ -1,4 +1,4 @@
-namespace "http://mrasoft.pl/mridl/examples"
+namespace "http://mrasoft.pl/mridl/examples4"
 
 operation string a op1(TestComplexType text)
 
