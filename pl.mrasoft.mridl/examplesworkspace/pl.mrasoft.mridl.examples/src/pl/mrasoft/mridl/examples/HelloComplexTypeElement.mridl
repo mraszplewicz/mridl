@@ -1,7 +1,8 @@
 namespace "http://mrasoft.pl/mridl/examples"
 
-import "HelloOperationComplexTypeParam.mridl" as h2
 import "../testns/Hello.mridl" as h
+import "HelloOperationComplexTypeParam.mridl" as h2
+
 
 operation string a op1(h2:TestComplexType text)
 complex TestComplexType2 {
@@ -9,6 +10,9 @@ complex TestComplexType2 {
 	string aaa
 	h:TestComplexType bbb	
 	h2:TestComplexType ccc
-	
+	h:TestComplexType fff
+	h:TestComplexType ff
+	h2:TestComplexType a
+	h:TestComplexType d
 	
 }

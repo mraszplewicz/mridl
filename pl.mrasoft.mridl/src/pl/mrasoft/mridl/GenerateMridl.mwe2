@@ -77,7 +77,8 @@ Workflow {
     		}
     
     		// old scoping and exporting API
-    		fragment = scoping.ImportURIScopingFragment auto-inject {}
+//    		fragment = scoping.ImportURIScopingFragment auto-inject {}
+    		fragment = scoping.MridlScopingFragment auto-inject {}
     		fragment = exporting.SimpleNamesFragment auto-inject {}
     
     		// scoping and exporting API
