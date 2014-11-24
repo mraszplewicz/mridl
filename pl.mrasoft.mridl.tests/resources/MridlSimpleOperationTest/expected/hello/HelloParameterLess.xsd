@@ -2,7 +2,8 @@
 <xs:schema elementFormDefault="unqualified" 
 		   xmlns:xs="http://www.w3.org/2001/XMLSchema"
 		         xmlns:tns="http://mrasoft.pl/mridl/examples"
-		         targetNamespace="http://mrasoft.pl/mridl/examples">
+		         targetNamespace="http://mrasoft.pl/mridl/examples"
+		         >
 	<xs:element name="sayHello" type="tns:sayHello"/>
 	<xs:element name="sayHelloResponse" type="tns:sayHelloResponse"/>
 	<xs:complexType name="sayHello">

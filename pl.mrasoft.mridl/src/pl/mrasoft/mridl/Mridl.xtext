@@ -9,7 +9,7 @@ Mridl:
 	(types+=Type)*;
 
 Import:
-	"import" importURI=STRING "as" nsPrefix=ID;
+	"import" importURI=ImportMridlUri "as" nsPrefix=ID;
 
 Type:
 	ComplexType | SimpleType;
@@ -27,8 +27,7 @@ NamedTypeReference:
 	XsdBuiltinTypeReference | TypeReference;
 
 TypeReference:
-	DirectTypeReference | ImportedTypeReference 
-;
+	DirectTypeReference | ImportedTypeReference;
 
 DirectTypeReference:
 	ref=[Type];
@@ -98,3 +97,8 @@ enum XsdBuiltinType:
 	| ENTITIES
 	| IDREFS
 	| NMTOKENS;
+
+ImportMridlUri:
+	STRING |
+	(((ID | '..' | '.') '/')* ID '.mridl');
+		

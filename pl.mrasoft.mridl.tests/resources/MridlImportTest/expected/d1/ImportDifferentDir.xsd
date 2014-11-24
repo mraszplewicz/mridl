@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="unqualified" 
+		   xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		         xmlns:tns="http://mrasoft.pl/mridl/examples/d1/ImportDifferentDir"
+		         targetNamespace="http://mrasoft.pl/mridl/examples/d1/ImportDifferentDir"
+		         xmlns:i="http://mrasoft.pl/mridl/examples/d2/Imported"
+		         >
+	<xs:import schemaLocation="../d2/Imported.xsd" namespace="http://mrasoft.pl/mridl/examples/d2/Imported"/>
+	<xs:complexType name="TestComplex">
+		<xs:sequence>
+			<xs:element name="aaa" type="xs:string"/>
+			<xs:element name="bbb" type="i:TestComplexType2"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

@@ -10,9 +10,15 @@ import pl.mrasoft.mridl.mridl.Element
 import pl.mrasoft.mridl.mridl.ComplexType
 import pl.mrasoft.mridl.mridl.XsdBuiltinTypeReference
 import pl.mrasoft.mridl.mridl.SimpleType
-import pl.mrasoft.mridl.mridl.TypeReference
+import pl.mrasoft.mridl.mridl.Import
+import javax.inject.Inject
+import pl.mrasoft.mridl.util.ResourceUtil
+import pl.mrasoft.mridl.mridl.DirectTypeReference
+import pl.mrasoft.mridl.mridl.ImportedTypeReference
 
 class MridlGenerator implements IGenerator {
+
+	@Inject extension ResourceUtil
 
 	final static val CLASSPATH_PREFIX = "classpath:/"
 
@@ -51,7 +57,7 @@ class MridlGenerator implements IGenerator {
 		<wsdl:definitions name="«modelName»"
 		                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
 		                  xmlns:tns="«nsUri»"
-		                  targetNamespace="«nsUri»">		
+		                  targetNamespace="«nsUri»">
 		    <wsdl:types>
 		        <schema xmlns="http://www.w3.org/2001/XMLSchema">
 		            <import namespace="«nsUri»" schemaLocation="«modelName».xsd"/>
@@ -89,16 +95,19 @@ class MridlGenerator implements IGenerator {
 		<xs:schema elementFormDefault="unqualified" 
 				   xmlns:xs="http://www.w3.org/2001/XMLSchema"
 				         xmlns:tns="«nsUri»"
-				         targetNamespace="«nsUri»">
-			«FOR operation : operations»
-				«IF operation instanceof Operation»
-					«(operation as Operation).operationRootElements»
-				«ENDIF»
+				         targetNamespace="«nsUri»"
+				         «FOR imp : imports»
+				         	«imp.importNS»
+				         «ENDFOR»
+				         >
+			«FOR imp : imports»
+				«imp.importSchema»
 			«ENDFOR»
 			«FOR operation : operations»
-				«IF operation instanceof Operation»
-					«(operation as Operation).operationComplexTypes»
-				«ENDIF»
+				«operation.operationRootElements»
+			«ENDFOR»
+			«FOR operation : operations»
+				«operation.operationComplexTypes»
 			«ENDFOR»
 			«FOR type : types»				
 				«type.type»
@@ -147,5 +156,14 @@ class MridlGenerator implements IGenerator {
 
 	def dispatch typeRef(XsdBuiltinTypeReference it) '''xs:«builtin»'''
 
-	def dispatch typeRef(TypeReference it) '''tns:«ref.name»'''
+	def dispatch typeRef(DirectTypeReference it) '''tns:«ref.name»'''
+	def dispatch typeRef(ImportedTypeReference it) '''«^import.nsPrefix»:«ref.name»'''
+
+	def importSchema(Import it) '''
+		<xs:import schemaLocation="«trimMridlExtension(importURI)».xsd" namespace="«resolveImport.nsUri»"/>
+	'''
+
+	def importNS(Import it) '''
+		xmlns:«nsPrefix»="«resolveImport.nsUri»"
+	'''
 }

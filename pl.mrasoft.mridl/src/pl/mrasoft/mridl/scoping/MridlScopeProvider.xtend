@@ -10,10 +10,12 @@ import pl.mrasoft.mridl.mridl.Type
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.util.EcoreUtil
 import pl.mrasoft.mridl.mridl.Import
-import org.eclipse.emf.ecore.resource.Resource
-import org.eclipse.xtext.EcoreUtil2
+import pl.mrasoft.mridl.util.ResourceUtil
+import javax.inject.Inject
 
 class MridlScopeProvider extends org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider {
+
+	@Inject extension ResourceUtil
 
 	def scope_Import(Mridl mridl, EReference eRef) {
 
@@ -53,13 +55,6 @@ class MridlScopeProvider extends org.eclipse.xtext.scoping.impl.AbstractDeclarat
 		)
 	}
 
-	def resolveImport(Import importElt) {
-		resolveImport(importElt.eResource, importElt.importURI)
-	}
 
-	def resolveImport(Resource resource, String uri) {
-		val importResource = EcoreUtil2::getResource(resource, uri)
-		importResource.contents.head as Mridl
-	}
 
 }

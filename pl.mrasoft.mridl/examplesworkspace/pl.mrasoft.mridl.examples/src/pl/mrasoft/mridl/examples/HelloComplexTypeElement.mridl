@@ -1,6 +1,6 @@
 namespace "http://mrasoft.pl/mridl/examples"
 
-import "../testns/Hello.mridl" as h
+import ../testns/Hello.mridl as h
 import "HelloOperationComplexTypeParam.mridl" as h2
 
 
@@ -14,5 +14,11 @@ complex TestComplexType2 {
 	h:TestComplexType ff
 	h2:TestComplexType a
 	h:TestComplexType d
-	
+	h2:TestComplexType aa
+ 	h:TestComplexType aaa
+ 	h2:TestComplexType dd
+ 	
+ 	
+ 		
+ 
 }
