@@ -77,17 +77,17 @@ class MridlGenerator implements IGenerator {
 	def operationMessages(Operation it) '''		
 		<wsdl:message name="«name»">
 			<wsdl:part element="tns:«name»" name="parameters"/>
-		</wsdl:message>	
+		</wsdl:message>
 		<wsdl:message name="«name»Response">
 			<wsdl:part element="tns:«name»Response" name="parameters"/>
-		</wsdl:message>		    
+		</wsdl:message>
 	'''
 
 	def operationInPortType(Operation it) '''
 		<wsdl:operation name="«name»">
 			<wsdl:input message="tns:«name»" name="«name»"/>
 			<wsdl:output message="tns:«name»Response" name="«name»Response"/>
-		</wsdl:operation>		    
+		</wsdl:operation>
 	'''
 
 	def xsdFile(Mridl it, String modelName) '''

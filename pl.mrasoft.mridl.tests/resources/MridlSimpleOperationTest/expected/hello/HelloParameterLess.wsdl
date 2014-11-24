@@ -2,7 +2,7 @@
 <wsdl:definitions name="HelloParameterLess"
                   xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
                   xmlns:tns="http://mrasoft.pl/mridl/examples"
-                  targetNamespace="http://mrasoft.pl/mridl/examples">		
+                  targetNamespace="http://mrasoft.pl/mridl/examples">
     <wsdl:types>
         <schema xmlns="http://www.w3.org/2001/XMLSchema">
             <import namespace="http://mrasoft.pl/mridl/examples" schemaLocation="HelloParameterLess.xsd"/>
@@ -10,14 +10,14 @@
     </wsdl:types>
 	<wsdl:message name="sayHello">
 		<wsdl:part element="tns:sayHello" name="parameters"/>
-	</wsdl:message>	
+	</wsdl:message>
 	<wsdl:message name="sayHelloResponse">
 		<wsdl:part element="tns:sayHelloResponse" name="parameters"/>
-	</wsdl:message>		    
+	</wsdl:message>
 	<wsdl:portType name="HelloParameterLess">
 		<wsdl:operation name="sayHello">
 			<wsdl:input message="tns:sayHello" name="sayHello"/>
 			<wsdl:output message="tns:sayHelloResponse" name="sayHelloResponse"/>
-		</wsdl:operation>		    
+		</wsdl:operation>
 	</wsdl:portType>
 </wsdl:definitions>

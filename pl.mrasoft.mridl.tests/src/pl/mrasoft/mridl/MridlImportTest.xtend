@@ -5,7 +5,7 @@ import pl.mrasoft.mridl.util.BaseMridlTest
 
 import static org.junit.Assert.*
 
-class MridlSimpleOperationTest extends BaseMridlTest {
+class MridlImportTest extends BaseMridlTest {
 
 	new() {
 		super("MridlImportTest");
@@ -13,7 +13,7 @@ class MridlSimpleOperationTest extends BaseMridlTest {
 
 	@Test
 	def void importNoQuotes() {
-		val fsa = generate("d1/ImportNoQuotes.mridl", "d1/Imported.mridl")
+		val fsa = generate("d1/ImportNoQuotes.mridl")
 
 		assertEquals(1, fsa.allFiles.size)
 
@@ -25,7 +25,7 @@ class MridlSimpleOperationTest extends BaseMridlTest {
 	
 	@Test
 	def void importDifferentDir() {
-		val fsa = generate("d1/ImportDifferentDir.mridl", "d2/Imported.mridl")
+		val fsa = generate("d1/ImportDifferentDir.mridl")
 
 		assertEquals(1, fsa.allFiles.size)
 
@@ -38,7 +38,7 @@ class MridlSimpleOperationTest extends BaseMridlTest {
 
 	@Test
 	def void importWithQuotes() {
-		val fsa = generate("d1/ImportWithQuotes.mridl", "d1/Imported.mridl")
+		val fsa = generate("d1/ImportWithQuotes.mridl")
 
 		assertEquals(1, fsa.allFiles.size)
 
@@ -51,7 +51,7 @@ class MridlSimpleOperationTest extends BaseMridlTest {
 	
 	@Test
 	def void importInOperation() {
-		val fsa = generate("d1/ImportInOperation.mridl", "d1/Imported.mridl")
+		val fsa = generate("d1/ImportInOperation.mridl")
 
 		assertEquals(2, fsa.allFiles.size)
 

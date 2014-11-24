@@ -2,7 +2,7 @@
 <wsdl:definitions name="HelloMoreThanOneOperation"
                   xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
                   xmlns:tns="http://mrasoft.pl/mridl/examples"
-                  targetNamespace="http://mrasoft.pl/mridl/examples">		
+                  targetNamespace="http://mrasoft.pl/mridl/examples">
     <wsdl:types>
         <schema xmlns="http://www.w3.org/2001/XMLSchema">
             <import namespace="http://mrasoft.pl/mridl/examples" schemaLocation="HelloMoreThanOneOperation.xsd"/>
@@ -10,34 +10,34 @@
     </wsdl:types>
 	<wsdl:message name="op1">
 		<wsdl:part element="tns:op1" name="parameters"/>
-	</wsdl:message>	
+	</wsdl:message>
 	<wsdl:message name="op1Response">
 		<wsdl:part element="tns:op1Response" name="parameters"/>
-	</wsdl:message>		    
+	</wsdl:message>
 	<wsdl:message name="op2">
 		<wsdl:part element="tns:op2" name="parameters"/>
-	</wsdl:message>	
+	</wsdl:message>
 	<wsdl:message name="op2Response">
 		<wsdl:part element="tns:op2Response" name="parameters"/>
-	</wsdl:message>		    
+	</wsdl:message>
 	<wsdl:message name="op3">
 		<wsdl:part element="tns:op3" name="parameters"/>
-	</wsdl:message>	
+	</wsdl:message>
 	<wsdl:message name="op3Response">
 		<wsdl:part element="tns:op3Response" name="parameters"/>
-	</wsdl:message>		    
+	</wsdl:message>
 	<wsdl:portType name="HelloMoreThanOneOperation">
 		<wsdl:operation name="op1">
 			<wsdl:input message="tns:op1" name="op1"/>
 			<wsdl:output message="tns:op1Response" name="op1Response"/>
-		</wsdl:operation>		    
+		</wsdl:operation>
 		<wsdl:operation name="op2">
 			<wsdl:input message="tns:op2" name="op2"/>
 			<wsdl:output message="tns:op2Response" name="op2Response"/>
-		</wsdl:operation>		    
+		</wsdl:operation>
 		<wsdl:operation name="op3">
 			<wsdl:input message="tns:op3" name="op3"/>
 			<wsdl:output message="tns:op3Response" name="op3Response"/>
-		</wsdl:operation>		    
+		</wsdl:operation>
 	</wsdl:portType>
 </wsdl:definitions>
