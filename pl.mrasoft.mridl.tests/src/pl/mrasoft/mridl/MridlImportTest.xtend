@@ -66,5 +66,18 @@ class MridlImportTest extends BaseMridlTest {
 		)
 
 	}	
+	
+	@Test
+	def void unusedImport() {
+		val fsa = generate("d1/UnusedImport.mridl")
+
+		assertEquals(1, fsa.allFiles.size)
+
+		assertEquals(
+			getExpected("d1/UnusedImport.xsd"),
+			getActual(fsa, "d1/UnusedImport.xsd")
+		)		
+
+	}
 
 }

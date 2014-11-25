@@ -1,0 +1,9 @@
+namespace "http://mrasoft.pl/mridl/examples/d1/UnusedImport"
+
+import Imported.mridl as i
+
+complex TestComplex {
+	
+	string aaa	
+ 
+}

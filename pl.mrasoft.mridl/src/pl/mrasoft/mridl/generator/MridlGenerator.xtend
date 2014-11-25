@@ -97,11 +97,11 @@ class MridlGenerator implements IGenerator {
 				         xmlns:tns="«nsUri»"
 				         targetNamespace="«nsUri»"
 				         «FOR imp : imports»
-				         	«imp.importNS»
+				         	«IF imp.importUsed(it)»«imp.importNS»«ENDIF»
 				         «ENDFOR»
 				         >
 			«FOR imp : imports»
-				«imp.importSchema»
+				«IF imp.importUsed(it)»«imp.importSchema»«ENDIF»
 			«ENDFOR»
 			«FOR operation : operations»
 				«operation.operationRootElements»
@@ -166,4 +166,12 @@ class MridlGenerator implements IGenerator {
 	def importNS(Import it) '''
 		xmlns:«nsPrefix»="«resolveImport.nsUri»"
 	'''
+	def importUsed(Import it, Mridl model) {
+		val importedTypeReferences = model.eAllContents.filter(ImportedTypeReference);
+		val thisImport = it
+		val thisTypeReference = importedTypeReferences.findFirst [
+			it.import == thisImport 
+		]		
+		thisTypeReference != null
+	}
 }
