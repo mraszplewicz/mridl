@@ -1,0 +1,7 @@
+namespace "http://mrasoft.pl/mridl/examples/d1/UnspecifiedMultiplicity"
+
+complex TestComplex {
+	
+	string[] aaa
+
+}

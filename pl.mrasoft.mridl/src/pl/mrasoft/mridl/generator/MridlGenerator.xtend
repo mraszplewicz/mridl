@@ -15,6 +15,9 @@ import javax.inject.Inject
 import pl.mrasoft.mridl.util.ResourceUtil
 import pl.mrasoft.mridl.mridl.DirectTypeReference
 import pl.mrasoft.mridl.mridl.ImportedTypeReference
+import pl.mrasoft.mridl.mridl.SpecifiedMultiplicity
+import pl.mrasoft.mridl.mridl.UnspecifiedMultiplicity
+import pl.mrasoft.mridl.mridl.Optional
 
 class MridlGenerator implements IGenerator {
 
@@ -151,12 +154,17 @@ class MridlGenerator implements IGenerator {
 	'''
 
 	def element(Element it) '''
-		<xs:element name="«name»" type="«type.typeRef»"/>
+		<xs:element name="«name»" type="«type.typeRef»"«IF multiplicity != null» «multiplicity.elementMultiplicity»«ENDIF»/>
 	'''
+
+	def dispatch elementMultiplicity(SpecifiedMultiplicity it) '''minOccurs="«lower»" maxOccurs="«IF unbounded»unbounded«ELSE»«upper»«ENDIF»"'''
+	def dispatch elementMultiplicity(UnspecifiedMultiplicity it) '''minOccurs="0" maxOccurs="unbounded"'''
+	def dispatch elementMultiplicity(Optional it) '''minOccurs="0"'''
 
 	def dispatch typeRef(XsdBuiltinTypeReference it) '''xs:«builtin»'''
 
 	def dispatch typeRef(DirectTypeReference it) '''tns:«ref.name»'''
+
 	def dispatch typeRef(ImportedTypeReference it) '''«^import.nsPrefix»:«ref.name»'''
 
 	def importSchema(Import it) '''
@@ -166,12 +174,13 @@ class MridlGenerator implements IGenerator {
 	def importNS(Import it) '''
 		xmlns:«nsPrefix»="«resolveImport.nsUri»"
 	'''
+
 	def importUsed(Import it, Mridl model) {
 		val importedTypeReferences = model.eAllContents.filter(ImportedTypeReference);
 		val thisImport = it
 		val thisTypeReference = importedTypeReferences.findFirst [
-			it.import == thisImport 
-		]		
+			it.import == thisImport
+		]
 		thisTypeReference != null
 	}
 }

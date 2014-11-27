@@ -21,7 +21,22 @@ Operation:
 	(',' params+=Element)*)? ')';
 
 Element:
-	type=NamedTypeReference name=ID;
+	type=NamedTypeReference (multiplicity=Multiplicity)? name=ID;
+
+Multiplicity:
+	SpecifiedMultiplicity | UnspecifiedMultiplicity | Optional;
+
+SpecifiedMultiplicity:
+	{SpecifiedMultiplicity}
+	"[" (lower=INT "..") (upper=INT | unbounded?="*") "]";
+
+UnspecifiedMultiplicity:
+	{UnspecifiedMultiplicity}
+	"[]";
+
+Optional:
+	{Optional}
+	"?";
 
 NamedTypeReference:
 	XsdBuiltinTypeReference | TypeReference;
