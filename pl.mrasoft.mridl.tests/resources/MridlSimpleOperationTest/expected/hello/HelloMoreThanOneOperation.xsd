@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema elementFormDefault="unqualified" 
 		   xmlns:xs="http://www.w3.org/2001/XMLSchema"
-		         xmlns:tns="http://mrasoft.pl/mridl/examples"
-		         targetNamespace="http://mrasoft.pl/mridl/examples"
-		         >
+		   xmlns:tns="http://mrasoft.pl/mridl/examples"
+		   targetNamespace="http://mrasoft.pl/mridl/examples">
 	<xs:element name="op1" type="tns:op1"/>
 	<xs:element name="op1Response" type="tns:op1Response"/>
 	<xs:element name="op2" type="tns:op2"/>

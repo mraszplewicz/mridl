@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema elementFormDefault="unqualified" 
 		   xmlns:xs="http://www.w3.org/2001/XMLSchema"
-		   xmlns:tns="http://mrasoft.pl/mridl/examples/d1/ImportInOperation"
-		   xmlns:i="http://mrasoft.pl/mridl/examples/d1/Imported"
-		   targetNamespace="http://mrasoft.pl/mridl/examples/d1/ImportInOperation">
-	<xs:import namespace="http://mrasoft.pl/mridl/examples/d1/Imported" schemaLocation="Imported.xsd"/>
+		   xmlns:tns="http://mrasoft.pl/mridl/examples/d1/SimpleFault"
+		   targetNamespace="http://mrasoft.pl/mridl/examples/d1/SimpleFault">
 	<xs:element name="op1" type="tns:op1"/>
 	<xs:element name="op1Response" type="tns:op1Response"/>
 	<xs:complexType name="op1">
 		<xs:sequence>
-			<xs:element name="param1" type="i:TestComplexType"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="op1Response">
 		<xs:sequence>
-			<xs:element name="a" type="xs:string"/>
+			<xs:element name="a" type="xs:int"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TestFault">
+		<xs:sequence>
 		</xs:sequence>
 	</xs:complexType>
 </xs:schema>

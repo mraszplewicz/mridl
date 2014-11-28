@@ -18,7 +18,13 @@ Type:
 Operation:
 	'operation' returnType=Element name=ID
 	'(' (params+=Element
-	(',' params+=Element)*)? ')';
+	(',' params+=Element)*)? ')'
+	("throws" (faults+=Fault
+	(',' faults+=Fault)*))?;
+
+Fault:
+	type=NamedTypeReference
+;
 
 Element:
 	type=NamedTypeReference (multiplicity=Multiplicity)? name=ID;
