@@ -16,7 +16,7 @@ Type:
 
 	//to jest do zmiany, ale jeszcze nie wiem jak
 Operation:
-	'operation' returnType=Element name=ID
+	'operation' (returnType=Element | void?='void') name=ID
 	'(' (params+=Element
 	(',' params+=Element)*)? ')'
 	("throws" (faults+=Fault

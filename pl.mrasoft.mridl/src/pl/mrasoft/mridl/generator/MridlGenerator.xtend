@@ -90,20 +90,24 @@ class MridlGenerator implements IGenerator {
 		<wsdl:message name="«name»">
 			<wsdl:part element="tns:«name»" name="parameters"/>
 		</wsdl:message>
-		<wsdl:message name="«name»Response">
-			<wsdl:part element="tns:«name»Response" name="parameters"/>
-		</wsdl:message>
+		«IF !^void»
+			<wsdl:message name="«name»Response">
+				<wsdl:part element="tns:«name»Response" name="parameters"/>
+			</wsdl:message>
+		«ENDIF»
 		«FOR fault : faults»
 			<wsdl:message name="«fault.type.typeName»Exception">
 				<wsdl:part name="«fault.type.typeName»Exception" element="«fault.type.typeRef»"/>
 			</wsdl:message>
-		«ENDFOR»
+		«ENDFOR»		
 	'''
 
 	def operationInPortType(Operation it) '''
 		<wsdl:operation name="«name»">
 			<wsdl:input message="tns:«name»" name="«name»"/>
-			<wsdl:output message="tns:«name»Response" name="«name»Response"/>
+			«IF !^void»
+				<wsdl:output message="tns:«name»Response" name="«name»Response"/>
+			«ENDIF»
 			«FOR fault : faults»
 				<wsdl:fault name="«fault.type.typeName»Exception" message="tns:«fault.type.typeName»Exception"/>
 			«ENDFOR»
@@ -136,7 +140,9 @@ class MridlGenerator implements IGenerator {
 
 	def operationRootElements(Operation it) '''
 		<xs:element name="«name»" type="tns:«name»"/>
-		<xs:element name="«name»Response" type="tns:«name»Response"/>
+		«IF !^void»
+			<xs:element name="«name»Response" type="tns:«name»Response"/>
+		«ENDIF»
 	'''
 
 	//TODO zmiana complextype na jeden szablon?
@@ -148,11 +154,13 @@ class MridlGenerator implements IGenerator {
 				«ENDFOR»
 			</xs:sequence>
 		</xs:complexType>
-		<xs:complexType name="«name»Response">
-			<xs:sequence>
-				«returnType.element»
-			</xs:sequence>
-		</xs:complexType>
+		«IF !^void»
+			<xs:complexType name="«name»Response">
+				<xs:sequence>
+					«returnType.element»
+				</xs:sequence>
+			</xs:complexType>
+		«ENDIF»
 	'''
 
 	def dispatch type(ComplexType it) '''

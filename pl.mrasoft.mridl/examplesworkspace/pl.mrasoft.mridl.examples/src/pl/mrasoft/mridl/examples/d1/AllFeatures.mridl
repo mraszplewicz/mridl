@@ -1,0 +1,21 @@
+namespace "http://mrasoft.pl/mridl/examples/d1/AllFeatures"
+
+import "Imported.mridl" as i
+import ../d2/Imported.mridl as i2
+
+operation int[] a op1(string? f, TestComplex2 d) throws TestFault, i:TestComplexType
+operation void op2()
+
+complex TestFault {
+	
+	i2:TestComplexType2 b
+
+}
+
+complex TestComplex2 {
+	
+	i2:TestComplexType2[1..*] b
+	int[1..2] c
+
+}
+

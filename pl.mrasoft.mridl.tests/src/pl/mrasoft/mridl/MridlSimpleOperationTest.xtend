@@ -72,5 +72,22 @@ class MridlSimpleOperationTest extends BaseMridlTest {
 				  
 		)
 	}
+	
+	@Test
+	def void voidOperation() {
+		val fsa = generate("hello/VoidOperation.mridl")
+
+		assertEquals(2, fsa.allFiles.size)
+
+		assertEquals(
+			getExpected("hello/VoidOperation.xsd"),
+			getActual(fsa, "hello/VoidOperation.xsd")
+		)
+
+		assertEquals(
+			getExpected("hello/VoidOperation.wsdl"),
+			getActual(fsa, "hello/VoidOperation.wsdl")
+		)
+	}
 
 }
