@@ -23,8 +23,7 @@ Operation:
 	(',' faults+=Fault)*))?;
 
 Fault:
-	type=NamedTypeReference
-;
+	type=NamedTypeReference;
 
 Element:
 	type=NamedTypeReference (multiplicity=Multiplicity)? name=ID;
@@ -54,7 +53,7 @@ DirectTypeReference:
 	ref=[Type];
 
 XsdBuiltinTypeReference:
-	builtin=XsdBuiltinType;
+	XsdBuiltinTypeWithDigits | XsdBuiltinTypeWithLength;
 
 ComplexType:
 	"complex" name=ID "{" (elements+=Element)* "}";
@@ -66,7 +65,22 @@ ImportedTypeReference:
 	^import=[Import|ID] ":" ref=[Type];
 
 	//some types will not be fully supported
-enum XsdBuiltinType:
+XsdBuiltinTypeWithDigits:
+	builtin=XsdBuiltinTypeCanHaveDigits (digitsSpec=DigitsSpecification)?;
+
+XsdBuiltinTypeWithLength:
+	builtin=XsdBuiltinTypeCanHaveLength (lengthSpec=LengthSpecification)?;
+
+LengthSpecification:
+	"(" len=INT ")";
+
+DigitsSpecification:
+	"(" totalDigits=INT "," fractionDigits=INT ")";
+
+enum XsdBuiltinTypeCanHaveDigits:
+	decimal;
+
+enum XsdBuiltinTypeCanHaveLength:
 	anyType
 	| anySimpleType
 	| anyAtomicType
@@ -76,7 +90,6 @@ enum XsdBuiltinType:
 	| date
 	| dateTime
 	| dateTimeStamp
-	| decimal
 	| integer
 	| long
 	| int
@@ -122,4 +135,3 @@ enum XsdBuiltinType:
 ImportMridlUri:
 	STRING |
 	(((ID | '..' | '.') '/')* ID '.mridl');
-		

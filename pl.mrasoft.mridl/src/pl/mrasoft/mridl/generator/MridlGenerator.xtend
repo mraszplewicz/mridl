@@ -19,6 +19,8 @@ import pl.mrasoft.mridl.mridl.SpecifiedMultiplicity
 import pl.mrasoft.mridl.mridl.UnspecifiedMultiplicity
 import pl.mrasoft.mridl.mridl.Optional
 import pl.mrasoft.mridl.mridl.Fault
+import pl.mrasoft.mridl.mridl.XsdBuiltinTypeWithDigits
+import pl.mrasoft.mridl.mridl.XsdBuiltinTypeWithLength
 
 class MridlGenerator implements IGenerator {
 
@@ -178,8 +180,49 @@ class MridlGenerator implements IGenerator {
 	'''
 
 	def element(Element it) '''
-		<xs:element name="«name»" type="«type.typeRef»"«IF multiplicity != null» «multiplicity.elementMultiplicity»«ENDIF»/>
+		«IF elementHasLength»
+			<xs:element name="«name»"«conditionalElementMultiplicity»>
+				<xs:simpleType>
+						<xs:restriction base="«type.typeRef»">
+									<xs:length value="«elementLength»"/>
+						</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		«ELSEIF elementHasDigits»
+			<xs:element name="«name»"«conditionalElementMultiplicity»>
+				<xs:simpleType>
+						<xs:restriction base="«type.typeRef»">
+							<xs:totalDigits value="«elementTotalDigits»"/>
+							<xs:fractionDigits value="«elementFractionDigits»"/>
+						</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		«ELSE»
+			<xs:element name="«name»" type="«type.typeRef»"«conditionalElementMultiplicity»/>
+		«ENDIF»
 	'''
+
+	def conditionalElementMultiplicity(Element it) '''«IF multiplicity != null» «multiplicity.elementMultiplicity»«ENDIF»'''
+
+	def elementHasLength(Element it) {
+		type instanceof XsdBuiltinTypeWithLength && (type as XsdBuiltinTypeWithLength).lengthSpec != null
+	}
+
+	def elementLength(Element it) {
+		(type as XsdBuiltinTypeWithLength).lengthSpec.len
+	}
+
+	def elementHasDigits(Element it) {
+		type instanceof XsdBuiltinTypeWithDigits && (type as XsdBuiltinTypeWithDigits).digitsSpec != null
+	}
+
+	def elementTotalDigits(Element it) {
+		(type as XsdBuiltinTypeWithDigits).digitsSpec.totalDigits
+	}
+
+	def elementFractionDigits(Element it) {
+		(type as XsdBuiltinTypeWithDigits).digitsSpec.fractionDigits
+	}
 
 	def dispatch elementMultiplicity(SpecifiedMultiplicity it) '''minOccurs="«lower»" maxOccurs="«IF unbounded»unbounded«ELSE»«upper»«ENDIF»"'''
 
@@ -193,7 +236,9 @@ class MridlGenerator implements IGenerator {
 
 	def dispatch typeRef(ImportedTypeReference it) '''«^import.nsPrefix»:«typeName»'''
 
-	def dispatch typeName(XsdBuiltinTypeReference it) '''«builtin»'''
+	def dispatch typeName(XsdBuiltinTypeWithDigits it) '''«builtin»'''
+
+	def dispatch typeName(XsdBuiltinTypeWithLength it) '''«builtin»'''
 
 	def dispatch typeName(DirectTypeReference it) '''«ref.name»'''
 

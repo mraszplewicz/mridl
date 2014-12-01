@@ -16,6 +16,10 @@ complex TestComplex2 {
 	
 	i2:TestComplexType2[1..*] b
 	int[1..2] c
+	string(2) s
+	string s2
+	string(2)[] s3	
+	decimal(2,1) d
 
 }
 
