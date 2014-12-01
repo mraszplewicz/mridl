@@ -12,7 +12,7 @@ Import:
 	"import" importURI=ImportMridlUri "as" nsPrefix=ID;
 
 Type:
-	ComplexType | SimpleType;
+	ComplexType | SimpleType | EnumType;
 
 	//to jest do zmiany, ale jeszcze nie wiem jak
 Operation:
@@ -60,6 +60,12 @@ ComplexType:
 
 SimpleType:
 	"simple" name=ID;
+
+EnumType:
+	"enum" name=ID "{" (values+=EnumValue)* "}";
+
+EnumValue:
+	value=ID;
 
 ImportedTypeReference:
 	^import=[Import|ID] ":" ref=[Type];
@@ -133,5 +139,4 @@ enum XsdBuiltinTypeCanHaveLength:
 	| NMTOKENS;
 
 ImportMridlUri:
-	STRING |
-	(((ID | '..' | '.') '/')* ID '.mridl');
+	STRING | (((ID | '..' | '.') '/')* ID '.mridl');

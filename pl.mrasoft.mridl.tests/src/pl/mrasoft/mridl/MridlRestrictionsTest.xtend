@@ -49,5 +49,18 @@ class MridlRestrictionsTest extends BaseMridlTest {
 		)
 
 	}
+	
+	@Test
+	def void enumeration() {
+		val fsa = generate("d1/Enum.mridl")
+
+		assertEquals(1, fsa.allFiles.size)
+
+		assertEquals(
+			getExpected("d1/Enum.xsd"),
+			getActual(fsa, "d1/Enum.xsd")
+		)
+
+	}
 
 }

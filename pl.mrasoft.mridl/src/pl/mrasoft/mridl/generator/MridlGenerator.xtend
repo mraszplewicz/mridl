@@ -21,6 +21,8 @@ import pl.mrasoft.mridl.mridl.Optional
 import pl.mrasoft.mridl.mridl.Fault
 import pl.mrasoft.mridl.mridl.XsdBuiltinTypeWithDigits
 import pl.mrasoft.mridl.mridl.XsdBuiltinTypeWithLength
+import pl.mrasoft.mridl.mridl.EnumType
+import pl.mrasoft.mridl.mridl.EnumValue
 
 class MridlGenerator implements IGenerator {
 
@@ -179,22 +181,36 @@ class MridlGenerator implements IGenerator {
 
 	'''
 
+	def dispatch type(EnumType it) '''
+		<xs:simpleType name="«name»">
+			<xs:restriction base="xs:string">
+				«FOR value : values»
+					«value.enumValue»
+				«ENDFOR»	    
+			</xs:restriction>
+		</xs:simpleType>
+	'''
+
+	def enumValue(EnumValue it) '''
+		<xs:enumeration value="«value»"/>
+	'''
+
 	def element(Element it) '''
 		«IF elementHasLength»
 			<xs:element name="«name»"«conditionalElementMultiplicity»>
 				<xs:simpleType>
-						<xs:restriction base="«type.typeRef»">
-									<xs:length value="«elementLength»"/>
-						</xs:restriction>
+					<xs:restriction base="«type.typeRef»">
+						<xs:length value="«elementLength»"/>
+					</xs:restriction>
 				</xs:simpleType>
 			</xs:element>
 		«ELSEIF elementHasDigits»
 			<xs:element name="«name»"«conditionalElementMultiplicity»>
 				<xs:simpleType>
-						<xs:restriction base="«type.typeRef»">
-							<xs:totalDigits value="«elementTotalDigits»"/>
-							<xs:fractionDigits value="«elementFractionDigits»"/>
-						</xs:restriction>
+					<xs:restriction base="«type.typeRef»">
+						<xs:totalDigits value="«elementTotalDigits»"/>
+						<xs:fractionDigits value="«elementFractionDigits»"/>
+					</xs:restriction>
 				</xs:simpleType>
 			</xs:element>
 		«ELSE»

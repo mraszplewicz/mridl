@@ -9,7 +9,8 @@ operation void op2()
 complex TestFault {
 	
 	i2:TestComplexType2 b
-
+	TestEnum e
+	
 }
 
 complex TestComplex2 {
@@ -22,4 +23,9 @@ complex TestComplex2 {
 	decimal(2,1) d
 
 }
+
+enum TestEnum { 
+	ENUM1
+	ENUM2
+} 
 

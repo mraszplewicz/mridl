@@ -1,0 +1,8 @@
+namespace "http://mrasoft.pl/mridl/examples/d1/Enum"
+
+enum TestEnum {
+	
+	ENUM1
+	ENUM2
+
+}
