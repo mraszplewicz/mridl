@@ -11,10 +11,11 @@ complex TestFault {
 	i2:TestComplexType2 b
 	TestEnum e
 	i:TestComplexType s
+	i:ImportedTestSimple d
 	
 }
 
-complex TestComplex2 {
+complex TestComplex2 extends i:TestComplexType {
 	
 	i2:TestComplexType2[1..*] b
 	int[1..2] c
@@ -25,9 +26,9 @@ complex TestComplex2 {
 
 }
 
-simple TestSimple
-
 simple TestSimple2 (string "[a-zA-Z][a-zA-Z][a-zA-Z]")
+
+simple TestSimple3 (i:ImportedTestSimple "[a-zA-Z][a-zA-Z][a-zA-Z]")
 
 enum TestEnum { 
 	ENUM1

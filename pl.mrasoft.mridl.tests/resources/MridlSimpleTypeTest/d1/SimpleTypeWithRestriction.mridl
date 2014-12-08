@@ -1,3 +1,0 @@
-namespace "http://mrasoft.pl/mridl/examples/d1/SimpleTypeWithRestriction"
-
-simple TestSimple2 (string "[a-zA-Z][a-zA-Z][a-zA-Z]")

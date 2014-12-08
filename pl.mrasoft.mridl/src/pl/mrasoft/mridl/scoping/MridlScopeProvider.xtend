@@ -8,12 +8,17 @@ import org.eclipse.xtext.naming.QualifiedName
 import org.eclipse.xtext.scoping.IScope
 import org.eclipse.xtext.scoping.Scopes
 import org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider
-import pl.mrasoft.mridl.mridl.DirectTopLevelTypeReference
 import pl.mrasoft.mridl.mridl.Import
-import pl.mrasoft.mridl.mridl.ImportedTopLevelTypeReference
 import pl.mrasoft.mridl.mridl.Mridl
 import pl.mrasoft.mridl.mridl.TopLevelTypeReference
 import pl.mrasoft.mridl.util.ResourceUtil
+import pl.mrasoft.mridl.mridl.TopLevelSimpleTypeReference
+import pl.mrasoft.mridl.mridl.TopLevelComplexTypeReference
+import pl.mrasoft.mridl.mridl.TopLevelSimpleType
+import pl.mrasoft.mridl.mridl.TopLevelComplexType
+import pl.mrasoft.mridl.mridl.TopLevelType
+import pl.mrasoft.mridl.mridl.DirectTopLevelTypeReferenceBase
+import pl.mrasoft.mridl.mridl.ImportedTopLevelTypeReferenceBase
 
 class MridlScopeProvider extends AbstractDeclarativeScopeProvider {
 
@@ -26,18 +31,26 @@ class MridlScopeProvider extends AbstractDeclarativeScopeProvider {
 	}
 
 	def scope_TopLevelTypeReference_ref(TopLevelTypeReference ref, EReference eRef) {
-		createTopLevelTypeScope(ref)
+		createTopLevelTypeScope(ref, TopLevelType)
 	}
 	
-	def dispatch createTopLevelTypeScope(DirectTopLevelTypeReference ref) {
+	def scope_TopLevelSimpleTypeReference_ref(TopLevelSimpleTypeReference ref, EReference eRef) {
+		createTopLevelTypeScope(ref, TopLevelSimpleType)
+	}
+	
+	def scope_TopLevelComplexTypeReference_ref(TopLevelComplexTypeReference ref, EReference eRef) {
+		createTopLevelTypeScope(ref, TopLevelComplexType)
+	}
+	
+	def dispatch createTopLevelTypeScope(DirectTopLevelTypeReferenceBase ref, Class<? extends TopLevelType> clazz) {
 		val model = getRootModel(ref)
-		Scopes::scopeFor(model.typeDeclarations) 
+		Scopes::scopeFor(model.typeDeclarations.filter(clazz)) 
 	}
 	
 
-	def dispatch createTopLevelTypeScope(ImportedTopLevelTypeReference importedRef) {
+	def dispatch createTopLevelTypeScope(ImportedTopLevelTypeReferenceBase importedRef, Class<? extends TopLevelType> clazz) {
 		val model = getImportedModel(importedRef, importedRef.importRef.^import.nsPrefix)
-		Scopes::scopeFor(model.typeDeclarations) 
+		Scopes::scopeFor(model.typeDeclarations.filter(clazz)) 
 	}
 
 	def getImportedModel(EObject eObject, String prefix) {

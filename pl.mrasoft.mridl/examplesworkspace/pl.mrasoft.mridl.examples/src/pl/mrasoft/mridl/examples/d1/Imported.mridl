@@ -6,3 +6,5 @@ complex TestComplexType {
 	int bbb
 	
 }
+
+simple ImportedTestSimple (string "[a-zA-Z][a-zA-Z][a-zA-Z]")

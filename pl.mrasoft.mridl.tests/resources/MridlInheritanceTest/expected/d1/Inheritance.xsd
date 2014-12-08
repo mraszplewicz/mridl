@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="unqualified" 
+		   xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		   xmlns:tns="http://mrasoft.pl/mridl/examples/d1/Inheritance"
+		   targetNamespace="http://mrasoft.pl/mridl/examples/d1/Inheritance">
+	<xs:complexType name="TestComplexType">
+		<xs:complexContent>
+			<xs:extension base="tns:TestComplexType2">
+				 <xs:sequence>
+				 	<xs:element name="aaa" type="xs:string"/>
+				 	<xs:element name="bbb" type="xs:int"/>
+				 </xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="TestComplexType2">
+		<xs:sequence>
+			<xs:element name="ccc" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

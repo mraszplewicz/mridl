@@ -1,0 +1,10 @@
+namespace "http://mrasoft.pl/mridl/examples/d1/InheritanceImportedType"
+
+import Imported.mridl as i
+
+complex TestComplexType3 extends i:TestComplexType {
+	
+	string aaa
+	int bbb
+	
+}

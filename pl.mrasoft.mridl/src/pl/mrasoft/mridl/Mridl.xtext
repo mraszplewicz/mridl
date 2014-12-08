@@ -20,12 +20,12 @@ Operation:
 	(',' params+=Element)*)? ')'
 	("throws" (faults+=Fault (',' faults+=Fault)*))?;
 
-
 TopLevelComplexType:
-	"complex" name=ID "{" (elements+=Element)* "}";
+	"complex" name=ID ("extends" extends=TopLevelComplexTypeReference)?
+	"{" (elements+=Element)* "}";
 
 TopLevelSimpleType:
-	"simple" name=ID (restriction=PatternRestriction)?;
+	"simple" name=ID (restriction=PatternRestriction);
 
 TopLevelEnumType:
 	"enum" name=ID "{" (values+=EnumValue)* "}";
@@ -45,32 +45,47 @@ NamedTypeReference:
 TopLevelTypeReference:
 	DirectTopLevelTypeReference | ImportedTopLevelTypeReference;
 
+TopLevelSimpleTypeReference:
+	DirectTopLevelSimpleTypeReference | ImportedTopLevelSimpleTypeReference;
+
+TopLevelComplexTypeReference:
+	DirectTopLevelComplexTypeReference | ImportedTopLevelComplexTypeReference;
+
 XsdBuiltinTypeReference:
 	ref=XsdBuiltinType;
+
+DirectTopLevelTypeReferenceBase:
+	DirectTopLevelTypeReference | DirectTopLevelSimpleTypeReference | DirectTopLevelComplexTypeReference;
 
 DirectTopLevelTypeReference:
 	ref=[TopLevelType];
 
-DirectTopLevelNonComplexTypeReference:
-	ref=[TopLevelNonComplexType];
+DirectTopLevelSimpleTypeReference:
+	ref=[TopLevelSimpleType];
+
+DirectTopLevelComplexTypeReference:
+	ref=[TopLevelComplexType];
+
+ImportedTopLevelTypeReferenceBase:
+	ImportedTopLevelTypeReference | ImportedTopLevelSimpleTypeReference | ImportedTopLevelComplexTypeReference;
 
 ImportedTopLevelTypeReference:
 	importRef=ImportReference ref=[TopLevelType];
 
-ImportedTopLevelNonComplexTypeReference:
-	importRef=ImportReference ref=[TopLevelNonComplexType];
+ImportedTopLevelSimpleTypeReference:
+	importRef=ImportReference ref=[TopLevelSimpleType];
+
+ImportedTopLevelComplexTypeReference:
+	importRef=ImportReference ref=[TopLevelComplexType];
 
 ImportReference:
-	^import=[Import|ID] ":"; 
+	^import=[Import|ID] ":";
 
 XsdBuiltinType:
 	XsdBuiltinTypeWithDigits | XsdBuiltinTypeWithMaxLength;
 
 TopLevelType:
-	TopLevelComplexType | TopLevelNonComplexType;
-
-TopLevelNonComplexType:
-	TopLevelSimpleType | TopLevelEnumType;
+	TopLevelComplexType | TopLevelSimpleType | TopLevelEnumType;
 
 Multiplicity:
 	SpecifiedMultiplicity | UnspecifiedMultiplicity | Optional;
@@ -88,14 +103,11 @@ Optional:
 	"?";
 
 PatternRestriction:
-	"(" nonComplexType=NamedNonComplexTypeReference
+	"(" simpleType=NamedSimpleTypeReference
 	pattern=STRING ")";
 
-NamedNonComplexTypeReference:
-	TopLevelNonComplexTypeReference | XsdBuiltinTypeReference;
-
-TopLevelNonComplexTypeReference:
-	DirectTopLevelNonComplexTypeReference | ImportedTopLevelNonComplexTypeReference;
+NamedSimpleTypeReference:
+	TopLevelSimpleTypeReference | XsdBuiltinTypeReference;
 
 XsdBuiltinTypeWithDigits:
 	declaration=XsdBuiltinTypeCanHaveDigits (digitsSpec=DigitsSpecification)?;

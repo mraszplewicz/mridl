@@ -5,13 +5,13 @@ import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.generator.IFileSystemAccess
 import org.eclipse.xtext.generator.IFileSystemAccessExtension2
 import org.eclipse.xtext.generator.IGenerator
-import pl.mrasoft.mridl.mridl.DirectTopLevelNonComplexTypeReference
+import pl.mrasoft.mridl.mridl.DirectTopLevelSimpleTypeReference
 import pl.mrasoft.mridl.mridl.DirectTopLevelTypeReference
 import pl.mrasoft.mridl.mridl.Element
 import pl.mrasoft.mridl.mridl.EnumValue
 import pl.mrasoft.mridl.mridl.Fault
 import pl.mrasoft.mridl.mridl.Import
-import pl.mrasoft.mridl.mridl.ImportedTopLevelNonComplexTypeReference
+import pl.mrasoft.mridl.mridl.ImportedTopLevelSimpleTypeReference
 import pl.mrasoft.mridl.mridl.ImportedTopLevelTypeReference
 import pl.mrasoft.mridl.mridl.Mridl
 import pl.mrasoft.mridl.mridl.Operation
@@ -19,7 +19,7 @@ import pl.mrasoft.mridl.mridl.Optional
 import pl.mrasoft.mridl.mridl.SpecifiedMultiplicity
 import pl.mrasoft.mridl.mridl.TopLevelComplexType
 import pl.mrasoft.mridl.mridl.TopLevelEnumType
-import pl.mrasoft.mridl.mridl.TopLevelNonComplexTypeReference
+import pl.mrasoft.mridl.mridl.TopLevelSimpleTypeReference
 import pl.mrasoft.mridl.mridl.TopLevelSimpleType
 import pl.mrasoft.mridl.mridl.TopLevelTypeReference
 import pl.mrasoft.mridl.mridl.UnspecifiedMultiplicity
@@ -27,6 +27,9 @@ import pl.mrasoft.mridl.mridl.XsdBuiltinTypeReference
 import pl.mrasoft.mridl.mridl.XsdBuiltinTypeWithDigits
 import pl.mrasoft.mridl.mridl.XsdBuiltinTypeWithMaxLength
 import pl.mrasoft.mridl.util.ResourceUtil
+import pl.mrasoft.mridl.mridl.DirectTopLevelComplexTypeReference
+import pl.mrasoft.mridl.mridl.ImportedTopLevelComplexTypeReference
+import pl.mrasoft.mridl.mridl.TopLevelComplexTypeReference
 
 class MridlGenerator implements IGenerator {
 
@@ -172,25 +175,35 @@ class MridlGenerator implements IGenerator {
 	'''
 
 	def dispatch typeDeclaration(TopLevelComplexType it) '''
-		<xs:complexType name="«name»">
-			<xs:sequence>
-				«FOR element : elements»
-					«element.element»
-				«ENDFOR»
-			</xs:sequence>
-		</xs:complexType>
+		«IF extends != null»
+			<xs:complexType name="«name»">
+				<xs:complexContent>
+					<xs:extension base="«extends.typeRef»">
+						 «complexTypeSequence»
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+		«ELSE»
+			<xs:complexType name="«name»">
+				«complexTypeSequence»
+			</xs:complexType>
+		«ENDIF»
+	'''
+
+	def complexTypeSequence(TopLevelComplexType it) '''
+		<xs:sequence>
+			«FOR element : elements»
+				«element.element»
+			«ENDFOR»
+		</xs:sequence>
 	'''
 
 	def dispatch typeDeclaration(TopLevelSimpleType it) '''
-		«IF restriction != null»
-			<xs:simpleType name="«name»">
-				<xs:restriction base="«restriction.nonComplexType.typeRef»">
-					<xs:pattern value="«restriction.pattern»"/>	    
-				</xs:restriction>
-			</xs:simpleType>
-		«ELSE»
-			<xs:simpleType name="«name»"/>
-		«ENDIF»
+		<xs:simpleType name="«name»">
+			<xs:restriction base="«restriction.simpleType.typeRef»">
+				<xs:pattern value="«restriction.pattern»"/>	    
+			</xs:restriction>
+		</xs:simpleType>
 	'''
 
 	def dispatch typeDeclaration(TopLevelEnumType it) '''
@@ -236,23 +249,23 @@ class MridlGenerator implements IGenerator {
 		val ref = getXsdBuiltinTypeWithMaxLength
 		ref != null && ref.lengthSpec != null
 	}
-	
+
 	def getXsdBuiltinTypeWithMaxLength(Element it) {
 		if (type instanceof XsdBuiltinTypeReference) {
 			val ref = (type as XsdBuiltinTypeReference).ref
-			if(ref instanceof XsdBuiltinTypeWithMaxLength) {
+			if (ref instanceof XsdBuiltinTypeWithMaxLength) {
 				return ref
-			}			
+			}
 		}
 		return null
 	}
-	
+
 	def getXsdBuiltinTypeWithDigits(Element it) {
 		if (type instanceof XsdBuiltinTypeReference) {
 			val ref = (type as XsdBuiltinTypeReference).ref
-			if(ref instanceof XsdBuiltinTypeWithDigits) {
+			if (ref instanceof XsdBuiltinTypeWithDigits) {
 				return ref
-			}			
+			}
 		}
 		return null
 	}
@@ -286,15 +299,21 @@ class MridlGenerator implements IGenerator {
 
 	def dispatch typeRef(ImportedTopLevelTypeReference it) '''«importRef.^import.nsPrefix»:«typeName»'''
 
-	def dispatch typeRef(DirectTopLevelNonComplexTypeReference it) '''tns:«typeName»'''
+	def dispatch typeRef(DirectTopLevelSimpleTypeReference it) '''tns:«typeName»'''
 
-	def dispatch typeRef(ImportedTopLevelNonComplexTypeReference it) '''«importRef.^import.nsPrefix»:«typeName»'''
+	def dispatch typeRef(ImportedTopLevelSimpleTypeReference it) '''«importRef.^import.nsPrefix»:«typeName»'''
+
+	def dispatch typeRef(DirectTopLevelComplexTypeReference it) '''tns:«typeName»'''
+
+	def dispatch typeRef(ImportedTopLevelComplexTypeReference it) '''«importRef.^import.nsPrefix»:«typeName»'''
 
 	def dispatch typeName(XsdBuiltinTypeReference it) '''«ref.referencedTypeName»'''
 
 	def dispatch typeName(TopLevelTypeReference it) '''«ref.referencedTypeName»'''
 
-	def dispatch typeName(TopLevelNonComplexTypeReference it) '''«ref.referencedTypeName»'''
+	def dispatch typeName(TopLevelSimpleTypeReference it) '''«ref.referencedTypeName»'''
+
+	def dispatch typeName(TopLevelComplexTypeReference it) '''«ref.referencedTypeName»'''
 
 	def dispatch referencedTypeName(XsdBuiltinTypeWithDigits it) { declaration.getName }
 

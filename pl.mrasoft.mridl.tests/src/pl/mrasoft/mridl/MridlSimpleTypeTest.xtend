@@ -25,16 +25,17 @@ class MridlSimpleTypeTest extends BaseMridlTest {
 	}
 	
 	@Test
-	def void simpleTypeWithRestriction() {
-		val fsa = generate("d1/SimpleTypeWithRestriction.mridl")
+	def void simpleTypeWithRestrictionImportedType() {
+		val fsa = generate("d1/SimpleTypeWithRestrictionImportedType.mridl")
 
 		assertEquals(1, fsa.allFiles.size)
 
 		assertEquals(
-			getExpected("d1/SimpleTypeWithRestriction.xsd"),
-			getActual(fsa, "d1/SimpleTypeWithRestriction.xsd")
+			getExpected("d1/SimpleTypeWithRestrictionImportedType.xsd"),
+			getActual(fsa, "d1/SimpleTypeWithRestrictionImportedType.xsd")
 		)
 
 	}
+	
 	
 }
