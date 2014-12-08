@@ -26,26 +26,26 @@ class MridlRestrictionsTest extends BaseMridlTest {
 	
 	@Test
 	def void stringArrayWithLength() {
-		val fsa = generate("d1/StringArrayWithLength.mridl")
+		val fsa = generate("d1/StringArrayWithMaxLength.mridl")
 
 		assertEquals(1, fsa.allFiles.size)
 
 		assertEquals(
-			getExpected("d1/StringArrayWithLength.xsd"),
-			getActual(fsa, "d1/StringArrayWithLength.xsd")
+			getExpected("d1/StringArrayWithMaxLength.xsd"),
+			getActual(fsa, "d1/StringArrayWithMaxLength.xsd")
 		)
 
 	}
 	
 	@Test
 	def void stringWithLength() {
-		val fsa = generate("d1/StringWithLength.mridl")
+		val fsa = generate("d1/StringWithMaxLength.mridl")
 
 		assertEquals(1, fsa.allFiles.size)
 
 		assertEquals(
-			getExpected("d1/StringWithLength.xsd"),
-			getActual(fsa, "d1/StringWithLength.xsd")
+			getExpected("d1/StringWithMaxLength.xsd"),
+			getActual(fsa, "d1/StringWithMaxLength.xsd")
 		)
 
 	}

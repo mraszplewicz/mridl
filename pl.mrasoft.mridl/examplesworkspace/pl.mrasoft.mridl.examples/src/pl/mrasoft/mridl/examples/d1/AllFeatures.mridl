@@ -6,10 +6,11 @@ import ../d2/Imported.mridl as i2
 operation int[] a op1(string? f, TestComplex2 d) throws TestFault, i:TestComplexType
 operation void op2()
 
-complex TestFault {
+complex TestFault { 
 	
 	i2:TestComplexType2 b
 	TestEnum e
+	i:TestComplexType s
 	
 }
 
@@ -23,6 +24,10 @@ complex TestComplex2 {
 	decimal(2,1) d
 
 }
+
+simple TestSimple
+
+simple TestSimple2 (string "[a-zA-Z][a-zA-Z][a-zA-Z]")
 
 enum TestEnum { 
 	ENUM1

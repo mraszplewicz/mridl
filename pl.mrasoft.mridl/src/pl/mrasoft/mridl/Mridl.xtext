@@ -6,27 +6,71 @@ Mridl:
 	'namespace' nsUri=STRING
 	(imports+=Import)*
 	(operations+=Operation)*
-	(types+=Type)*;
+	(typeDeclarations+=TopLevelType)*;
 
 Import:
 	"import" importURI=ImportMridlUri "as" nsPrefix=ID;
 
-Type:
-	ComplexType | SimpleType | EnumType;
+ImportMridlUri:
+	STRING | (((ID | '..' | '.') '/')* ID '.mridl');
 
-	//to jest do zmiany, ale jeszcze nie wiem jak
 Operation:
 	'operation' (returnType=Element | void?='void') name=ID
 	'(' (params+=Element
 	(',' params+=Element)*)? ')'
-	("throws" (faults+=Fault
-	(',' faults+=Fault)*))?;
+	("throws" (faults+=Fault (',' faults+=Fault)*))?;
+
+
+TopLevelComplexType:
+	"complex" name=ID "{" (elements+=Element)* "}";
+
+TopLevelSimpleType:
+	"simple" name=ID (restriction=PatternRestriction)?;
+
+TopLevelEnumType:
+	"enum" name=ID "{" (values+=EnumValue)* "}";
+
+EnumValue:
+	value=ID;
+
+Element:
+	type=NamedTypeReference (multiplicity=Multiplicity)? name=ID;
 
 Fault:
 	type=NamedTypeReference;
 
-Element:
-	type=NamedTypeReference (multiplicity=Multiplicity)? name=ID;
+NamedTypeReference:
+	TopLevelTypeReference | XsdBuiltinTypeReference;
+
+TopLevelTypeReference:
+	DirectTopLevelTypeReference | ImportedTopLevelTypeReference;
+
+XsdBuiltinTypeReference:
+	ref=XsdBuiltinType;
+
+DirectTopLevelTypeReference:
+	ref=[TopLevelType];
+
+DirectTopLevelNonComplexTypeReference:
+	ref=[TopLevelNonComplexType];
+
+ImportedTopLevelTypeReference:
+	importRef=ImportReference ref=[TopLevelType];
+
+ImportedTopLevelNonComplexTypeReference:
+	importRef=ImportReference ref=[TopLevelNonComplexType];
+
+ImportReference:
+	^import=[Import|ID] ":"; 
+
+XsdBuiltinType:
+	XsdBuiltinTypeWithDigits | XsdBuiltinTypeWithMaxLength;
+
+TopLevelType:
+	TopLevelComplexType | TopLevelNonComplexType;
+
+TopLevelNonComplexType:
+	TopLevelSimpleType | TopLevelEnumType;
 
 Multiplicity:
 	SpecifiedMultiplicity | UnspecifiedMultiplicity | Optional;
@@ -43,50 +87,33 @@ Optional:
 	{Optional}
 	"?";
 
-NamedTypeReference:
-	XsdBuiltinTypeReference | TypeReference;
+PatternRestriction:
+	"(" nonComplexType=NamedNonComplexTypeReference
+	pattern=STRING ")";
 
-TypeReference:
-	DirectTypeReference | ImportedTypeReference;
+NamedNonComplexTypeReference:
+	TopLevelNonComplexTypeReference | XsdBuiltinTypeReference;
 
-DirectTypeReference:
-	ref=[Type];
+TopLevelNonComplexTypeReference:
+	DirectTopLevelNonComplexTypeReference | ImportedTopLevelNonComplexTypeReference;
 
-XsdBuiltinTypeReference:
-	XsdBuiltinTypeWithDigits | XsdBuiltinTypeWithLength;
-
-ComplexType:
-	"complex" name=ID "{" (elements+=Element)* "}";
-
-SimpleType:
-	"simple" name=ID;
-
-EnumType:
-	"enum" name=ID "{" (values+=EnumValue)* "}";
-
-EnumValue:
-	value=ID;
-
-ImportedTypeReference:
-	^import=[Import|ID] ":" ref=[Type];
-
-	//some types will not be fully supported
 XsdBuiltinTypeWithDigits:
-	builtin=XsdBuiltinTypeCanHaveDigits (digitsSpec=DigitsSpecification)?;
+	declaration=XsdBuiltinTypeCanHaveDigits (digitsSpec=DigitsSpecification)?;
 
-XsdBuiltinTypeWithLength:
-	builtin=XsdBuiltinTypeCanHaveLength (lengthSpec=LengthSpecification)?;
+XsdBuiltinTypeWithMaxLength:
+	declaration=XsdBuiltinTypeCanHaveMaxLength (lengthSpec=MaxLengthSpecification)?;
 
-LengthSpecification:
-	"(" len=INT ")";
+MaxLengthSpecification:
+	"(" maxLength=INT ")";
 
 DigitsSpecification:
 	"(" totalDigits=INT "," fractionDigits=INT ")";
 
+	//some types will not be fully supported
 enum XsdBuiltinTypeCanHaveDigits:
 	decimal;
 
-enum XsdBuiltinTypeCanHaveLength:
+enum XsdBuiltinTypeCanHaveMaxLength:
 	anyType
 	| anySimpleType
 	| anyAtomicType
@@ -137,6 +164,3 @@ enum XsdBuiltinTypeCanHaveLength:
 	| ENTITIES
 	| IDREFS
 	| NMTOKENS;
-
-ImportMridlUri:
-	STRING | (((ID | '..' | '.') '/')* ID '.mridl');

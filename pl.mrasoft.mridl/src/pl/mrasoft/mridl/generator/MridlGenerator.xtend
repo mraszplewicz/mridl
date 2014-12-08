@@ -1,28 +1,32 @@
 package pl.mrasoft.mridl.generator
 
+import javax.inject.Inject
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.generator.IFileSystemAccess
 import org.eclipse.xtext.generator.IFileSystemAccessExtension2
 import org.eclipse.xtext.generator.IGenerator
+import pl.mrasoft.mridl.mridl.DirectTopLevelNonComplexTypeReference
+import pl.mrasoft.mridl.mridl.DirectTopLevelTypeReference
+import pl.mrasoft.mridl.mridl.Element
+import pl.mrasoft.mridl.mridl.EnumValue
+import pl.mrasoft.mridl.mridl.Fault
+import pl.mrasoft.mridl.mridl.Import
+import pl.mrasoft.mridl.mridl.ImportedTopLevelNonComplexTypeReference
+import pl.mrasoft.mridl.mridl.ImportedTopLevelTypeReference
 import pl.mrasoft.mridl.mridl.Mridl
 import pl.mrasoft.mridl.mridl.Operation
-import pl.mrasoft.mridl.mridl.Element
-import pl.mrasoft.mridl.mridl.ComplexType
-import pl.mrasoft.mridl.mridl.XsdBuiltinTypeReference
-import pl.mrasoft.mridl.mridl.SimpleType
-import pl.mrasoft.mridl.mridl.Import
-import javax.inject.Inject
-import pl.mrasoft.mridl.util.ResourceUtil
-import pl.mrasoft.mridl.mridl.DirectTypeReference
-import pl.mrasoft.mridl.mridl.ImportedTypeReference
-import pl.mrasoft.mridl.mridl.SpecifiedMultiplicity
-import pl.mrasoft.mridl.mridl.UnspecifiedMultiplicity
 import pl.mrasoft.mridl.mridl.Optional
-import pl.mrasoft.mridl.mridl.Fault
+import pl.mrasoft.mridl.mridl.SpecifiedMultiplicity
+import pl.mrasoft.mridl.mridl.TopLevelComplexType
+import pl.mrasoft.mridl.mridl.TopLevelEnumType
+import pl.mrasoft.mridl.mridl.TopLevelNonComplexTypeReference
+import pl.mrasoft.mridl.mridl.TopLevelSimpleType
+import pl.mrasoft.mridl.mridl.TopLevelTypeReference
+import pl.mrasoft.mridl.mridl.UnspecifiedMultiplicity
+import pl.mrasoft.mridl.mridl.XsdBuiltinTypeReference
 import pl.mrasoft.mridl.mridl.XsdBuiltinTypeWithDigits
-import pl.mrasoft.mridl.mridl.XsdBuiltinTypeWithLength
-import pl.mrasoft.mridl.mridl.EnumType
-import pl.mrasoft.mridl.mridl.EnumValue
+import pl.mrasoft.mridl.mridl.XsdBuiltinTypeWithMaxLength
+import pl.mrasoft.mridl.util.ResourceUtil
 
 class MridlGenerator implements IGenerator {
 
@@ -136,8 +140,8 @@ class MridlGenerator implements IGenerator {
 			«FOR operation : operations»
 				«operation.operationComplexTypes»
 			«ENDFOR»
-			«FOR type : types»				
-				«type.type»
+			«FOR typeDeclaration : typeDeclarations»				
+				«typeDeclaration.typeDeclaration»
 			«ENDFOR»	         								
 		</xs:schema>
 	'''
@@ -167,7 +171,7 @@ class MridlGenerator implements IGenerator {
 		«ENDIF»
 	'''
 
-	def dispatch type(ComplexType it) '''
+	def dispatch typeDeclaration(TopLevelComplexType it) '''
 		<xs:complexType name="«name»">
 			<xs:sequence>
 				«FOR element : elements»
@@ -177,11 +181,19 @@ class MridlGenerator implements IGenerator {
 		</xs:complexType>
 	'''
 
-	def dispatch type(SimpleType it) '''
-
+	def dispatch typeDeclaration(TopLevelSimpleType it) '''
+		«IF restriction != null»
+			<xs:simpleType name="«name»">
+				<xs:restriction base="«restriction.nonComplexType.typeRef»">
+					<xs:pattern value="«restriction.pattern»"/>	    
+				</xs:restriction>
+			</xs:simpleType>
+		«ELSE»
+			<xs:simpleType name="«name»"/>
+		«ENDIF»
 	'''
 
-	def dispatch type(EnumType it) '''
+	def dispatch typeDeclaration(TopLevelEnumType it) '''
 		<xs:simpleType name="«name»">
 			<xs:restriction base="xs:string">
 				«FOR value : values»
@@ -200,7 +212,7 @@ class MridlGenerator implements IGenerator {
 			<xs:element name="«name»"«conditionalElementMultiplicity»>
 				<xs:simpleType>
 					<xs:restriction base="«type.typeRef»">
-						<xs:length value="«elementLength»"/>
+						<xs:maxLength value="«elementLength»"/>
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:element>
@@ -221,23 +233,45 @@ class MridlGenerator implements IGenerator {
 	def conditionalElementMultiplicity(Element it) '''«IF multiplicity != null» «multiplicity.elementMultiplicity»«ENDIF»'''
 
 	def elementHasLength(Element it) {
-		type instanceof XsdBuiltinTypeWithLength && (type as XsdBuiltinTypeWithLength).lengthSpec != null
+		val ref = getXsdBuiltinTypeWithMaxLength
+		ref != null && ref.lengthSpec != null
+	}
+	
+	def getXsdBuiltinTypeWithMaxLength(Element it) {
+		if (type instanceof XsdBuiltinTypeReference) {
+			val ref = (type as XsdBuiltinTypeReference).ref
+			if(ref instanceof XsdBuiltinTypeWithMaxLength) {
+				return ref
+			}			
+		}
+		return null
+	}
+	
+	def getXsdBuiltinTypeWithDigits(Element it) {
+		if (type instanceof XsdBuiltinTypeReference) {
+			val ref = (type as XsdBuiltinTypeReference).ref
+			if(ref instanceof XsdBuiltinTypeWithDigits) {
+				return ref
+			}			
+		}
+		return null
 	}
 
 	def elementLength(Element it) {
-		(type as XsdBuiltinTypeWithLength).lengthSpec.len
+		getXsdBuiltinTypeWithMaxLength.lengthSpec.maxLength
 	}
 
 	def elementHasDigits(Element it) {
-		type instanceof XsdBuiltinTypeWithDigits && (type as XsdBuiltinTypeWithDigits).digitsSpec != null
+		val ref = getXsdBuiltinTypeWithDigits
+		ref != null && ref.digitsSpec != null
 	}
 
 	def elementTotalDigits(Element it) {
-		(type as XsdBuiltinTypeWithDigits).digitsSpec.totalDigits
+		getXsdBuiltinTypeWithDigits.digitsSpec.totalDigits
 	}
 
 	def elementFractionDigits(Element it) {
-		(type as XsdBuiltinTypeWithDigits).digitsSpec.fractionDigits
+		getXsdBuiltinTypeWithDigits.digitsSpec.fractionDigits
 	}
 
 	def dispatch elementMultiplicity(SpecifiedMultiplicity it) '''minOccurs="«lower»" maxOccurs="«IF unbounded»unbounded«ELSE»«upper»«ENDIF»"'''
@@ -248,17 +282,29 @@ class MridlGenerator implements IGenerator {
 
 	def dispatch typeRef(XsdBuiltinTypeReference it) '''xs:«typeName»'''
 
-	def dispatch typeRef(DirectTypeReference it) '''tns:«typeName»'''
+	def dispatch typeRef(DirectTopLevelTypeReference it) '''tns:«typeName»'''
 
-	def dispatch typeRef(ImportedTypeReference it) '''«^import.nsPrefix»:«typeName»'''
+	def dispatch typeRef(ImportedTopLevelTypeReference it) '''«importRef.^import.nsPrefix»:«typeName»'''
 
-	def dispatch typeName(XsdBuiltinTypeWithDigits it) '''«builtin»'''
+	def dispatch typeRef(DirectTopLevelNonComplexTypeReference it) '''tns:«typeName»'''
 
-	def dispatch typeName(XsdBuiltinTypeWithLength it) '''«builtin»'''
+	def dispatch typeRef(ImportedTopLevelNonComplexTypeReference it) '''«importRef.^import.nsPrefix»:«typeName»'''
 
-	def dispatch typeName(DirectTypeReference it) '''«ref.name»'''
+	def dispatch typeName(XsdBuiltinTypeReference it) '''«ref.referencedTypeName»'''
 
-	def dispatch typeName(ImportedTypeReference it) '''«ref.name»'''
+	def dispatch typeName(TopLevelTypeReference it) '''«ref.referencedTypeName»'''
+
+	def dispatch typeName(TopLevelNonComplexTypeReference it) '''«ref.referencedTypeName»'''
+
+	def dispatch referencedTypeName(XsdBuiltinTypeWithDigits it) { declaration.getName }
+
+	def dispatch referencedTypeName(XsdBuiltinTypeWithMaxLength it) { declaration.getName }
+
+	def dispatch referencedTypeName(TopLevelSimpleType it) { name }
+
+	def dispatch referencedTypeName(TopLevelComplexType it) { name }
+
+	def dispatch referencedTypeName(TopLevelEnumType it) { name }
 
 	def importSchema(Import it) '''
 		<xs:import namespace="«resolveImport.nsUri»" schemaLocation="«trimMridlExtension(importURI)».xsd"/>
@@ -283,16 +329,16 @@ class MridlGenerator implements IGenerator {
 	}
 
 	def importUsed(Import it, Mridl model, GeneratedFileType fileType) {
-		val importedTypeReferences = model.eAllContents.filter(ImportedTypeReference);
+		val importedTypeReferences = model.eAllContents.filter(ImportedTopLevelTypeReference);
 		val thisImport = it
 		val thisTypeReference = importedTypeReferences.findFirst [
-			import == thisImport && ((fileType == GeneratedFileType.WSDL && isReferenceFromWsdl) ||
+			importRef.^import == thisImport && ((fileType == GeneratedFileType.WSDL && isReferenceFromWsdl) ||
 				(fileType == GeneratedFileType.XSD && !isReferenceFromWsdl))
 		]
 		thisTypeReference != null
 	}
 
-	def isReferenceFromWsdl(ImportedTypeReference it) {
+	def isReferenceFromWsdl(ImportedTopLevelTypeReference it) {
 		eContainer instanceof Fault
 	}
 
