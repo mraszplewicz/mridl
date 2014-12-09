@@ -3,6 +3,7 @@ grammar pl.mrasoft.mridl.Mridl with org.eclipse.xtext.common.Terminals
 generate mridl "http://mrasoft.pl/mridl/Mridl"
 
 Mridl:
+	(documentation=Documentation)?
 	'namespace' nsUri=STRING
 	(imports+=Import)*
 	(operations+=Operation)*
@@ -15,6 +16,7 @@ ImportMridlUri:
 	STRING | (((ID | '..' | '.') '/')* ID '.mridl');
 
 Operation:
+	(documentation=Documentation)?
 	'operation' (returnType=Element | void?='void') name=ID
 	'(' (params+=Element
 	(',' params+=Element)*)? ')'
@@ -31,13 +33,13 @@ TopLevelEnumType:
 	"enum" name=ID "{" (values+=EnumValue)* "}";
 
 EnumValue:
-	value=ID;
+	(documentation=Documentation)? value=ID;
 
 Element:
-	type=NamedTypeReference (multiplicity=Multiplicity)? name=ID;
+	(documentation=Documentation)? type=NamedTypeReference (multiplicity=Multiplicity)? name=ID;
 
 Fault:
-	type=NamedTypeReference;
+	(documentation=Documentation)? type=NamedTypeReference;
 
 NamedTypeReference:
 	TopLevelTypeReference | XsdBuiltinTypeReference;
@@ -176,3 +178,6 @@ enum XsdBuiltinTypeCanHaveMaxLength:
 	| ENTITIES
 	| IDREFS
 	| NMTOKENS;
+
+Documentation:
+	"@doc" "(" doc=STRING ")";

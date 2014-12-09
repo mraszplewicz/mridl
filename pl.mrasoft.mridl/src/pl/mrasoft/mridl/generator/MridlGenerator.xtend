@@ -30,6 +30,7 @@ import pl.mrasoft.mridl.util.ResourceUtil
 import pl.mrasoft.mridl.mridl.DirectTopLevelComplexTypeReference
 import pl.mrasoft.mridl.mridl.ImportedTopLevelComplexTypeReference
 import pl.mrasoft.mridl.mridl.TopLevelComplexTypeReference
+import pl.mrasoft.mridl.mridl.Documentation
 
 class MridlGenerator implements IGenerator {
 
@@ -43,10 +44,14 @@ class MridlGenerator implements IGenerator {
 
 		val pathWithoutExtension = resource.containingFolder(fsa) + "/" + modelName
 
-		if (!model.operations.empty) {
+		if (model.mridlHasWsdlFile) {
 			fsa.generateFile(pathWithoutExtension + ".wsdl", model.wsdlFile(modelName))
 		}
 		fsa.generateFile(pathWithoutExtension + ".xsd", model.xsdFile(modelName))
+	}
+	
+	def mridlHasWsdlFile(Mridl it) {
+		!operations.empty
 	}
 
 	def containingFolder(Resource it, IFileSystemAccess fsa) {
@@ -78,6 +83,7 @@ class MridlGenerator implements IGenerator {
 		                  	«ENDIF»
 		                  «ENDFOR»
 		                  targetNamespace="«nsUri»">
+		    «wsdlFileDocumentation»
 		    <wsdl:types>
 		        <schema xmlns="http://www.w3.org/2001/XMLSchema">
 		            <import namespace="«nsUri»" schemaLocation="«modelName».xsd"/>
@@ -96,6 +102,16 @@ class MridlGenerator implements IGenerator {
 			</wsdl:portType>
 		</wsdl:definitions>
 	'''
+	
+	def wsdlFileDocumentation(Mridl it) '''
+		«IF wsdlFileHasDocumentation»
+			«documentation.wsdlDocumentation»
+		«ENDIF»
+	'''
+
+	def wsdlFileHasDocumentation(Mridl it) {
+		documentation != null && documentation.doc != null
+	}
 
 	def operationMessages(Operation it) '''		
 		<wsdl:message name="«name»">
@@ -115,14 +131,51 @@ class MridlGenerator implements IGenerator {
 
 	def operationInPortType(Operation it) '''
 		<wsdl:operation name="«name»">
+			«operationDocumentation»
 			<wsdl:input message="tns:«name»" name="«name»"/>
 			«IF !^void»
 				<wsdl:output message="tns:«name»Response" name="«name»Response"/>
 			«ENDIF»
 			«FOR fault : faults»
-				<wsdl:fault name="«fault.type.typeName»Exception" message="tns:«fault.type.typeName»Exception"/>
+				«fault.operationFault»
 			«ENDFOR»
 		</wsdl:operation>
+	'''
+
+	def operationFault(Fault it) '''
+		«IF faultHasDocumentation»
+			<wsdl:fault name="«type.typeName»Exception" message="tns:«type.typeName»Exception">
+				«faultDocumentation»
+			</wsdl:fault>
+		«ELSE»
+			<wsdl:fault name="«type.typeName»Exception" message="tns:«type.typeName»Exception"/>
+		«ENDIF»
+	'''
+
+	def operationDocumentation(Operation it) '''
+		«IF operationHasDocumentation»
+			«documentation.wsdlDocumentation»
+		«ENDIF»
+	'''
+
+	def operationHasDocumentation(Operation it) {
+		documentation != null && documentation.doc != null
+	}
+
+	def faultDocumentation(Fault it) '''
+		«IF faultHasDocumentation»
+			«documentation.wsdlDocumentation»
+		«ENDIF»
+	'''
+
+	def faultHasDocumentation(Fault it) {
+		documentation != null && documentation.doc != null
+	}
+
+	def wsdlDocumentation(Documentation it) '''		
+		<wsdl:documentation>
+			«doc»
+		</wsdl:documentation>
 	'''
 
 	def xsdFile(Mridl it, String modelName) '''
@@ -134,6 +187,7 @@ class MridlGenerator implements IGenerator {
 				   	«IF imp.importUsedInXsd(it)»«imp.importNS»«ENDIF»
 				   «ENDFOR»
 				   targetNamespace="«nsUri»">
+			«xsdFileDocumentation»
 			«FOR imp : imports»
 				«IF imp.importUsedInXsd(it)»«imp.importSchema»«ENDIF»
 			«ENDFOR»
@@ -148,6 +202,16 @@ class MridlGenerator implements IGenerator {
 			«ENDFOR»	         								
 		</xs:schema>
 	'''
+	
+	def xsdFileDocumentation(Mridl it) '''
+		«IF xsdFileHasDocumentation»
+			«documentation.xsdDocumentation»
+		«ENDIF»
+	'''
+
+	def xsdFileHasDocumentation(Mridl it) {
+		!mridlHasWsdlFile && documentation != null && documentation.doc != null
+	}
 
 	def operationRootElements(Operation it) '''
 		<xs:element name="«name»" type="tns:«name»"/>
@@ -217,12 +281,23 @@ class MridlGenerator implements IGenerator {
 	'''
 
 	def enumValue(EnumValue it) '''
-		<xs:enumeration value="«value»"/>
+		«IF enumValueHasDocumentation»
+			<xs:enumeration value="«value»">
+				«documentation.xsdDocumentation»
+			</xs:enumeration>
+		«ELSE»
+			<xs:enumeration value="«value»"/>
+		«ENDIF»
 	'''
+
+	def enumValueHasDocumentation(EnumValue it) {
+		documentation != null && documentation.doc != null
+	}
 
 	def element(Element it) '''
 		«IF elementHasLength»
 			<xs:element name="«name»"«conditionalElementMultiplicity»>
+				«elementDocumentation»
 				<xs:simpleType>
 					<xs:restriction base="«type.typeRef»">
 						<xs:maxLength value="«elementLength»"/>
@@ -231,6 +306,7 @@ class MridlGenerator implements IGenerator {
 			</xs:element>
 		«ELSEIF elementHasDigits»
 			<xs:element name="«name»"«conditionalElementMultiplicity»>
+				«elementDocumentation»
 				<xs:simpleType>
 					<xs:restriction base="«type.typeRef»">
 						<xs:totalDigits value="«elementTotalDigits»"/>
@@ -238,9 +314,31 @@ class MridlGenerator implements IGenerator {
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:element>
+		«ELSEIF elementHasDocumentation»
+			<xs:element name="«name»" type="«type.typeRef»"«conditionalElementMultiplicity»>
+				«documentation.xsdDocumentation»
+			</xs:element>	
 		«ELSE»
 			<xs:element name="«name»" type="«type.typeRef»"«conditionalElementMultiplicity»/>
 		«ENDIF»
+	'''
+
+	def elementDocumentation(Element it) '''
+		«IF elementHasDocumentation»
+			«documentation.xsdDocumentation»
+		«ENDIF»
+	'''
+
+	def elementHasDocumentation(Element it) {
+		documentation != null && documentation.doc != null
+	}
+
+	def xsdDocumentation(Documentation it) '''
+		<xs:annotation>
+			<xs:documentation>
+				«doc»
+			</xs:documentation>
+		</xs:annotation>
 	'''
 
 	def conditionalElementMultiplicity(Element it) '''«IF multiplicity != null» «multiplicity.elementMultiplicity»«ENDIF»'''

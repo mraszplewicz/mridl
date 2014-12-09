@@ -1,9 +1,13 @@
+@doc("global doc")
 namespace "http://mrasoft.pl/mridl/examples/d1/AllFeatures"
 
 import "Imported.mridl" as i
 import ../d2/Imported.mridl as i2
 
-operation int[] a op1(string? f, TestComplex2 d) throws TestFault, i:TestComplexType
+@doc("op1 documentation") 
+operation 
+	@doc("a doc") int[] a op1(@doc("f doc") string? f, TestComplex2 d) 
+	throws @doc("fault doc1") TestFault, @doc("fault doc2") i:TestComplexType
 operation void op2()
 
 complex TestFault { 
@@ -11,7 +15,10 @@ complex TestFault {
 	i2:TestComplexType2 b
 	TestEnum e
 	i:TestComplexType s
+	@doc("d docume
+	ntation")
 	i:ImportedTestSimple d
+	
 	
 }
 
@@ -31,7 +38,7 @@ simple TestSimple2 (string "[a-zA-Z][a-zA-Z][a-zA-Z]")
 simple TestSimple3 (i:ImportedTestSimple "[a-zA-Z][a-zA-Z][a-zA-Z]")
 
 enum TestEnum { 
-	ENUM1
+	@doc("ENUM1 documentation") ENUM1 
 	ENUM2
 } 
 

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="unqualified" 
+		   xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		   xmlns:tns="http://mrasoft.pl/mridl/examples/d1/EnumValueDocumentation"
+		   targetNamespace="http://mrasoft.pl/mridl/examples/d1/EnumValueDocumentation">
+	<xs:simpleType name="TestEnum">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="ENUM1">
+				<xs:annotation>
+					<xs:documentation>
+						ENUM1 doc
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="ENUM2"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

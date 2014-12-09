@@ -1,0 +1,7 @@
+namespace "http://mrasoft.pl/mridl/examples/d1/ElementDocumentation"
+
+complex TestComplex2 {
+	
+	@doc("s doc") string s
+
+}
