@@ -7,4 +7,4 @@ complex TestComplexType {
 	
 }
 
-simple ImportedTestSimple (string "[a-zA-Z][a-zA-Z][a-zA-Z]")
+simple ImportedTestSimple (string pattern="[a-zA-Z][a-zA-Z][a-zA-Z]")

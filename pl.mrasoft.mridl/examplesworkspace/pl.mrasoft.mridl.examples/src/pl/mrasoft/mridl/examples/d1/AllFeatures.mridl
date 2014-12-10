@@ -33,9 +33,9 @@ complex TestComplex2 extends i:TestComplexType {
 
 }
 
-simple TestSimple2 (string "[a-zA-Z][a-zA-Z][a-zA-Z]")
+simple TestSimple2 (string pattern="[a-zA-Z][a-zA-Z][a-zA-Z]")
 
-simple TestSimple3 (i:ImportedTestSimple "[a-zA-Z][a-zA-Z][a-zA-Z]")
+simple TestSimple3 (i:ImportedTestSimple pattern="[a-zA-Z][a-zA-Z][a-zA-Z]")
 
 enum TestEnum { 
 	@doc("ENUM1 documentation") ENUM1 

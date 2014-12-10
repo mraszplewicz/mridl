@@ -4,7 +4,7 @@ generate mridl "http://mrasoft.pl/mridl/Mridl"
 
 Mridl:
 	(documentation=Documentation)?
-	'namespace' nsUri=STRING
+	"namespace" nsUri=STRING
 	(imports+=Import)*
 	(operations+=Operation)*
 	(typeDeclarations+=TopLevelType)*;
@@ -13,14 +13,14 @@ Import:
 	"import" importURI=ImportMridlUri "as" nsPrefix=ID;
 
 ImportMridlUri:
-	STRING | (((ID | '..' | '.') '/')* ID '.mridl');
+	STRING | (((ID | ".." | ".") "/")* ID ".mridl");
 
 Operation:
 	(documentation=Documentation)?
-	'operation' (returnType=Element | void?='void') name=ID
-	'(' (params+=Element
-	(',' params+=Element)*)? ')'
-	("throws" (faults+=Fault (',' faults+=Fault)*))?;
+	"operation" (returnType=Element | void?="void") name=ID
+	"(" (params+=Element
+	("," params+=Element)*)? ")"
+	("throws" (faults+=Fault ("," faults+=Fault)*))?;
 
 TopLevelComplexType:
 	"complex" name=ID ("extends" extends=TopLevelComplexTypeReference)?
@@ -106,7 +106,7 @@ Optional:
 
 PatternRestriction:
 	"(" simpleType=NamedSimpleTypeReference
-	pattern=STRING ")";
+	"pattern" "=" pattern=STRING ")";
 
 NamedSimpleTypeReference:
 	TopLevelSimpleTypeReference | XsdBuiltinTypeReference;
