@@ -80,6 +80,8 @@ ImportedTopLevelSimpleTypeReference:
 ImportedTopLevelComplexTypeReference:
 	importRef=ImportReference ref=[TopLevelComplexType];
 
+
+
 ImportReference:
 	^import=[Import|ID] ":";
 
@@ -123,11 +125,64 @@ MaxLengthSpecification:
 DigitsSpecification:
 	"(" totalDigits=INT "," fractionDigits=INT ")";
 
+enum XsdBuiltinTypeDeclaration:
+	decimal
+	| anyType
+	| anySimpleType
+	| anyAtomicType
+	| anyURI
+	| base64Binary
+	| boolean
+	| date
+	| dateTime
+	| dateTimeStamp
+	| integer
+	| long
+	| int
+	| short
+	| byte
+	| nonNegativeInteger
+	| positiveInteger
+	| unsignedLong
+	| unsignedInt
+	| unsignedShort
+	| unsignedByte
+	| nonPositiveInteger
+	| negativeInteger
+	| double
+	| duration
+	| dayTimeDuration
+	| yearMonthDuration
+	| float
+	| gDay
+	| gMonth
+	| gMonthDay
+	| gYear
+	| gYearMonth
+	| hexBinary
+	| NOTATION
+	| precisionDecimal
+	| QName
+	| string
+	| normalizedString
+	| token
+	| language
+	| Name
+	| NCName
+	| ENTITY
+	| ID
+	| IDREF
+	| NMTOKEN
+	| time
+	| ENTITIES
+	| IDREFS
+	| NMTOKENS;
+
 	//some types will not be fully supported
-enum XsdBuiltinTypeCanHaveDigits:
+enum XsdBuiltinTypeCanHaveDigits returns XsdBuiltinTypeDeclaration:
 	decimal;
 
-enum XsdBuiltinTypeCanHaveMaxLength:
+enum XsdBuiltinTypeCanHaveMaxLength returns XsdBuiltinTypeDeclaration:
 	anyType
 	| anySimpleType
 	| anyAtomicType

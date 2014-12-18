@@ -1,24 +1,18 @@
 package pl.mrasoft.mridl.generator
 
 import javax.inject.Inject
-import pl.mrasoft.mridl.mridl.DirectTopLevelComplexTypeReference
-import pl.mrasoft.mridl.mridl.DirectTopLevelSimpleTypeReference
-import pl.mrasoft.mridl.mridl.DirectTopLevelTypeReference
+import pl.mrasoft.mridl.mridl.DirectTopLevelTypeReferenceBase
 import pl.mrasoft.mridl.mridl.Fault
 import pl.mrasoft.mridl.mridl.Import
-import pl.mrasoft.mridl.mridl.ImportedTopLevelComplexTypeReference
-import pl.mrasoft.mridl.mridl.ImportedTopLevelSimpleTypeReference
 import pl.mrasoft.mridl.mridl.ImportedTopLevelTypeReference
+import pl.mrasoft.mridl.mridl.ImportedTopLevelTypeReferenceBase
 import pl.mrasoft.mridl.mridl.Mridl
-import pl.mrasoft.mridl.mridl.TopLevelComplexType
 import pl.mrasoft.mridl.mridl.TopLevelComplexTypeReference
-import pl.mrasoft.mridl.mridl.TopLevelEnumType
-import pl.mrasoft.mridl.mridl.TopLevelSimpleType
 import pl.mrasoft.mridl.mridl.TopLevelSimpleTypeReference
+import pl.mrasoft.mridl.mridl.TopLevelType
 import pl.mrasoft.mridl.mridl.TopLevelTypeReference
+import pl.mrasoft.mridl.mridl.XsdBuiltinType
 import pl.mrasoft.mridl.mridl.XsdBuiltinTypeReference
-import pl.mrasoft.mridl.mridl.XsdBuiltinTypeWithDigits
-import pl.mrasoft.mridl.mridl.XsdBuiltinTypeWithMaxLength
 import pl.mrasoft.mridl.util.ResourceUtil
 
 class GeneratorCommon {
@@ -57,27 +51,13 @@ class GeneratorCommon {
 	
 	def dispatch typeRef(XsdBuiltinTypeReference it) '''xs:«typeName»'''
 
-	def dispatch typeRef(DirectTopLevelTypeReference it) '''tns:«typeName»'''
+	def dispatch typeRef(DirectTopLevelTypeReferenceBase it) '''tns:«typeName»'''
 
-	def dispatch typeRef(ImportedTopLevelTypeReference it) '''«importRef.^import.nsPrefix»:«typeName»'''
+	def dispatch typeRef(ImportedTopLevelTypeReferenceBase it) '''«importRef.^import.nsPrefix»:«typeName»'''	
 
-	def dispatch typeRef(DirectTopLevelSimpleTypeReference it) '''tns:«typeName»'''
+	def dispatch referencedTypeName(XsdBuiltinType it) { declaration.getName }
 
-	def dispatch typeRef(ImportedTopLevelSimpleTypeReference it) '''«importRef.^import.nsPrefix»:«typeName»'''
-
-	def dispatch typeRef(DirectTopLevelComplexTypeReference it) '''tns:«typeName»'''
-
-	def dispatch typeRef(ImportedTopLevelComplexTypeReference it) '''«importRef.^import.nsPrefix»:«typeName»'''	
-
-	def dispatch referencedTypeName(XsdBuiltinTypeWithDigits it) { declaration.getName }
-
-	def dispatch referencedTypeName(XsdBuiltinTypeWithMaxLength it) { declaration.getName }
-
-	def dispatch referencedTypeName(TopLevelSimpleType it) { name }
-
-	def dispatch referencedTypeName(TopLevelComplexType it) { name }
-
-	def dispatch referencedTypeName(TopLevelEnumType it) { name }
+	def dispatch referencedTypeName(TopLevelType it) { name }
 
 	enum GeneratedFileType {
 		WSDL,

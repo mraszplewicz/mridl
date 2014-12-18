@@ -48,6 +48,10 @@ class XsdGenerator {
 		</xs:schema>
 	'''
 
+	def importSchema(Import it) '''
+		<xs:import namespace="«resolveImport.nsUri»" schemaLocation="«trimMridlExtension(importURI)».xsd"/>
+	'''
+
 	def xsdFileDocumentation(Mridl it) '''
 		«IF xsdFileHasDocumentation»
 			«documentation.xsdDocumentation»
@@ -65,7 +69,6 @@ class XsdGenerator {
 		«ENDIF»
 	'''
 
-	//TODO zmiana complextype na jeden szablon?
 	def operationComplexTypes(Operation it) '''
 		<xs:complexType name="«name»">
 			<xs:sequence>
@@ -84,27 +87,17 @@ class XsdGenerator {
 	'''
 
 	def dispatch typeDeclaration(TopLevelComplexType it) '''
-		«IF extends != null»
-			<xs:complexType name="«name»">
+		<xs:complexType name="«name»">
+			«IF extends != null»
 				<xs:complexContent>
 					<xs:extension base="«extends.typeRef»">
 						 «complexTypeSequence»
 					</xs:extension>
 				</xs:complexContent>
-			</xs:complexType>
-		«ELSE»
-			<xs:complexType name="«name»">
+			«ELSE»			
 				«complexTypeSequence»
-			</xs:complexType>
-		«ENDIF»
-	'''
-
-	def complexTypeSequence(TopLevelComplexType it) '''
-		<xs:sequence>
-			«FOR element : elements»
-				«element.element»
-			«ENDFOR»
-		</xs:sequence>
+			«ENDIF»
+		</xs:complexType>
 	'''
 
 	def dispatch typeDeclaration(TopLevelSimpleType it) '''
@@ -125,6 +118,14 @@ class XsdGenerator {
 		</xs:simpleType>
 	'''
 
+	def complexTypeSequence(TopLevelComplexType it) '''
+		<xs:sequence>
+			«FOR element : elements»
+				«element.element»
+			«ENDFOR»
+		</xs:sequence>
+	'''
+
 	def enumValue(EnumValue it) '''
 		«IF enumValueHasDocumentation»
 			<xs:enumeration value="«value»">
@@ -140,42 +141,45 @@ class XsdGenerator {
 	}
 
 	def element(Element it) '''
-		«IF elementHasLength»
-			<xs:element name="«name»"«conditionalElementMultiplicity»>
-				«elementDocumentation»
+		«IF elementHasClosingTag»
+			«elementWithClosingTag»
+		«ELSE»
+			<xs:element name="«name»" type="«type.typeRef»"«conditionalElementMultiplicity»/>
+		«ENDIF»
+	'''
+
+	def elementHasClosingTag(Element it) {
+		elementHasLength || elementHasDigits || elementHasDocumentation
+	}
+
+	def elementWithClosingTag(Element it) '''
+		<xs:element name="«name»"«IF !elementHasSimpleTypeRestriction» type="«type.typeRef»"«ENDIF»«conditionalElementMultiplicity»>
+			«IF elementHasDocumentation»
+				«documentation.xsdDocumentation»
+			«ENDIF»
+			«IF elementHasLength»
 				<xs:simpleType>
 					<xs:restriction base="«type.typeRef»">
 						<xs:maxLength value="«elementLength»"/>
 					</xs:restriction>
 				</xs:simpleType>
-			</xs:element>
-		«ELSEIF elementHasDigits»
-			<xs:element name="«name»"«conditionalElementMultiplicity»>
-				«elementDocumentation»
+			«ELSEIF elementHasDigits»
 				<xs:simpleType>
 					<xs:restriction base="«type.typeRef»">
 						<xs:totalDigits value="«elementTotalDigits»"/>
 						<xs:fractionDigits value="«elementFractionDigits»"/>
 					</xs:restriction>
 				</xs:simpleType>
-			</xs:element>
-		«ELSEIF elementHasDocumentation»
-			<xs:element name="«name»" type="«type.typeRef»"«conditionalElementMultiplicity»>
-				«documentation.xsdDocumentation»
-			</xs:element>	
-		«ELSE»
-			<xs:element name="«name»" type="«type.typeRef»"«conditionalElementMultiplicity»/>
-		«ENDIF»
-	'''
-
-	def elementDocumentation(Element it) '''
-		«IF elementHasDocumentation»
-			«documentation.xsdDocumentation»
-		«ENDIF»
+			«ENDIF»
+		</xs:element>
 	'''
 
 	def elementHasDocumentation(Element it) {
 		documentation != null && documentation.doc != null
+	}
+
+	def elementHasSimpleTypeRestriction(Element it) {
+		elementHasLength || elementHasDigits
 	}
 
 	def xsdDocumentation(Documentation it) '''
@@ -235,10 +239,6 @@ class XsdGenerator {
 	def dispatch elementMultiplicity(UnspecifiedMultiplicity it) '''minOccurs="0" maxOccurs="unbounded"'''
 
 	def dispatch elementMultiplicity(Optional it) '''minOccurs="0"'''
-
-	def importSchema(Import it) '''
-		<xs:import namespace="«resolveImport.nsUri»" schemaLocation="«trimMridlExtension(importURI)».xsd"/>
-	'''
 
 	def importUsedInXsd(Import it, Mridl model) {
 		importUsed(model, GeneratorCommon.GeneratedFileType.XSD)

@@ -50,7 +50,7 @@ class WsdlGenerator {
 
 	def wsdlFileDocumentation(Mridl it) '''
 		«IF wsdlFileHasDocumentation»
-			«documentation.wsdlDocumentation»
+			«documentation.documentation»
 		«ENDIF»
 	'''
 
@@ -99,7 +99,7 @@ class WsdlGenerator {
 
 	def operationDocumentation(Operation it) '''
 		«IF operationHasDocumentation»
-			«documentation.wsdlDocumentation»
+			«documentation.documentation»
 		«ENDIF»
 	'''
 
@@ -109,7 +109,7 @@ class WsdlGenerator {
 
 	def faultDocumentation(Fault it) '''
 		«IF faultHasDocumentation»
-			«documentation.wsdlDocumentation»
+			«documentation.documentation»
 		«ENDIF»
 	'''
 
@@ -117,7 +117,7 @@ class WsdlGenerator {
 		documentation != null && documentation.doc != null
 	}
 
-	def wsdlDocumentation(Documentation it) '''		
+	def documentation(Documentation it) '''		
 		<wsdl:documentation>
 			«doc»
 		</wsdl:documentation>
