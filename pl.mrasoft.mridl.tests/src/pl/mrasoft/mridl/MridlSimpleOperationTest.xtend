@@ -61,17 +61,6 @@ class MridlSimpleOperationTest extends BaseMridlTest {
 			getActual(fsa, "hello/HelloMoreThanOneOperation.wsdl")
 		)
 	}
-
-	@Test
-	def void checkOperationParameterNameIsUnique() {
-		val issues = testFile("hello/HelloDuplicateOperationParamName.mridl")
-
-		assertConstraints(
-			issues.inLine(3)
-			      .allOfThemContain("Duplicate parameter 'text'")
-				  
-		)
-	}
 	
 	@Test
 	def void voidOperation() {

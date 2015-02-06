@@ -7,8 +7,8 @@
 		<xs:complexContent>
 			<xs:extension base="i:TestComplexType">
 				 <xs:sequence>
-				 	<xs:element name="aaa" type="xs:string"/>
-				 	<xs:element name="bbb" type="xs:int"/>
+				 	<xs:element name="aaaa" type="xs:string"/>
+				 	<xs:element name="bbbb" type="xs:int"/>
 				 </xs:sequence>
 			</xs:extension>
 		</xs:complexContent>

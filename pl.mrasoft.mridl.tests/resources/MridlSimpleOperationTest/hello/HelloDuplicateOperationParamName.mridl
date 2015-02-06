@@ -1,3 +1,0 @@
-namespace "http://mrasoft.pl/mridl/examples"
-
-operation string greetings sayHello(string text, string text)
