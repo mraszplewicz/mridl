@@ -3,7 +3,7 @@ namespace "http://mrasoft.pl/mridl/examples/d1/ImportDifferentDir"
 import ../d2/Imported.mridl as i
 
 complex TestComplex {
-	
+
 	string aaa
 	i:TestComplexType2 bbb
 

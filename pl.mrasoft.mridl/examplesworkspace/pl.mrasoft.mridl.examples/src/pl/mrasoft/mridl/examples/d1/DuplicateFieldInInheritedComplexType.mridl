@@ -1,13 +1,13 @@
 namespace "http://mrasoft.pl/mridl/examples/d1/DuplicateFieldInInheritedComplexType"
 
-complex TestComplex { 
-	
-	string a 	
-	
+complex TestComplex {
+
+	string a
+
 }
 
-complex TestComplex2 extends TestComplex { 
-	
-	string a  	
-	
+complex TestComplex2 extends TestComplex {
+
+	string a
+
 }

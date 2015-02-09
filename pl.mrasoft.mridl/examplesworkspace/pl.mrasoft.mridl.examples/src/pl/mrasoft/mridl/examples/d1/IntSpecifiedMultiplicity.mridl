@@ -1,7 +1,7 @@
 namespace "http://mrasoft.pl/mridl/examples/d1/IntSpecifiedMultiplicity"
 
 complex TestComplex {
-	
+
 	string[1..2] aaa
 
 }

@@ -4,8 +4,8 @@ import Imported.mridl as i
 import ../d2/Imported.mridl as i2
 
 complex TestComplex {
-	
-	string aaa	
+
+	string aaa
 	i2:TestComplexType2 bbb
- 
+
 }

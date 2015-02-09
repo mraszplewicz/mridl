@@ -12,11 +12,19 @@ class ResourceUtil {
 	}
 
 	def resolveImport(Resource resource, String uri) {
-		val importResource = EcoreUtil2::getResource(resource, uri)
+		val importResource = EcoreUtil2::getResource(resource, removeImportQuotation(uri))
 		importResource.contents.head as Mridl
 	}
-	
+
 	def trimMridlExtension(String uri) {
 		uri.substring(0, uri.length - 6)
+	}
+
+	def removeImportQuotation(String importURI) {
+		if (importURI.startsWith("\"") && importURI.endsWith("\"")) {
+			importURI.substring(1, importURI.length() - 1)
+		} else {
+			importURI
+		}
 	}
 }

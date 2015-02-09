@@ -6,7 +6,7 @@ import ../d2/Imported.mridl as i2
 operation int a op1() throws TestFault, i:TestComplexType
 
 complex TestFault {
-	
+
 	i2:TestComplexType2 b
 
 }

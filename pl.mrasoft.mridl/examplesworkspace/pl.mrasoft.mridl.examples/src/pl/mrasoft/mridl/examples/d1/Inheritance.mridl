@@ -1,10 +1,10 @@
 namespace "http://mrasoft.pl/mridl/examples/d1/Inheritance"
 
 complex TestComplexType extends TestComplexType2 {
-	
+
 	string aaa
 	int bbb
-	
+
 }
 
 complex TestComplexType2 {
