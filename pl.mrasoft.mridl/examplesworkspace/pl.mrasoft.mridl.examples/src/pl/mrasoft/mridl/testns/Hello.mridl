@@ -1,8 +1,0 @@
-namespace "http://mrasoft.pl/mridl/examples2"
-
-complex TestComplexType {
-	
-	string aaa
-	int bbb
-	
-}

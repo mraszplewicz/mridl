@@ -1,8 +1,0 @@
-namespace "http://mrasoft.pl/mridl/examples/d1/StringArrayWithLength"
-
-complex TestComplex2 {
-
-	string(2)[] s
-
-}
-

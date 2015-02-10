@@ -1,9 +1,0 @@
-namespace "http://mrasoft.pl/mridl/examples/d1/DuplicateImportedComplexTypeName"
-
-import Imported.mridl as i
-
-complex TestComplexType {
-
-	i:TestComplexType a
-
-}

@@ -80,8 +80,6 @@ ImportedTopLevelSimpleTypeReference:
 ImportedTopLevelComplexTypeReference:
 	importRef=ImportReference ref=[TopLevelComplexType];
 
-
-
 ImportReference:
 	^import=[Import|ID] ":";
 
@@ -107,8 +105,8 @@ Optional:
 	"?";
 
 PatternRestriction:
-	"(" simpleType=NamedSimpleTypeReference
-	"pattern" "=" pattern=STRING ")";
+	"{" "base" "=" simpleType=NamedSimpleTypeReference
+	"pattern" "=" pattern=STRING "}";
 
 NamedSimpleTypeReference:
 	TopLevelSimpleTypeReference | XsdBuiltinTypeReference;

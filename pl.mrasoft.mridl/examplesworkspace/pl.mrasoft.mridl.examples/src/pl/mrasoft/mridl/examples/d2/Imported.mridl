@@ -1,8 +1,8 @@
 namespace "http://mrasoft.pl/mridl/examples/d2/Imported"
 
 complex TestComplexType2 {
-	
+
 	string aaa
 	int bbb
-	
+
 }

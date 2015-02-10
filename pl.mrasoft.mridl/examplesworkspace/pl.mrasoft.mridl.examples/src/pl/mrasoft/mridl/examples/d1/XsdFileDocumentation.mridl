@@ -1,7 +1,0 @@
-@doc("global doc")
-namespace "http://mrasoft.pl/mridl/examples/d1/XsdFileDocumentation"
-
-complex TestComplex {
-	string s
-}
-

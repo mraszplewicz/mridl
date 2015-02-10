@@ -1,5 +1,0 @@
-namespace "http://mrasoft.pl/mridl/examples/d1/ImportedFault"
-
-import Imported.mridl as i
-
-operation int a op1() throws i:TestComplexType

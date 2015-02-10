@@ -1,7 +1,7 @@
 @doc("global doc")
 namespace "http://mrasoft.pl/mridl/examples/d1/AllFeatures"
 
-import "Imported.mridl" as i
+import "Imported 2.mridl" as i
 import ../d2/Imported.mridl as i2
 
 @doc("op1 documentation")
@@ -32,9 +32,15 @@ complex TestComplex2 extends i:TestComplexType {
 
 }
 
-simple TestSimple2(string pattern = "[a-zA-Z][a-zA-Z][a-zA-Z]")
+simple TestSimple2 {
+	base = string
+	pattern = "[a-zA-Z][a-zA-Z][a-zA-Z]"
+}
 
-simple TestSimple3(i:ImportedTestSimple pattern = "[a-zA-Z][a-zA-Z][a-zA-Z]")
+simple TestSimple3 {
+	base = i:ImportedTestSimple
+	pattern = "[a-zA-Z][a-zA-Z][a-zA-Z]"
+}
 
 enum TestEnum {
 	@doc("ENUM1 documentation") ENUM1
