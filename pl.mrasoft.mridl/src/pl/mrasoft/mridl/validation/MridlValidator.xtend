@@ -58,7 +58,7 @@ class MridlValidator extends AbstractMridlValidator {
 		val List<Element> containerElements = getContainerElements(container, element)
 
 		if (container instanceof TopLevelComplexType) {
-			checkElementNameIsUniqueInSuperTypes(container as TopLevelComplexType, element)
+			checkElementNameIsUniqueInSuperTypes(container, element)
 		}
 
 		for (containerElement : containerElements) {
