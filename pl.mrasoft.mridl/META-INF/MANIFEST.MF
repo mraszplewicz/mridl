@@ -29,7 +29,7 @@ Export-Package: pl.mrasoft.mridl,
  pl.mrasoft.mridl.serializer,
  pl.mrasoft.mridl.parser.antlr,
  pl.mrasoft.mridl.parser.antlr.internal,
- pl.mrasoft.mridl.validation,
  pl.mrasoft.mridl.scoping,
+ pl.mrasoft.mridl.validation,
  pl.mrasoft.mridl.generator,
  pl.mrasoft.mridl.formatting
