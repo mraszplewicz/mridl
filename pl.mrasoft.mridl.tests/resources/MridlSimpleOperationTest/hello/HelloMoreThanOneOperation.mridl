@@ -1,0 +1,5 @@
+namespace "http://mrasoft.pl/mridl/examples"
+
+operation string a op1(string text)
+operation string a op2()
+operation string a op3(int number)

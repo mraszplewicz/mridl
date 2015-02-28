@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions name="OperationDocumentation"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:tns="http://mrasoft.pl/mridl/examples/d1/OperationDocumentation"
+                  targetNamespace="http://mrasoft.pl/mridl/examples/d1/OperationDocumentation">
+    <wsdl:types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema">
+            <import namespace="http://mrasoft.pl/mridl/examples/d1/OperationDocumentation" schemaLocation="OperationDocumentation.xsd"/>
+        </schema>
+    </wsdl:types>
+	<wsdl:message name="op1">
+		<wsdl:part element="tns:op1" name="parameters"/>
+	</wsdl:message>
+	<wsdl:portType name="OperationDocumentation">
+		<wsdl:operation name="op1">
+			<wsdl:documentation>
+				op1 doc
+			</wsdl:documentation>
+			<wsdl:input message="tns:op1" name="op1"/>
+		</wsdl:operation>
+	</wsdl:portType>
+</wsdl:definitions>

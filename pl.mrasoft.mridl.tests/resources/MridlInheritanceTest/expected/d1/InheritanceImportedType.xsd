@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="unqualified" 
+		   xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		   xmlns:tns="http://mrasoft.pl/mridl/examples/d1/InheritanceImportedType"
+		   targetNamespace="http://mrasoft.pl/mridl/examples/d1/InheritanceImportedType">
+	<xs:complexType name="TestComplexType3">
+		<xs:complexContent>
+			<xs:extension base="i:TestComplexType">
+				 <xs:sequence>
+				 	<xs:element name="aaaa" type="xs:string"/>
+				 	<xs:element name="bbbb" type="xs:int"/>
+				 </xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>

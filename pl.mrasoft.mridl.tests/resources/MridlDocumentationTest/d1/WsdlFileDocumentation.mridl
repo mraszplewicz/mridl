@@ -1,0 +1,5 @@
+@doc("global doc")
+namespace "http://mrasoft.pl/mridl/examples/d1/WsdlFileDocumentation"
+
+operation void op1()
+

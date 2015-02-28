@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions name="FaultDocumentation"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:tns="http://mrasoft.pl/mridl/examples/d1/FaultDocumentation"
+                  targetNamespace="http://mrasoft.pl/mridl/examples/d1/FaultDocumentation">
+    <wsdl:types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema">
+            <import namespace="http://mrasoft.pl/mridl/examples/d1/FaultDocumentation" schemaLocation="FaultDocumentation.xsd"/>
+        </schema>
+    </wsdl:types>
+	<wsdl:message name="op1">
+		<wsdl:part element="tns:op1" name="parameters"/>
+	</wsdl:message>
+	<wsdl:message name="TestFaultException">
+		<wsdl:part name="TestFaultException" element="tns:TestFault"/>
+	</wsdl:message>
+	<wsdl:portType name="FaultDocumentation">
+		<wsdl:operation name="op1">
+			<wsdl:input message="tns:op1" name="op1"/>
+			<wsdl:fault name="TestFaultException" message="tns:TestFaultException">
+				<wsdl:documentation>
+					fault doc
+				</wsdl:documentation>
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:portType>
+</wsdl:definitions>

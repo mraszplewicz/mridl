@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="unqualified" 
+		   xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		   xmlns:tns="http://mrasoft.pl/mridl/examples/d1/XsdFileDocumentation"
+		   targetNamespace="http://mrasoft.pl/mridl/examples/d1/XsdFileDocumentation">
+	<xs:annotation>
+		<xs:documentation>
+			global doc
+		</xs:documentation>
+	</xs:annotation>
+	<xs:complexType name="TestComplex">
+		<xs:sequence>
+			<xs:element name="s" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

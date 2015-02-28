@@ -1,0 +1,5 @@
+namespace "http://mrasoft.pl/mridl/examples/d1/SimpleTypeWithRestrictionImportedType"
+
+import Imported.mridl as i
+
+simple TestSimple2 {base=i:ImportedTestSimple pattern="[a-zA-Z][a-zA-Z]"}

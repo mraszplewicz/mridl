@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="unqualified" 
+		   xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		   xmlns:tns="http://mrasoft.pl/mridl/examples/d1/Imported"
+		   targetNamespace="http://mrasoft.pl/mridl/examples/d1/Imported">
+	<xs:complexType name="TestComplexType">
+		<xs:sequence>
+			<xs:element name="aaa" type="xs:string"/>
+			<xs:element name="bbb" type="xs:int"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="ImportedTestSimple">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[a-zA-Z][a-zA-Z][a-zA-Z]"/>	    
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>
