@@ -31,10 +31,22 @@
 									<directory>${basedir}/src-gen/</directory>
 								</fileset>
 								<fileset>
+									<directory>${basedir}/</directory>
+									<includes>
+										<include>plugin.xml_gen</include>
+									</includes>
+								</fileset>
+								<fileset>
 									<directory>${basedir}/model/</directory>
 								</fileset>
 								<fileset>
 									<directory>${basedir}/../${project.artifactId}.ui/src-gen/</directory>
+								</fileset>
+								<fileset>
+									<directory>${basedir}/../${project.artifactId}.ui/</directory>
+									<includes>
+										<include>plugin.xml_gen</include>
+									</includes>
 								</fileset>
 								<fileset>
 									<directory>${basedir}/../${project.artifactId}.tests/src-gen/</directory>
