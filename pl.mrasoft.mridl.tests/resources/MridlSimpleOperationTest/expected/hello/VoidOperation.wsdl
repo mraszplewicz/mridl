@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions name="VoidOperation"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:tns="http://mrasoft.pl/mridl/examples/hello/VoidOperation"
+                  targetNamespace="http://mrasoft.pl/mridl/examples/hello/VoidOperation">
+    <wsdl:types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema">
+            <import namespace="http://mrasoft.pl/mridl/examples/hello/VoidOperation" schemaLocation="VoidOperation.xsd"/>
+        </schema>
+    </wsdl:types>
+	<wsdl:message name="op1">
+		<wsdl:part element="tns:op1" name="parameters"/>
+	</wsdl:message>
+	<wsdl:portType name="VoidOperation">
+		<wsdl:operation name="op1">
+			<wsdl:input message="tns:op1" name="op1"/>
+		</wsdl:operation>
+	</wsdl:portType>
+</wsdl:definitions>

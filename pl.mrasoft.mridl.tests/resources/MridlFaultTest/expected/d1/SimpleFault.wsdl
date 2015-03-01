@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions name="SimpleFault"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:tns="http://mrasoft.pl/mridl/examples/d1/SimpleFault"
+                  targetNamespace="http://mrasoft.pl/mridl/examples/d1/SimpleFault">
+    <wsdl:types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema">
+            <import namespace="http://mrasoft.pl/mridl/examples/d1/SimpleFault" schemaLocation="SimpleFault.xsd"/>
+        </schema>
+    </wsdl:types>
+	<wsdl:message name="op1">
+		<wsdl:part element="tns:op1" name="parameters"/>
+	</wsdl:message>
+	<wsdl:message name="op1Response">
+		<wsdl:part element="tns:op1Response" name="parameters"/>
+	</wsdl:message>
+	<wsdl:message name="TestFaultException">
+		<wsdl:part name="TestFaultException" element="tns:TestFault"/>
+	</wsdl:message>
+	<wsdl:portType name="SimpleFault">
+		<wsdl:operation name="op1">
+			<wsdl:input message="tns:op1" name="op1"/>
+			<wsdl:output message="tns:op1Response" name="op1Response"/>
+			<wsdl:fault name="TestFaultException" message="tns:TestFaultException"/>
+		</wsdl:operation>
+	</wsdl:portType>
+</wsdl:definitions>

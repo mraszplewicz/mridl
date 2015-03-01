@@ -1,0 +1,8 @@
+namespace "http://mrasoft.pl/mridl/examples/d1/DecimalWithDigits"
+
+complex TestComplex2 {
+	
+	decimal(2,1) s
+
+}
+

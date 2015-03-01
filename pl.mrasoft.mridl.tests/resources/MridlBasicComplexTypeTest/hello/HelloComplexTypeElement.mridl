@@ -1,0 +1,15 @@
+namespace "http://mrasoft.pl/mridl/examples"
+
+complex TestComplexType1 {
+	
+	string aaa
+	TestComplexType2 bbb
+	
+}
+
+complex TestComplexType2 {
+	
+	string aaa
+	int bbb
+	
+}

@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: pl.mrasoft.mridl.fragments
+Bundle-SymbolicName: pl.mrasoft.mridl.fragments; singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: My Company
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Require-Bundle: org.eclipse.xtext,
+ org.eclipse.xtext.xbase,
+ org.eclipse.xtext.generator,
+ org.eclipse.xtext.util,
+ org.eclipse.emf.ecore,
+ org.eclipse.emf.common,
+ org.eclipse.xtext.common.types,
+ org.eclipse.xtext.xbase.lib
+Export-Package: pl.mrasoft.mridl.fragments
