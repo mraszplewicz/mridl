@@ -1,0 +1,8 @@
+namespace "http://mrasoft.pl/mridl/examples/d1/DuplicateFieldInComplexType"
+
+complex TestComplex { 
+	
+	string a
+	string a 	
+	
+}

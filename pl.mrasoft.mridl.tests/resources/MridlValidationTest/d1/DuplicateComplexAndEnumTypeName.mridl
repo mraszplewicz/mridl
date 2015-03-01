@@ -1,0 +1,13 @@
+namespace "http://mrasoft.pl/mridl/examples/d1/DuplicateComplexAndEnumTypeName"
+
+complex TestType { 
+	
+	string a 	
+	
+}
+
+enum TestType {
+	
+	ENUM1
+
+}

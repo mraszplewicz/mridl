@@ -1,0 +1,19 @@
+namespace "http://mrasoft.pl/mridl/examples/d1/DuplicateFieldInInheritanceHierarchy"
+
+complex TestComplex { 
+	
+	string a 	
+	
+}
+
+complex TestComplex2 extends TestComplex { 
+	
+	string b  	
+	
+}
+
+complex TestComplex3 extends TestComplex2 { 
+	
+	string a 	
+	
+}

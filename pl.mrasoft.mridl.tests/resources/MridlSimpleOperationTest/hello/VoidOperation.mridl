@@ -1,0 +1,4 @@
+namespace "http://mrasoft.pl/mridl/examples/hello/VoidOperation"
+
+operation void op1()
+

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="unqualified" 
+		   xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		   xmlns:tns="http://mrasoft.pl/mridl/examples"
+		   targetNamespace="http://mrasoft.pl/mridl/examples">
+	<xs:element name="sayHello2" type="tns:sayHello2"/>
+	<xs:element name="sayHello2Response" type="tns:sayHello2Response"/>
+	<xs:complexType name="sayHello2">
+		<xs:sequence>
+			<xs:element name="text" type="xs:string"/>
+			<xs:element name="test" type="xs:int"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="sayHello2Response">
+		<xs:sequence>
+			<xs:element name="greetings" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

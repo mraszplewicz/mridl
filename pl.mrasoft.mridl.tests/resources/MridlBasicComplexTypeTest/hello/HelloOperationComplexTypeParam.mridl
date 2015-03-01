@@ -1,0 +1,10 @@
+namespace "http://mrasoft.pl/mridl/examples"
+
+operation string a op1(TestComplexType text)
+
+complex TestComplexType {
+	
+	string aaa
+	int bbb
+	
+}

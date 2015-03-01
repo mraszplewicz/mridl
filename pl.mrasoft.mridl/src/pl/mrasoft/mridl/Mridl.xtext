@@ -1,0 +1,236 @@
+grammar pl.mrasoft.mridl.Mridl with org.eclipse.xtext.common.Terminals
+
+generate mridl "http://mrasoft.pl/mridl/Mridl"
+
+Mridl:
+	(documentation=Documentation)?
+	"namespace" nsUri=STRING
+	(imports+=Import)*
+	(operations+=Operation)*
+	(typeDeclarations+=TopLevelType)*;
+
+Import:
+	"import" importURI=ImportMridlUri "as" nsPrefix=ID;
+
+ImportMridlUri:
+	STRING | (((ID | ".." | ".") "/")* ID ".mridl");
+
+Operation:
+	(documentation=Documentation)?
+	"operation" (returnType=Element | void?="void") name=ID
+	"(" (params+=Element
+	("," params+=Element)*)? ")"
+	("throws" (faults+=Fault ("," faults+=Fault)*))?;
+
+TopLevelComplexType:
+	"complex" name=ID ("extends" extends=TopLevelComplexTypeReference)?
+	"{" (elements+=Element)* "}";
+
+TopLevelSimpleType:
+	"simple" name=ID (restriction=PatternRestriction);
+
+TopLevelEnumType:
+	"enum" name=ID "{" (values+=EnumValue)* "}";
+
+EnumValue:
+	(documentation=Documentation)? value=ID;
+
+Element:
+	(documentation=Documentation)? type=NamedTypeReference (multiplicity=Multiplicity)? name=ID;
+
+Fault:
+	(documentation=Documentation)? type=NamedTypeReference;
+
+NamedTypeReference:
+	TopLevelTypeReference | XsdBuiltinTypeReference;
+
+TopLevelTypeReference:
+	DirectTopLevelTypeReference | ImportedTopLevelTypeReference;
+
+TopLevelSimpleTypeReference:
+	DirectTopLevelSimpleTypeReference | ImportedTopLevelSimpleTypeReference;
+
+TopLevelComplexTypeReference:
+	DirectTopLevelComplexTypeReference | ImportedTopLevelComplexTypeReference;
+
+XsdBuiltinTypeReference:
+	ref=XsdBuiltinType;
+
+DirectTopLevelTypeReferenceBase:
+	DirectTopLevelTypeReference | DirectTopLevelSimpleTypeReference | DirectTopLevelComplexTypeReference;
+
+DirectTopLevelTypeReference:
+	ref=[TopLevelType];
+
+DirectTopLevelSimpleTypeReference:
+	ref=[TopLevelSimpleType];
+
+DirectTopLevelComplexTypeReference:
+	ref=[TopLevelComplexType];
+
+ImportedTopLevelTypeReferenceBase:
+	ImportedTopLevelTypeReference | ImportedTopLevelSimpleTypeReference | ImportedTopLevelComplexTypeReference;
+
+ImportedTopLevelTypeReference:
+	importRef=ImportReference ref=[TopLevelType];
+
+ImportedTopLevelSimpleTypeReference:
+	importRef=ImportReference ref=[TopLevelSimpleType];
+
+ImportedTopLevelComplexTypeReference:
+	importRef=ImportReference ref=[TopLevelComplexType];
+
+ImportReference:
+	^import=[Import|ID] ":";
+
+XsdBuiltinType:
+	XsdBuiltinTypeWithDigits | XsdBuiltinTypeWithMaxLength;
+
+TopLevelType:
+	TopLevelComplexType | TopLevelSimpleType | TopLevelEnumType;
+
+Multiplicity:
+	SpecifiedMultiplicity | UnspecifiedMultiplicity | Optional;
+
+SpecifiedMultiplicity:
+	{SpecifiedMultiplicity}
+	"[" (lower=INT "..") (upper=INT | unbounded?="*") "]";
+
+UnspecifiedMultiplicity:
+	{UnspecifiedMultiplicity}
+	"[]";
+
+Optional:
+	{Optional}
+	"?";
+
+PatternRestriction:
+	"{" "base" "=" simpleType=NamedSimpleTypeReference
+	"pattern" "=" pattern=STRING "}";
+
+NamedSimpleTypeReference:
+	TopLevelSimpleTypeReference | XsdBuiltinTypeReference;
+
+XsdBuiltinTypeWithDigits:
+	declaration=XsdBuiltinTypeCanHaveDigits (digitsSpec=DigitsSpecification)?;
+
+XsdBuiltinTypeWithMaxLength:
+	declaration=XsdBuiltinTypeCanHaveMaxLength (lengthSpec=MaxLengthSpecification)?;
+
+MaxLengthSpecification:
+	"(" maxLength=INT ")";
+
+DigitsSpecification:
+	"(" totalDigits=INT "," fractionDigits=INT ")";
+
+enum XsdBuiltinTypeDeclaration:
+	decimal
+	| anyType
+	| anySimpleType
+	| anyAtomicType
+	| anyURI
+	| base64Binary
+	| boolean
+	| date
+	| dateTime
+	| dateTimeStamp
+	| integer
+	| long
+	| int
+	| short
+	| byte
+	| nonNegativeInteger
+	| positiveInteger
+	| unsignedLong
+	| unsignedInt
+	| unsignedShort
+	| unsignedByte
+	| nonPositiveInteger
+	| negativeInteger
+	| double
+	| duration
+	| dayTimeDuration
+	| yearMonthDuration
+	| float
+	| gDay
+	| gMonth
+	| gMonthDay
+	| gYear
+	| gYearMonth
+	| hexBinary
+	| NOTATION
+	| precisionDecimal
+	| QName
+	| string
+	| normalizedString
+	| token
+	| language
+	| Name
+	| NCName
+	| ENTITY
+	| ID
+	| IDREF
+	| NMTOKEN
+	| time
+	| ENTITIES
+	| IDREFS
+	| NMTOKENS;
+
+	//some types will not be fully supported
+enum XsdBuiltinTypeCanHaveDigits returns XsdBuiltinTypeDeclaration:
+	decimal;
+
+enum XsdBuiltinTypeCanHaveMaxLength returns XsdBuiltinTypeDeclaration:
+	anyType
+	| anySimpleType
+	| anyAtomicType
+	| anyURI
+	| base64Binary
+	| boolean
+	| date
+	| dateTime
+	| dateTimeStamp
+	| integer
+	| long
+	| int
+	| short
+	| byte
+	| nonNegativeInteger
+	| positiveInteger
+	| unsignedLong
+	| unsignedInt
+	| unsignedShort
+	| unsignedByte
+	| nonPositiveInteger
+	| negativeInteger
+	| double
+	| duration
+	| dayTimeDuration
+	| yearMonthDuration
+	| float
+	| gDay
+	| gMonth
+	| gMonthDay
+	| gYear
+	| gYearMonth
+	| hexBinary
+	| NOTATION
+	| precisionDecimal
+	| QName
+	| string
+	| normalizedString
+	| token
+	| language
+	| Name
+	| NCName
+	| ENTITY
+	| ID
+	| IDREF
+	| NMTOKEN
+	| time
+	| ENTITIES
+	| IDREFS
+	| NMTOKENS;
+
+Documentation:
+	"@doc" "(" doc=STRING ")";

@@ -1,0 +1,8 @@
+namespace "http://mrasoft.pl/mridl/examples/d1/DuplicateEnumValue"
+
+enum TestEnum {
+	
+	ENUM1
+	ENUM1
+
+}

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/pl.mrasoft.mridl.sdk_0.0.0.jar" id="pl.mrasoft.mridl.sdk" version="0.0.0">
+      <category name="pl.mrasoft.mridl"/>
+   </feature>
+   <category-def name="pl.mrasoft.mridl" label="Mridl Language"/>
+</site>
