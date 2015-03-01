@@ -7,7 +7,7 @@
 		<relativePath>../pl.mrasoft.mridl.releng/pom.xml</relativePath>
 		<groupId>pl.mrasoft.mridl</groupId>
 		<artifactId>parent</artifactId>
-		<version>1.0.0.RELEASE</version>
+		<version>1.0.1-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>pl.mrasoft.mridl.tests</artifactId>
