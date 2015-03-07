@@ -233,4 +233,6 @@ enum XsdBuiltinTypeCanHaveMaxLength returns XsdBuiltinTypeDeclaration:
 	| NMTOKENS;
 
 Documentation:
-	"@doc" "(" doc=STRING ")";
+	doc=DOCUMENTATION_TERMINAL;
+	
+terminal DOCUMENTATION_TERMINAL	: '(*' -> '*)';	

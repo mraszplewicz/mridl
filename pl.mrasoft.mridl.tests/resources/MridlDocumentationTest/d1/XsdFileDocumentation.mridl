@@ -1,4 +1,4 @@
-@doc("global doc")
+(*global doc*)
 namespace "http://mrasoft.pl/mridl/examples/d1/XsdFileDocumentation"
 
 complex TestComplex {
