@@ -68,8 +68,8 @@ class WsdlGenerator {
 			</wsdl:message>
 		«ENDIF»
 		«FOR fault : faults»
-			<wsdl:message name="«fault.type.typeName»Exception">
-				<wsdl:part name="«fault.type.typeName»Exception" element="«fault.type.typeRef»"/>
+			<wsdl:message name="«fault.element.elementName»Exception">
+				<wsdl:part name="«fault.element.elementName»Exception" element="«fault.element.elementRef»"/>
 			</wsdl:message>
 		«ENDFOR»		
 	'''
@@ -89,11 +89,11 @@ class WsdlGenerator {
 
 	def operationFault(Fault it) '''
 		«IF faultHasDocumentation»
-			<wsdl:fault name="«type.typeName»Exception" message="tns:«type.typeName»Exception">
+			<wsdl:fault name="«element.ref.name»Exception" message="tns:«element.ref.name»Exception">
 				«faultDocumentation»
 			</wsdl:fault>
 		«ELSE»
-			<wsdl:fault name="«type.typeName»Exception" message="tns:«type.typeName»Exception"/>
+			<wsdl:fault name="«element.ref.name»Exception" message="tns:«element.ref.name»Exception"/>
 		«ENDIF»
 	'''
 

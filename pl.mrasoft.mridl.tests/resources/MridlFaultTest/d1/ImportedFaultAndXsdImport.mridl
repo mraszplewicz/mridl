@@ -3,7 +3,9 @@ namespace "http://mrasoft.pl/mridl/examples/d1/ImportedFaultAndXsdImport"
 import Imported.mridl as i
 import ../d2/Imported.mridl as i2
 
-operation int a op1() throws TestFault, i:TestComplexType
+operation int a op1() throws TestFault2, i:TestComplexType2
+
+fault TestFault TestFault2
 
 complex TestFault {
 	

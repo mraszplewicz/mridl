@@ -63,7 +63,7 @@ class MridlValidator extends AbstractMridlValidator {
 
 		for (containerElement : containerElements) {
 			if (containerElement != element && elementName.equals(containerElement.name)) {
-				error("Duplicate element '" + elementName + "'", MridlPackage.Literals::ELEMENT__NAME);
+				error("Duplicate element '" + elementName + "'", MridlPackage.Literals::ABSTRACT_ELEMENT__NAME);
 				return
 			}
 		}

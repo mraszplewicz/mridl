@@ -6,8 +6,9 @@ Mridl:
 	(documentation=Documentation)?
 	"namespace" nsUri=STRING
 	(imports+=Import)*
-	(operations+=Operation)*
-	(typeDeclarations+=TopLevelType)*;
+	((operations+=Operation)* &
+	(typeDeclarations+=TopLevelType)* &
+	(faultElements+=FaultElement)*);
 
 Import:
 	"import" importURI=ImportMridlUri "as" nsPrefix=ID;
@@ -35,11 +36,20 @@ TopLevelEnumType:
 EnumValue:
 	(documentation=Documentation)? value=ID;
 
+ElementTypeDeclaration:
+	type=NamedTypeReference (multiplicity=Multiplicity)?;
+
+AbstractElement:
+	Element | FaultElement;
+
 Element:
-	(documentation=Documentation)? type=NamedTypeReference (multiplicity=Multiplicity)? name=ID;
+	(documentation=Documentation)? typeDeclaration=ElementTypeDeclaration name=ID;
 
 Fault:
-	(documentation=Documentation)? type=NamedTypeReference;
+	(documentation=Documentation)? element=FaultElementReference;
+
+FaultElement:
+	"fault" typeDeclaration=ElementTypeDeclaration name=ID;
 
 NamedTypeReference:
 	TopLevelTypeReference | XsdBuiltinTypeReference;
@@ -55,6 +65,9 @@ TopLevelComplexTypeReference:
 
 XsdBuiltinTypeReference:
 	ref=XsdBuiltinType;
+
+FaultElementReference:
+	DirectFaultElementReference | ImportedFaultElementReference;
 
 DirectTopLevelTypeReferenceBase:
 	DirectTopLevelTypeReference | DirectTopLevelSimpleTypeReference | DirectTopLevelComplexTypeReference;
@@ -80,6 +93,12 @@ ImportedTopLevelSimpleTypeReference:
 ImportedTopLevelComplexTypeReference:
 	importRef=ImportReference ref=[TopLevelComplexType];
 
+DirectFaultElementReference:
+	ref=[FaultElement];
+
+ImportedFaultElementReference:
+	importRef=ImportReference ref=[FaultElement];
+
 ImportReference:
 	^import=[Import|ID] ":";
 
@@ -93,20 +112,16 @@ Multiplicity:
 	SpecifiedMultiplicity | UnspecifiedMultiplicity | Optional;
 
 SpecifiedMultiplicity:
-	{SpecifiedMultiplicity}
-	"[" (lower=INT "..") (upper=INT | unbounded?="*") "]";
+	{SpecifiedMultiplicity} "[" (lower=INT "..") (upper=INT | unbounded?="*") "]";
 
 UnspecifiedMultiplicity:
-	{UnspecifiedMultiplicity}
-	"[]";
+	{UnspecifiedMultiplicity} "[]";
 
 Optional:
-	{Optional}
-	"?";
+	{Optional} "?";
 
 PatternRestriction:
-	"{" "base" "=" simpleType=NamedSimpleTypeReference
-	"pattern" "=" pattern=STRING "}";
+	"{" "base" "=" simpleType=NamedSimpleTypeReference "pattern" "=" pattern=STRING "}";
 
 NamedSimpleTypeReference:
 	TopLevelSimpleTypeReference | XsdBuiltinTypeReference;
@@ -234,5 +249,6 @@ enum XsdBuiltinTypeCanHaveMaxLength returns XsdBuiltinTypeDeclaration:
 
 Documentation:
 	doc=DOCUMENTATION_TERMINAL;
-	
-terminal DOCUMENTATION_TERMINAL	: '(*' -> '*)';	
+
+terminal DOCUMENTATION_TERMINAL:
+	'(*'->'*)';	

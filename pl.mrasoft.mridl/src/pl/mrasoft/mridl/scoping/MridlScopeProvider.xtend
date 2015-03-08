@@ -19,6 +19,10 @@ import pl.mrasoft.mridl.mridl.TopLevelComplexType
 import pl.mrasoft.mridl.mridl.TopLevelType
 import pl.mrasoft.mridl.mridl.DirectTopLevelTypeReferenceBase
 import pl.mrasoft.mridl.mridl.ImportedTopLevelTypeReferenceBase
+import pl.mrasoft.mridl.mridl.FaultElementReference
+import pl.mrasoft.mridl.mridl.FaultElement
+import pl.mrasoft.mridl.mridl.ImportedFaultElementReference
+import pl.mrasoft.mridl.mridl.DirectFaultElementReference
 
 class MridlScopeProvider extends AbstractDeclarativeScopeProvider {
 
@@ -42,15 +46,28 @@ class MridlScopeProvider extends AbstractDeclarativeScopeProvider {
 		createTopLevelTypeScope(ref, TopLevelComplexType)
 	}
 	
+	def scope_FaultElementReference_ref(FaultElementReference ref, EReference eRef) {
+		createFaultElementScope(ref, FaultElement)
+	}
+	
 	def dispatch createTopLevelTypeScope(DirectTopLevelTypeReferenceBase ref, Class<? extends TopLevelType> clazz) {
 		val model = getRootModel(ref)
 		Scopes::scopeFor(model.typeDeclarations.filter(clazz)) 
 	}
 	
-
 	def dispatch createTopLevelTypeScope(ImportedTopLevelTypeReferenceBase importedRef, Class<? extends TopLevelType> clazz) {
 		val model = getImportedModel(importedRef, importedRef.importRef.^import.nsPrefix)
 		Scopes::scopeFor(model.typeDeclarations.filter(clazz)) 
+	}
+	
+	def dispatch createFaultElementScope(DirectFaultElementReference ref, Class<? extends FaultElement> clazz) {
+		val model = getRootModel(ref)
+		Scopes::scopeFor(model.faultElements.filter(clazz)) 
+	}	
+
+	def dispatch createFaultElementScope(ImportedFaultElementReference importedRef, Class<? extends FaultElement> clazz) {
+		val model = getImportedModel(importedRef, importedRef.importRef.^import.nsPrefix)
+		Scopes::scopeFor(model.faultElements.filter(clazz)) 
 	}
 
 	def getImportedModel(EObject eObject, String prefix) {

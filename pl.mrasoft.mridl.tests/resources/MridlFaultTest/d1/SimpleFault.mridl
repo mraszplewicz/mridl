@@ -1,6 +1,8 @@
 namespace "http://mrasoft.pl/mridl/examples/d1/SimpleFault"
 
-operation int a op1() throws TestFault
+operation int a op1() throws TestFault2
+
+fault TestFault TestFault2
 
 complex TestFault {
 	

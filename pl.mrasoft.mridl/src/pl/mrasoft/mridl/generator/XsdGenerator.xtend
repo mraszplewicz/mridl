@@ -17,6 +17,8 @@ import pl.mrasoft.mridl.mridl.XsdBuiltinTypeReference
 import pl.mrasoft.mridl.mridl.XsdBuiltinTypeWithDigits
 import pl.mrasoft.mridl.mridl.XsdBuiltinTypeWithMaxLength
 import pl.mrasoft.mridl.util.ResourceUtil
+import pl.mrasoft.mridl.mridl.FaultElement
+import pl.mrasoft.mridl.mridl.AbstractElement
 
 class XsdGenerator {
 
@@ -39,12 +41,15 @@ class XsdGenerator {
 			«FOR operation : operations»
 				«operation.operationRootElements»
 			«ENDFOR»
+			«FOR faultElement : faultElements»				
+				«faultElement.faultElement»
+			«ENDFOR»
 			«FOR operation : operations»
 				«operation.operationComplexTypes»
-			«ENDFOR»
+			«ENDFOR»		
 			«FOR typeDeclaration : typeDeclarations»				
 				«typeDeclaration.typeDeclaration»
-			«ENDFOR»	         								
+			«ENDFOR»
 		</xs:schema>
 	'''
 
@@ -67,6 +72,10 @@ class XsdGenerator {
 		«IF !^void»
 			<xs:element name="«name»Response" type="tns:«name»Response"/>
 		«ENDIF»
+	'''
+
+	def faultElement(FaultElement it) '''
+		<xs:element name="«name»" type="«typeDeclaration.type.typeRef»"«conditionalElementMultiplicity»/>
 	'''
 
 	def operationComplexTypes(Operation it) '''
@@ -144,7 +153,7 @@ class XsdGenerator {
 		«IF elementHasClosingTag»
 			«elementWithClosingTag»
 		«ELSE»
-			<xs:element name="«name»" type="«type.typeRef»"«conditionalElementMultiplicity»/>
+			<xs:element name="«name»" type="«typeDeclaration.type.typeRef»"«conditionalElementMultiplicity»/>
 		«ENDIF»
 	'''
 
@@ -153,19 +162,19 @@ class XsdGenerator {
 	}
 
 	def elementWithClosingTag(Element it) '''
-		<xs:element name="«name»"«IF !elementHasSimpleTypeRestriction» type="«type.typeRef»"«ENDIF»«conditionalElementMultiplicity»>
+		<xs:element name="«name»"«IF !elementHasSimpleTypeRestriction» type="«typeDeclaration.type.typeRef»"«ENDIF»«conditionalElementMultiplicity»>
 			«IF elementHasDocumentation»
 				«documentation.xsdDocumentation»
 			«ENDIF»
 			«IF elementHasLength»
 				<xs:simpleType>
-					<xs:restriction base="«type.typeRef»">
+					<xs:restriction base="«typeDeclaration.type.typeRef»">
 						<xs:maxLength value="«elementLength»"/>
 					</xs:restriction>
 				</xs:simpleType>
 			«ELSEIF elementHasDigits»
 				<xs:simpleType>
-					<xs:restriction base="«type.typeRef»">
+					<xs:restriction base="«typeDeclaration.type.typeRef»">
 						<xs:totalDigits value="«elementTotalDigits»"/>
 						<xs:fractionDigits value="«elementFractionDigits»"/>
 					</xs:restriction>
@@ -190,7 +199,8 @@ class XsdGenerator {
 		</xs:annotation>
 	'''
 
-	def conditionalElementMultiplicity(Element it) '''«IF multiplicity != null» «multiplicity.elementMultiplicity»«ENDIF»'''
+	def conditionalElementMultiplicity(AbstractElement it) '''«IF typeDeclaration.multiplicity != null» «typeDeclaration.
+		multiplicity.elementMultiplicity»«ENDIF»'''
 
 	def elementHasLength(Element it) {
 		val ref = getXsdBuiltinTypeWithMaxLength
@@ -198,8 +208,8 @@ class XsdGenerator {
 	}
 
 	def getXsdBuiltinTypeWithMaxLength(Element it) {
-		if (type instanceof XsdBuiltinTypeReference) {
-			val ref = (type as XsdBuiltinTypeReference).ref
+		if (typeDeclaration.type instanceof XsdBuiltinTypeReference) {
+			val ref = (typeDeclaration.type as XsdBuiltinTypeReference).ref
 			if (ref instanceof XsdBuiltinTypeWithMaxLength) {
 				return ref
 			}
@@ -208,8 +218,8 @@ class XsdGenerator {
 	}
 
 	def getXsdBuiltinTypeWithDigits(Element it) {
-		if (type instanceof XsdBuiltinTypeReference) {
-			val ref = (type as XsdBuiltinTypeReference).ref
+		if (typeDeclaration.type instanceof XsdBuiltinTypeReference) {
+			val ref = (typeDeclaration.type as XsdBuiltinTypeReference).ref
 			if (ref instanceof XsdBuiltinTypeWithDigits) {
 				return ref
 			}

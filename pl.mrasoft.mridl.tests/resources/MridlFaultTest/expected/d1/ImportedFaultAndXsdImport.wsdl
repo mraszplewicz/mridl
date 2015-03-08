@@ -18,18 +18,18 @@
 	<wsdl:message name="op1Response">
 		<wsdl:part element="tns:op1Response" name="parameters"/>
 	</wsdl:message>
-	<wsdl:message name="TestFaultException">
-		<wsdl:part name="TestFaultException" element="tns:TestFault"/>
+	<wsdl:message name="TestFault2Exception">
+		<wsdl:part name="TestFault2Exception" element="tns:TestFault2"/>
 	</wsdl:message>
-	<wsdl:message name="TestComplexTypeException">
-		<wsdl:part name="TestComplexTypeException" element="i:TestComplexType"/>
+	<wsdl:message name="TestComplexType2Exception">
+		<wsdl:part name="TestComplexType2Exception" element="i:TestComplexType2"/>
 	</wsdl:message>
 	<wsdl:portType name="ImportedFaultAndXsdImport">
 		<wsdl:operation name="op1">
 			<wsdl:input message="tns:op1" name="op1"/>
 			<wsdl:output message="tns:op1Response" name="op1Response"/>
-			<wsdl:fault name="TestFaultException" message="tns:TestFaultException"/>
-			<wsdl:fault name="TestComplexTypeException" message="tns:TestComplexTypeException"/>
+			<wsdl:fault name="TestFault2Exception" message="tns:TestFault2Exception"/>
+			<wsdl:fault name="TestComplexType2Exception" message="tns:TestComplexType2Exception"/>
 		</wsdl:operation>
 	</wsdl:portType>
 </wsdl:definitions>
