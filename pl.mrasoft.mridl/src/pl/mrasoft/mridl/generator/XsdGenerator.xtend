@@ -19,6 +19,7 @@ import pl.mrasoft.mridl.mridl.XsdBuiltinTypeWithMaxLength
 import pl.mrasoft.mridl.util.ResourceUtil
 import pl.mrasoft.mridl.mridl.FaultElement
 import pl.mrasoft.mridl.mridl.AbstractElement
+import pl.mrasoft.mridl.mridl.ImportedTopLevelTypeReference
 
 class XsdGenerator {
 
@@ -251,7 +252,13 @@ class XsdGenerator {
 	def dispatch elementMultiplicity(Optional it) '''minOccurs="0"'''
 
 	def importUsedInXsd(Import it, Mridl model) {
-		importUsed(model, GeneratorCommon.GeneratedFileType.XSD)
+		val thisImport = it
+
+		val importedTypeReferences = model.eAllContents.filter(ImportedTopLevelTypeReference)
+		val thisTypeReference = importedTypeReferences.findFirst [
+			importRef.^import == thisImport
+		]
+		thisTypeReference != null
 	}
 
 }

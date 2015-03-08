@@ -64,4 +64,22 @@ class MridlFaultTest extends BaseMridlTest {
 		)
 
 	}	
+	
+	@Test
+	def void sameFaultInManyOperations() {
+		val fsa = generate("d1/SameFaultInManyOperations.mridl")
+
+		assertEquals(2, fsa.allFiles.size)
+
+		assertEquals(
+			getExpected("d1/SameFaultInManyOperations.xsd"),
+			getActual(fsa, "d1/SameFaultInManyOperations.xsd")
+		)
+		
+		assertEquals(
+			getExpected("d1/SameFaultInManyOperations.wsdl"),
+			getActual(fsa, "d1/SameFaultInManyOperations.wsdl")
+		)
+
+	}
 }

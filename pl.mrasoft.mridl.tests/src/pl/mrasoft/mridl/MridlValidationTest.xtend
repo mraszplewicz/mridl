@@ -145,5 +145,39 @@ class MridlValidationTest extends BaseMridlTest {
 			issues.sizeIs(0)
 		)
 	}
+	
+	@Test
+	def void checkFaultElementNameIsUnique() {
+		val issues = testFile("d1/DuplicateFaultElementName.mridl")
+
+		assertConstraints(
+			issues.sizeIs(2)
+		)
+
+		assertConstraints(
+			issues.inLine(3).allOfThemContain("Duplicate element 'TestFault'")
+		)
+
+		assertConstraints(
+			issues.inLine(9).allOfThemContain("Duplicate element 'TestFault'")
+		)
+	}
+	
+	@Test
+	def void checkOperationFaultNameIsUnique() {
+		val issues = testFile("d1/DuplicateOperationFaultName.mridl")
+
+		assertConstraints(
+			issues.sizeIs(2)
+		)
+
+		assertConstraints(
+			issues.inLine(3).sizeIs(2)
+		)
+
+		assertConstraints(
+			issues.inLine(3).allOfThemContain("Duplicate fault 'TestFault'")
+		)
+	}
 
 }

@@ -11,6 +11,8 @@ import pl.mrasoft.mridl.mridl.EnumValue
 import pl.mrasoft.mridl.mridl.TopLevelEnumType
 import pl.mrasoft.mridl.mridl.TopLevelType
 import pl.mrasoft.mridl.mridl.Mridl
+import pl.mrasoft.mridl.mridl.FaultElement
+import pl.mrasoft.mridl.mridl.Fault
 
 class MridlValidator extends AbstractMridlValidator {
 
@@ -51,8 +53,38 @@ class MridlValidator extends AbstractMridlValidator {
 
 	}
 
+	@Check
+	def void checkFaultElementNameIsUnique(FaultElement faultElement) {
+
+		val faultElementName = faultElement.name
+		val model = faultElement.eContainer as Mridl
+
+		for (containerFaultElement : model.faultElements) {
+			if (containerFaultElement != faultElement && faultElementName.equals(containerFaultElement.name)) {
+				error("Duplicate element '" + faultElementName + "'", MridlPackage.Literals::ABSTRACT_ELEMENT__NAME);
+				return
+			}
+		}
+
+	}
+	
+	@Check
+	def void checkOperationFaultNameIsUnique(Fault fault) {
+
+		val faultName = fault.element.ref.name
+		val operation = fault.eContainer as Operation
+
+		for (containerFault : operation.faults) {
+			if (containerFault != fault && faultName.equals(containerFault.element.ref.name)) {
+				error("Duplicate fault '" + faultName + "'", MridlPackage.Literals::FAULT__ELEMENT);
+				return
+			}
+		}
+
+	}
+
 	def void checkElementNameIsUnique(EObject container, Element element) {
-		
+
 		val elementName = element.name
 
 		val List<Element> containerElements = getContainerElements(container, element)
@@ -67,7 +99,7 @@ class MridlValidator extends AbstractMridlValidator {
 				return
 			}
 		}
-		
+
 	}
 
 	def dispatch List<Element> getContainerElements(Operation container, Element element) {
@@ -79,11 +111,11 @@ class MridlValidator extends AbstractMridlValidator {
 	}
 
 	def void checkElementNameIsUniqueInSuperTypes(TopLevelComplexType container, Element element) {
-		
+
 		if (container.^extends != null) {
 			checkElementNameIsUnique(container.^extends.ref, element)
 		}
-		
+
 	}
 
 }

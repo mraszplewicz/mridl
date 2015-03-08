@@ -3,7 +3,6 @@ package pl.mrasoft.mridl.generator
 import javax.inject.Inject
 import pl.mrasoft.mridl.mridl.DirectTopLevelTypeReferenceBase
 import pl.mrasoft.mridl.mridl.Import
-import pl.mrasoft.mridl.mridl.ImportedTopLevelTypeReference
 import pl.mrasoft.mridl.mridl.ImportedTopLevelTypeReferenceBase
 import pl.mrasoft.mridl.mridl.Mridl
 import pl.mrasoft.mridl.mridl.TopLevelComplexTypeReference
@@ -23,32 +22,7 @@ class GeneratorCommon {
 
 	def mridlHasWsdlFile(Mridl it) {
 		!operations.empty
-	}
-
-	def importUsed(Import it, Mridl model, GeneratedFileType fileType) {
-		importUsedInXsd(model, fileType) || importUsedInWsdl(model, fileType)
-	}
-
-	def importUsedInXsd(Import it, Mridl model, GeneratedFileType fileType) {
-		val thisImport = it
-
-		val importedTypeReferences = model.eAllContents.filter(ImportedTopLevelTypeReference)
-		val thisTypeReference = importedTypeReferences.findFirst [
-			importRef.^import == thisImport && fileType == GeneratedFileType.XSD
-		]
-		thisTypeReference != null
-	}
-
-	def importUsedInWsdl(Import it, Mridl model, GeneratedFileType fileType) {
-		val thisImport = it
-
-		val importedFaultElementReferences = model.eAllContents.filter(ImportedFaultElementReference)
-		val thisFaultElementReference = importedFaultElementReferences.findFirst [
-			importRef.^import == thisImport && fileType == GeneratedFileType.WSDL
-		]
-
-		thisFaultElementReference != null
-	}
+	}	
 
 	def importNS(Import it) '''
 		xmlns:«nsPrefix»="«resolveImport.nsUri»"
