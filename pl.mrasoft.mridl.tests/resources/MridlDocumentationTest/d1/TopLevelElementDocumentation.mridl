@@ -1,0 +1,6 @@
+namespace "http://mrasoft.pl/mridl/examples/d1/TopLevelElementDocumentation"
+
+
+(*s doc*)
+element string s
+

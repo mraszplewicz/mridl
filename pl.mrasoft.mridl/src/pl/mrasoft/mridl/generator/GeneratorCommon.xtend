@@ -12,9 +12,9 @@ import pl.mrasoft.mridl.mridl.TopLevelTypeReference
 import pl.mrasoft.mridl.mridl.XsdBuiltinType
 import pl.mrasoft.mridl.mridl.XsdBuiltinTypeReference
 import pl.mrasoft.mridl.util.ResourceUtil
-import pl.mrasoft.mridl.mridl.FaultElementReference
-import pl.mrasoft.mridl.mridl.DirectFaultElementReference
-import pl.mrasoft.mridl.mridl.ImportedFaultElementReference
+import pl.mrasoft.mridl.mridl.TopLevelElementReference
+import pl.mrasoft.mridl.mridl.DirectTopLevelElementReference
+import pl.mrasoft.mridl.mridl.ImportedTopLevelElementReference
 
 class GeneratorCommon {
 
@@ -46,11 +46,11 @@ class GeneratorCommon {
 
 	def dispatch referencedTypeName(TopLevelType it) { name }
 
-	def elementName(FaultElementReference it) '''«ref.name»'''
+	def elementName(TopLevelElementReference it) '''«ref.name»'''
 
-	def dispatch elementRef(DirectFaultElementReference it) '''tns:«elementName»'''
+	def dispatch elementRef(DirectTopLevelElementReference it) '''tns:«elementName»'''
 
-	def dispatch elementRef(ImportedFaultElementReference it) '''«importRef.^import.nsPrefix»:«elementName»'''
+	def dispatch elementRef(ImportedTopLevelElementReference it) '''«importRef.^import.nsPrefix»:«elementName»'''
 
 	enum GeneratedFileType {
 		WSDL,

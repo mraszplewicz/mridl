@@ -1,10 +1,11 @@
 package pl.mrasoft.mridl.generator
 
 import javax.inject.Inject
+import pl.mrasoft.mridl.mridl.AbstractElement
 import pl.mrasoft.mridl.mridl.Documentation
-import pl.mrasoft.mridl.mridl.Element
 import pl.mrasoft.mridl.mridl.EnumValue
 import pl.mrasoft.mridl.mridl.Import
+import pl.mrasoft.mridl.mridl.ImportedTopLevelTypeReference
 import pl.mrasoft.mridl.mridl.Mridl
 import pl.mrasoft.mridl.mridl.Operation
 import pl.mrasoft.mridl.mridl.Optional
@@ -17,9 +18,6 @@ import pl.mrasoft.mridl.mridl.XsdBuiltinTypeReference
 import pl.mrasoft.mridl.mridl.XsdBuiltinTypeWithDigits
 import pl.mrasoft.mridl.mridl.XsdBuiltinTypeWithMaxLength
 import pl.mrasoft.mridl.util.ResourceUtil
-import pl.mrasoft.mridl.mridl.FaultElement
-import pl.mrasoft.mridl.mridl.AbstractElement
-import pl.mrasoft.mridl.mridl.ImportedTopLevelTypeReference
 
 class XsdGenerator {
 
@@ -42,8 +40,8 @@ class XsdGenerator {
 			«FOR operation : operations»
 				«operation.operationRootElements»
 			«ENDFOR»
-			«FOR faultElement : faultElements»				
-				«faultElement.faultElement»
+			«FOR topLevelElement : topLevelElements»				
+				«topLevelElement.element»
 			«ENDFOR»
 			«FOR operation : operations»
 				«operation.operationComplexTypes»
@@ -73,10 +71,6 @@ class XsdGenerator {
 		«IF !^void»
 			<xs:element name="«name»Response" type="tns:«name»Response"/>
 		«ENDIF»
-	'''
-
-	def faultElement(FaultElement it) '''
-		<xs:element name="«name»" type="«typeDeclaration.type.typeRef»"«conditionalElementMultiplicity»/>
 	'''
 
 	def operationComplexTypes(Operation it) '''
@@ -150,7 +144,7 @@ class XsdGenerator {
 		documentation != null && documentation.doc != null
 	}
 
-	def element(Element it) '''
+	def element(AbstractElement it) '''
 		«IF elementHasClosingTag»
 			«elementWithClosingTag»
 		«ELSE»
@@ -158,11 +152,11 @@ class XsdGenerator {
 		«ENDIF»
 	'''
 
-	def elementHasClosingTag(Element it) {
+	def elementHasClosingTag(AbstractElement it) {
 		elementHasLength || elementHasDigits || elementHasDocumentation
 	}
 
-	def elementWithClosingTag(Element it) '''
+	def elementWithClosingTag(AbstractElement it) '''
 		<xs:element name="«name»"«IF !elementHasSimpleTypeRestriction» type="«typeDeclaration.type.typeRef»"«ENDIF»«conditionalElementMultiplicity»>
 			«IF elementHasDocumentation»
 				«documentation.xsdDocumentation»
@@ -184,11 +178,11 @@ class XsdGenerator {
 		</xs:element>
 	'''
 
-	def elementHasDocumentation(Element it) {
+	def elementHasDocumentation(AbstractElement it) {
 		documentation != null && documentation.doc != null
 	}
 
-	def elementHasSimpleTypeRestriction(Element it) {
+	def elementHasSimpleTypeRestriction(AbstractElement it) {
 		elementHasLength || elementHasDigits
 	}
 
@@ -203,12 +197,12 @@ class XsdGenerator {
 	def conditionalElementMultiplicity(AbstractElement it) '''«IF typeDeclaration.multiplicity != null» «typeDeclaration.
 		multiplicity.elementMultiplicity»«ENDIF»'''
 
-	def elementHasLength(Element it) {
+	def elementHasLength(AbstractElement it) {
 		val ref = getXsdBuiltinTypeWithMaxLength
 		ref != null && ref.lengthSpec != null
 	}
 
-	def getXsdBuiltinTypeWithMaxLength(Element it) {
+	def getXsdBuiltinTypeWithMaxLength(AbstractElement it) {
 		if (typeDeclaration.type instanceof XsdBuiltinTypeReference) {
 			val ref = (typeDeclaration.type as XsdBuiltinTypeReference).ref
 			if (ref instanceof XsdBuiltinTypeWithMaxLength) {
@@ -218,7 +212,7 @@ class XsdGenerator {
 		return null
 	}
 
-	def getXsdBuiltinTypeWithDigits(Element it) {
+	def getXsdBuiltinTypeWithDigits(AbstractElement it) {
 		if (typeDeclaration.type instanceof XsdBuiltinTypeReference) {
 			val ref = (typeDeclaration.type as XsdBuiltinTypeReference).ref
 			if (ref instanceof XsdBuiltinTypeWithDigits) {
@@ -228,20 +222,20 @@ class XsdGenerator {
 		return null
 	}
 
-	def elementLength(Element it) {
+	def elementLength(AbstractElement it) {
 		getXsdBuiltinTypeWithMaxLength.lengthSpec.maxLength
 	}
 
-	def elementHasDigits(Element it) {
+	def elementHasDigits(AbstractElement it) {
 		val ref = getXsdBuiltinTypeWithDigits
 		ref != null && ref.digitsSpec != null
 	}
 
-	def elementTotalDigits(Element it) {
+	def elementTotalDigits(AbstractElement it) {
 		getXsdBuiltinTypeWithDigits.digitsSpec.totalDigits
 	}
 
-	def elementFractionDigits(Element it) {
+	def elementFractionDigits(AbstractElement it) {
 		getXsdBuiltinTypeWithDigits.digitsSpec.fractionDigits
 	}
 

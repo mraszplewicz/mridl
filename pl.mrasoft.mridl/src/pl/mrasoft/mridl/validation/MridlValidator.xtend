@@ -1,18 +1,18 @@
 package pl.mrasoft.mridl.validation
 
+import java.util.List
+import org.eclipse.emf.ecore.EObject
 import org.eclipse.xtext.validation.Check
+import pl.mrasoft.mridl.mridl.Element
+import pl.mrasoft.mridl.mridl.EnumValue
+import pl.mrasoft.mridl.mridl.Fault
+import pl.mrasoft.mridl.mridl.Mridl
 import pl.mrasoft.mridl.mridl.MridlPackage
 import pl.mrasoft.mridl.mridl.Operation
-import pl.mrasoft.mridl.mridl.Element
-import java.util.List
 import pl.mrasoft.mridl.mridl.TopLevelComplexType
-import org.eclipse.emf.ecore.EObject
-import pl.mrasoft.mridl.mridl.EnumValue
+import pl.mrasoft.mridl.mridl.TopLevelElement
 import pl.mrasoft.mridl.mridl.TopLevelEnumType
 import pl.mrasoft.mridl.mridl.TopLevelType
-import pl.mrasoft.mridl.mridl.Mridl
-import pl.mrasoft.mridl.mridl.FaultElement
-import pl.mrasoft.mridl.mridl.Fault
 
 class MridlValidator extends AbstractMridlValidator {
 
@@ -54,14 +54,14 @@ class MridlValidator extends AbstractMridlValidator {
 	}
 
 	@Check
-	def void checkFaultElementNameIsUnique(FaultElement faultElement) {
+	def void checkFaultElementNameIsUnique(TopLevelElement topLevelElement) {
 
-		val faultElementName = faultElement.name
-		val model = faultElement.eContainer as Mridl
+		val topLevelElementName = topLevelElement.name
+		val model = topLevelElement.eContainer as Mridl
 
-		for (containerFaultElement : model.faultElements) {
-			if (containerFaultElement != faultElement && faultElementName.equals(containerFaultElement.name)) {
-				error("Duplicate element '" + faultElementName + "'", MridlPackage.Literals::ABSTRACT_ELEMENT__NAME);
+		for (containerTopLevelElement : model.topLevelElements) {
+			if (containerTopLevelElement != topLevelElement && topLevelElementName.equals(containerTopLevelElement.name)) {
+				error("Duplicate element '" + topLevelElementName + "'", MridlPackage.Literals::ABSTRACT_ELEMENT__NAME);
 				return
 			}
 		}

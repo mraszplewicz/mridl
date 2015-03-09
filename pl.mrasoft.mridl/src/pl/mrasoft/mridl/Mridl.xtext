@@ -8,7 +8,7 @@ Mridl:
 	(imports+=Import)*
 	((operations+=Operation)* &
 	(typeDeclarations+=TopLevelType)* &
-	(faultElements+=FaultElement)*);
+	(topLevelElements+=TopLevelElement)*);
 
 Import:
 	"import" importURI=ImportMridlUri "as" nsPrefix=ID;
@@ -33,6 +33,9 @@ TopLevelSimpleType:
 TopLevelEnumType:
 	"enum" name=ID "{" (values+=EnumValue)* "}";
 
+TopLevelElement:
+	(documentation=Documentation)? "element" typeDeclaration=ElementTypeDeclaration name=ID;
+
 EnumValue:
 	(documentation=Documentation)? value=ID;
 
@@ -40,16 +43,13 @@ ElementTypeDeclaration:
 	type=NamedTypeReference (multiplicity=Multiplicity)?;
 
 AbstractElement:
-	Element | FaultElement;
+	Element | TopLevelElement;
 
 Element:
 	(documentation=Documentation)? typeDeclaration=ElementTypeDeclaration name=ID;
 
 Fault:
-	(documentation=Documentation)? element=FaultElementReference;
-
-FaultElement:
-	"fault" typeDeclaration=ElementTypeDeclaration name=ID;
+	(documentation=Documentation)? element=TopLevelElementReference;
 
 NamedTypeReference:
 	TopLevelTypeReference | XsdBuiltinTypeReference;
@@ -66,8 +66,8 @@ TopLevelComplexTypeReference:
 XsdBuiltinTypeReference:
 	ref=XsdBuiltinType;
 
-FaultElementReference:
-	DirectFaultElementReference | ImportedFaultElementReference;
+TopLevelElementReference:
+	DirectTopLevelElementReference | ImportedTopLevelElementReference;
 
 DirectTopLevelTypeReferenceBase:
 	DirectTopLevelTypeReference | DirectTopLevelSimpleTypeReference | DirectTopLevelComplexTypeReference;
@@ -93,11 +93,11 @@ ImportedTopLevelSimpleTypeReference:
 ImportedTopLevelComplexTypeReference:
 	importRef=ImportReference ref=[TopLevelComplexType];
 
-DirectFaultElementReference:
-	ref=[FaultElement];
+DirectTopLevelElementReference:
+	ref=[TopLevelElement];
 
-ImportedFaultElementReference:
-	importRef=ImportReference ref=[FaultElement];
+ImportedTopLevelElementReference:
+	importRef=ImportReference ref=[TopLevelElement];
 
 ImportReference:
 	^import=[Import|ID] ":";

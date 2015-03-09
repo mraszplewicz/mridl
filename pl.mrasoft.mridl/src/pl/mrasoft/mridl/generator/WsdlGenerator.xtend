@@ -7,12 +7,12 @@ import pl.mrasoft.mridl.mridl.Import
 import pl.mrasoft.mridl.mridl.Mridl
 import pl.mrasoft.mridl.mridl.Operation
 import pl.mrasoft.mridl.util.ResourceUtil
-import pl.mrasoft.mridl.mridl.FaultElement
-import pl.mrasoft.mridl.mridl.FaultElementReference
 import org.eclipse.emf.common.util.EList
-import pl.mrasoft.mridl.mridl.ImportedFaultElementReference
 import java.util.HashSet
 import java.util.ArrayList
+import pl.mrasoft.mridl.mridl.ImportedTopLevelElementReference
+import pl.mrasoft.mridl.mridl.TopLevelElement
+import pl.mrasoft.mridl.mridl.TopLevelElementReference
 
 class WsdlGenerator {
 
@@ -56,7 +56,7 @@ class WsdlGenerator {
 	def importUsedInWsdl(Import it, Mridl model) {
 		val thisImport = it
 
-		val importedFaultElementReferences = model.eAllContents.filter(ImportedFaultElementReference)
+		val importedFaultElementReferences = model.eAllContents.filter(ImportedTopLevelElementReference)
 		val thisFaultElementReference = importedFaultElementReferences.findFirst [
 			importRef.^import == thisImport
 		]
@@ -86,8 +86,8 @@ class WsdlGenerator {
 	'''
 
 	def getUniqueFaultElementReferences(EList<Operation> operations) {
-		val faultElements = new HashSet<FaultElement>
-		val faultElementReferences = new ArrayList<FaultElementReference>
+		val faultElements = new HashSet<TopLevelElement>
+		val faultElementReferences = new ArrayList<TopLevelElementReference>
 		for (it : operations) {
 			for (it : faults) {
 				if (!faultElements.contains(element.ref)) {
@@ -99,7 +99,7 @@ class WsdlGenerator {
 		faultElementReferences
 	}
 
-	def faultMessage(FaultElementReference it) '''		
+	def faultMessage(TopLevelElementReference it) '''		
 		<wsdl:message name="«elementName»Exception">
 			<wsdl:part name="«elementName»Exception" element="«elementRef»"/>
 		</wsdl:message>

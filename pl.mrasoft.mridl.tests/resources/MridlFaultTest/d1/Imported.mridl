@@ -1,6 +1,6 @@
 namespace "http://mrasoft.pl/mridl/examples/d1/Imported"
 
-fault TestComplexType TestComplexType2
+element TestComplexType TestComplexType2
 
 complex TestComplexType {
 	

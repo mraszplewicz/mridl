@@ -2,4 +2,4 @@ namespace "http://mrasoft.pl/mridl/examples/d1/DuplicateOperationFaultName"
 
 operation void op() throws TestFault, TestFault
 
-fault string TestFault
+element string TestFault
