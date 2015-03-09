@@ -7,6 +7,7 @@
 	<xs:import namespace="http://mrasoft.pl/mridl/examples/d2/Imported" schemaLocation="../d2/Imported.xsd"/>
 	<xs:element name="op1" type="tns:op1"/>
 	<xs:element name="op1Response" type="tns:op1Response"/>
+	<xs:element name="TestFault2" type="tns:TestFault"/>
 	<xs:complexType name="op1">
 		<xs:sequence>
 		</xs:sequence>

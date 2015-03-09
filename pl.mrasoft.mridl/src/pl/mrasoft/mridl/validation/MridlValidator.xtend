@@ -1,16 +1,18 @@
 package pl.mrasoft.mridl.validation
 
+import java.util.List
+import org.eclipse.emf.ecore.EObject
 import org.eclipse.xtext.validation.Check
+import pl.mrasoft.mridl.mridl.Element
+import pl.mrasoft.mridl.mridl.EnumValue
+import pl.mrasoft.mridl.mridl.Fault
+import pl.mrasoft.mridl.mridl.Mridl
 import pl.mrasoft.mridl.mridl.MridlPackage
 import pl.mrasoft.mridl.mridl.Operation
-import pl.mrasoft.mridl.mridl.Element
-import java.util.List
 import pl.mrasoft.mridl.mridl.TopLevelComplexType
-import org.eclipse.emf.ecore.EObject
-import pl.mrasoft.mridl.mridl.EnumValue
+import pl.mrasoft.mridl.mridl.TopLevelElement
 import pl.mrasoft.mridl.mridl.TopLevelEnumType
 import pl.mrasoft.mridl.mridl.TopLevelType
-import pl.mrasoft.mridl.mridl.Mridl
 
 class MridlValidator extends AbstractMridlValidator {
 
@@ -51,8 +53,38 @@ class MridlValidator extends AbstractMridlValidator {
 
 	}
 
+	@Check
+	def void checkFaultElementNameIsUnique(TopLevelElement topLevelElement) {
+
+		val topLevelElementName = topLevelElement.name
+		val model = topLevelElement.eContainer as Mridl
+
+		for (containerTopLevelElement : model.topLevelElements) {
+			if (containerTopLevelElement != topLevelElement && topLevelElementName.equals(containerTopLevelElement.name)) {
+				error("Duplicate element '" + topLevelElementName + "'", MridlPackage.Literals::ABSTRACT_ELEMENT__NAME);
+				return
+			}
+		}
+
+	}
+	
+	@Check
+	def void checkOperationFaultNameIsUnique(Fault fault) {
+
+		val faultName = fault.element.ref.name
+		val operation = fault.eContainer as Operation
+
+		for (containerFault : operation.faults) {
+			if (containerFault != fault && faultName.equals(containerFault.element.ref.name)) {
+				error("Duplicate fault '" + faultName + "'", MridlPackage.Literals::FAULT__ELEMENT);
+				return
+			}
+		}
+
+	}
+
 	def void checkElementNameIsUnique(EObject container, Element element) {
-		
+
 		val elementName = element.name
 
 		val List<Element> containerElements = getContainerElements(container, element)
@@ -63,11 +95,11 @@ class MridlValidator extends AbstractMridlValidator {
 
 		for (containerElement : containerElements) {
 			if (containerElement != element && elementName.equals(containerElement.name)) {
-				error("Duplicate element '" + elementName + "'", MridlPackage.Literals::ELEMENT__NAME);
+				error("Duplicate element '" + elementName + "'", MridlPackage.Literals::ABSTRACT_ELEMENT__NAME);
 				return
 			}
 		}
-		
+
 	}
 
 	def dispatch List<Element> getContainerElements(Operation container, Element element) {
@@ -79,11 +111,11 @@ class MridlValidator extends AbstractMridlValidator {
 	}
 
 	def void checkElementNameIsUniqueInSuperTypes(TopLevelComplexType container, Element element) {
-		
+
 		if (container.^extends != null) {
 			checkElementNameIsUnique(container.^extends.ref, element)
 		}
-		
+
 	}
 
 }

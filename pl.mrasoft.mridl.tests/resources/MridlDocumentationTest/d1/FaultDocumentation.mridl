@@ -1,6 +1,8 @@
 namespace "http://mrasoft.pl/mridl/examples/d1/FaultDocumentation"
 
-operation void op1() throws (*fault doc*) TestFault 
+operation void op1() throws (*fault doc*) TestFault2 
+
+element TestFault TestFault2
 
 complex TestFault {
 	

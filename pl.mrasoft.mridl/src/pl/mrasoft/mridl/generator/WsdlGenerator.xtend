@@ -7,6 +7,12 @@ import pl.mrasoft.mridl.mridl.Import
 import pl.mrasoft.mridl.mridl.Mridl
 import pl.mrasoft.mridl.mridl.Operation
 import pl.mrasoft.mridl.util.ResourceUtil
+import org.eclipse.emf.common.util.EList
+import java.util.HashSet
+import java.util.ArrayList
+import pl.mrasoft.mridl.mridl.ImportedTopLevelElementReference
+import pl.mrasoft.mridl.mridl.TopLevelElement
+import pl.mrasoft.mridl.mridl.TopLevelElementReference
 
 class WsdlGenerator {
 
@@ -35,6 +41,9 @@ class WsdlGenerator {
 		    </wsdl:types>
 			«FOR operation : operations»				
 				«operation.operationMessages»
+			«ENDFOR»
+			«FOR faultElementReference : getUniqueFaultElementReferences(operations)»				
+				«faultElementReference.faultMessage»
 			«ENDFOR»		
 			<wsdl:portType name="«modelName»">
 				«FOR operation : operations»
@@ -45,7 +54,14 @@ class WsdlGenerator {
 	'''
 
 	def importUsedInWsdl(Import it, Mridl model) {
-		importUsed(model, GeneratorCommon.GeneratedFileType.WSDL)
+		val thisImport = it
+
+		val importedFaultElementReferences = model.eAllContents.filter(ImportedTopLevelElementReference)
+		val thisFaultElementReference = importedFaultElementReferences.findFirst [
+			importRef.^import == thisImport
+		]
+
+		thisFaultElementReference != null
 	}
 
 	def wsdlFileDocumentation(Mridl it) '''
@@ -66,12 +82,27 @@ class WsdlGenerator {
 			<wsdl:message name="«name»Response">
 				<wsdl:part element="tns:«name»Response" name="parameters"/>
 			</wsdl:message>
-		«ENDIF»
-		«FOR fault : faults»
-			<wsdl:message name="«fault.type.typeName»Exception">
-				<wsdl:part name="«fault.type.typeName»Exception" element="«fault.type.typeRef»"/>
-			</wsdl:message>
-		«ENDFOR»		
+		«ENDIF»		
+	'''
+
+	def getUniqueFaultElementReferences(EList<Operation> operations) {
+		val faultElements = new HashSet<TopLevelElement>
+		val faultElementReferences = new ArrayList<TopLevelElementReference>
+		for (it : operations) {
+			for (it : faults) {
+				if (!faultElements.contains(element.ref)) {
+					faultElements.add(element.ref)
+					faultElementReferences.add(element)
+				}
+			}
+		}
+		faultElementReferences
+	}
+
+	def faultMessage(TopLevelElementReference it) '''		
+		<wsdl:message name="«elementName»Exception">
+			<wsdl:part name="«elementName»Exception" element="«elementRef»"/>
+		</wsdl:message>
 	'''
 
 	def operationInPortType(Operation it) '''
@@ -89,11 +120,11 @@ class WsdlGenerator {
 
 	def operationFault(Fault it) '''
 		«IF faultHasDocumentation»
-			<wsdl:fault name="«type.typeName»Exception" message="tns:«type.typeName»Exception">
+			<wsdl:fault name="«element.ref.name»Exception" message="tns:«element.ref.name»Exception">
 				«faultDocumentation»
 			</wsdl:fault>
 		«ELSE»
-			<wsdl:fault name="«type.typeName»Exception" message="tns:«type.typeName»Exception"/>
+			<wsdl:fault name="«element.ref.name»Exception" message="tns:«element.ref.name»Exception"/>
 		«ENDIF»
 	'''
 

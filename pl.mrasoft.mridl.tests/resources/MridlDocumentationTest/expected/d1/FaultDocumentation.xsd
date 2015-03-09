@@ -4,6 +4,7 @@
 		   xmlns:tns="http://mrasoft.pl/mridl/examples/d1/FaultDocumentation"
 		   targetNamespace="http://mrasoft.pl/mridl/examples/d1/FaultDocumentation">
 	<xs:element name="op1" type="tns:op1"/>
+	<xs:element name="TestFault2" type="tns:TestFault"/>
 	<xs:complexType name="op1">
 		<xs:sequence>
 		</xs:sequence>

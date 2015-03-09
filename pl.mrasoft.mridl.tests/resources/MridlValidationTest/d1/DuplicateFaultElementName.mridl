@@ -1,0 +1,4 @@
+namespace "http://mrasoft.pl/mridl/examples/d1/DuplicateFaultElementName"
+
+element string TestFault
+element string TestFault

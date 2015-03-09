@@ -1,5 +1,7 @@
 namespace "http://mrasoft.pl/mridl/examples/d1/Imported"
 
+element TestComplexType TestComplexType2
+
 complex TestComplexType {
 	
 	string aaa
