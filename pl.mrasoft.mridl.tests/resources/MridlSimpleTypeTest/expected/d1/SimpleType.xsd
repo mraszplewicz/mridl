@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema elementFormDefault="unqualified" 
 		   xmlns:xs="http://www.w3.org/2001/XMLSchema"
-		   xmlns:tns="http://mrasoft.pl/mridl/examples/d1/SimpleTypeWithRestriction"
-		   targetNamespace="http://mrasoft.pl/mridl/examples/d1/SimpleTypeWithRestriction">
+		   xmlns:tns="http://mrasoft.pl/mridl/examples/d1/SimpleType"
+		   targetNamespace="http://mrasoft.pl/mridl/examples/d1/SimpleType">
 	<xs:simpleType name="TestSimple2">
 		<xs:restriction base="xs:string">
-			<xs:pattern value="[a-zA-Z][a-zA-Z][a-zA-Z]"/>	    
+			<xs:pattern value="[a-zA-Z][a-zA-Z][a-zA-Z]"/>
 		</xs:restriction>
 	</xs:simpleType>
 </xs:schema>

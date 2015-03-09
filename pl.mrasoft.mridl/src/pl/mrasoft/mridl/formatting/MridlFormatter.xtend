@@ -30,7 +30,10 @@ class MridlFormatter extends AbstractDeclarativeFormatter {
 
 		c.setLinewrap(1, 1, 3).around(importRule)
 		c.setLinewrap(1, 1, 3).around(operationRule)
-		c.setLinewrap(1, 1, 3).around(topLevelTypeRule)
+		c.setLinewrap(1, 1, 3).around(topLevelComplexTypeRule)
+		c.setLinewrap(1, 1, 3).around(topLevelSimpleTypeRule)
+		c.setLinewrap(1, 1, 3).around(topLevelEnumTypeRule)
+		c.setLinewrap(1, 1, 3).around(topLevelElementRule)
 
 		c.setLinewrap(0, 1, 1).around(documentationRule)
 
@@ -46,14 +49,14 @@ class MridlFormatter extends AbstractDeclarativeFormatter {
 		c.setLinewrap().after(topLevelEnumTypeAccess.rightCurlyBracketKeyword_4)
 		c.setLinewrap(1, 1, 3).around(topLevelEnumTypeAccess.valuesAssignment_3)
 
-		c.setIndentationIncrement().after(patternRestrictionAccess.leftCurlyBracketKeyword_0)
-		c.setLinewrap().after(patternRestrictionAccess.leftCurlyBracketKeyword_0)
-		c.setIndentationDecrement().before(patternRestrictionAccess.rightCurlyBracketKeyword_7)
-		c.setLinewrap().after(patternRestrictionAccess.rightCurlyBracketKeyword_7)
-		c.setLinewrap(1, 1, 3).before(patternRestrictionAccess.baseKeyword_1)
-		c.setLinewrap(1, 1, 3).after(patternRestrictionAccess.simpleTypeAssignment_3)
-		c.setLinewrap(1, 1, 3).before(patternRestrictionAccess.patternKeyword_4)
-		c.setLinewrap(1, 1, 3).after(patternRestrictionAccess.patternAssignment_6)
+		c.setIndentationIncrement().after(simpleTypeBodyAccess.leftCurlyBracketKeyword_0)
+		c.setLinewrap().after(simpleTypeBodyAccess.leftCurlyBracketKeyword_0)
+		c.setIndentationDecrement().before(simpleTypeBodyAccess.rightCurlyBracketKeyword_4)
+		c.setLinewrap().after(simpleTypeBodyAccess.rightCurlyBracketKeyword_4)
+		c.setLinewrap(1, 1, 3).before(simpleTypeBodyAccess.baseKeyword_1)
+		c.setLinewrap(1, 1, 3).after(simpleTypeBodyAccess.baseAssignment_2)
+		c.setLinewrap(1, 1, 3).before(simpleTypeBodyAccess.patternRestrictionAssignment_3)
+		c.setLinewrap(1, 1, 3).after(simpleTypeBodyAccess.patternRestrictionAssignment_3)
 
 		c.setIndentationIncrement().after(operationAccess.operationKeyword_1)
 		c.setIndentationDecrement().after(operationRule)

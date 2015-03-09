@@ -6,8 +6,8 @@ Mridl:
 	(documentation=Documentation)?
 	"namespace" nsUri=STRING
 	(imports+=Import)*
-	((operations+=Operation)* &
-	(typeDeclarations+=TopLevelType)* &
+	(operations+=Operation)*
+	((typeDeclarations+=TopLevelType)* &
 	(topLevelElements+=TopLevelElement)*);
 
 Import:
@@ -28,7 +28,7 @@ TopLevelComplexType:
 	"{" (elements+=Element)* "}";
 
 TopLevelSimpleType:
-	"simple" name=ID (restriction=PatternRestriction);
+	"simple" name=ID (body=SimpleTypeBody);
 
 TopLevelEnumType:
 	"enum" name=ID "{" (values+=EnumValue)* "}";
@@ -120,8 +120,11 @@ UnspecifiedMultiplicity:
 Optional:
 	{Optional} "?";
 
+SimpleTypeBody:
+	"{" "base" base=NamedSimpleTypeReference (patternRestriction=PatternRestriction)? "}";
+
 PatternRestriction:
-	"{" "base" "=" simpleType=NamedSimpleTypeReference "pattern" "=" pattern=STRING "}";
+	"pattern" pattern=STRING;
 
 NamedSimpleTypeReference:
 	TopLevelSimpleTypeReference | XsdBuiltinTypeReference;
@@ -136,7 +139,16 @@ MaxLengthSpecification:
 	"(" maxLength=INT ")";
 
 DigitsSpecification:
+	TotalAndFractionDigitsSpecification | TotalDigitsSpecification | FractionDigitsSpecification;
+
+TotalAndFractionDigitsSpecification:
 	"(" totalDigits=INT "," fractionDigits=INT ")";
+
+TotalDigitsSpecification:
+	"(" totalDigits=INT ")";
+
+FractionDigitsSpecification:
+	"(" "," fractionDigits=INT ")";
 
 enum XsdBuiltinTypeDeclaration:
 	decimal

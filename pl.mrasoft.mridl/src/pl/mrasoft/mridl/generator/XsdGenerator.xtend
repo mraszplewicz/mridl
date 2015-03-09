@@ -4,15 +4,19 @@ import javax.inject.Inject
 import pl.mrasoft.mridl.mridl.AbstractElement
 import pl.mrasoft.mridl.mridl.Documentation
 import pl.mrasoft.mridl.mridl.EnumValue
+import pl.mrasoft.mridl.mridl.FractionDigitsSpecification
 import pl.mrasoft.mridl.mridl.Import
 import pl.mrasoft.mridl.mridl.ImportedTopLevelTypeReference
 import pl.mrasoft.mridl.mridl.Mridl
 import pl.mrasoft.mridl.mridl.Operation
 import pl.mrasoft.mridl.mridl.Optional
+import pl.mrasoft.mridl.mridl.SimpleTypeBody
 import pl.mrasoft.mridl.mridl.SpecifiedMultiplicity
 import pl.mrasoft.mridl.mridl.TopLevelComplexType
 import pl.mrasoft.mridl.mridl.TopLevelEnumType
 import pl.mrasoft.mridl.mridl.TopLevelSimpleType
+import pl.mrasoft.mridl.mridl.TotalAndFractionDigitsSpecification
+import pl.mrasoft.mridl.mridl.TotalDigitsSpecification
 import pl.mrasoft.mridl.mridl.UnspecifiedMultiplicity
 import pl.mrasoft.mridl.mridl.XsdBuiltinTypeReference
 import pl.mrasoft.mridl.mridl.XsdBuiltinTypeWithDigits
@@ -106,11 +110,23 @@ class XsdGenerator {
 
 	def dispatch typeDeclaration(TopLevelSimpleType it) '''
 		<xs:simpleType name="«name»">
-			<xs:restriction base="«restriction.simpleType.typeRef»">
-				<xs:pattern value="«restriction.pattern»"/>	    
-			</xs:restriction>
+			«body.simpleTypeBody»
 		</xs:simpleType>
 	'''
+
+	def simpleTypeBody(SimpleTypeBody it) '''
+		«IF simpleTypeHasPatternRestriction»
+			<xs:restriction base="«base.typeRef»">
+				<xs:pattern value="«patternRestriction.pattern»"/>
+			</xs:restriction>
+		«ELSE»
+			<xs:restriction base="«base.typeRef»"/>
+		«ENDIF»
+	'''
+
+	def simpleTypeHasPatternRestriction(SimpleTypeBody it) {
+		patternRestriction != null
+	}
 
 	def dispatch typeDeclaration(TopLevelEnumType it) '''
 		<xs:simpleType name="«name»">
@@ -170,8 +186,12 @@ class XsdGenerator {
 			«ELSEIF elementHasDigits»
 				<xs:simpleType>
 					<xs:restriction base="«typeDeclaration.type.typeRef»">
-						<xs:totalDigits value="«elementTotalDigits»"/>
-						<xs:fractionDigits value="«elementFractionDigits»"/>
+						«IF elementHasTotalDigits»
+							<xs:totalDigits value="«elementTotalDigits»"/>
+						«ENDIF»
+						«IF elementHasFractionDigits»
+							<xs:fractionDigits value="«elementFractionDigits»"/>
+						«ENDIF»
 					</xs:restriction>
 				</xs:simpleType>
 			«ENDIF»
@@ -186,6 +206,26 @@ class XsdGenerator {
 		elementHasLength || elementHasDigits
 	}
 
+	def elementHasTotalDigits(AbstractElement it) {
+		elementHasDigits && getXsdBuiltinTypeWithDigits.digitsSpec.digitsSpecHasTotalDigits
+	}
+
+	def dispatch digitsSpecHasTotalDigits(TotalAndFractionDigitsSpecification it) { true }
+
+	def dispatch digitsSpecHasTotalDigits(TotalDigitsSpecification it) { true }
+
+	def dispatch digitsSpecHasTotalDigits(FractionDigitsSpecification it) { false }
+
+	def elementHasFractionDigits(AbstractElement it) {
+		elementHasDigits && getXsdBuiltinTypeWithDigits.digitsSpec.digitsSpecHasFractionDigits
+	}
+
+	def dispatch digitsSpecHasFractionDigits(TotalAndFractionDigitsSpecification it) { true }
+
+	def dispatch digitsSpecHasFractionDigits(TotalDigitsSpecification it) { false }
+
+	def dispatch digitsSpecHasFractionDigits(FractionDigitsSpecification it) { true }
+
 	def xsdDocumentation(Documentation it) '''
 		<xs:annotation>
 			<xs:documentation>
@@ -194,7 +234,7 @@ class XsdGenerator {
 		</xs:annotation>
 	'''
 
-	def conditionalElementMultiplicity(AbstractElement it) '''«IF typeDeclaration.multiplicity != null» «typeDeclaration.
+	def conditionalElementMultiplicity(AbstractElement it) '''«IF typeDeclaration.multiplicity != null»«typeDeclaration.
 		multiplicity.elementMultiplicity»«ENDIF»'''
 
 	def elementHasLength(AbstractElement it) {
@@ -232,18 +272,34 @@ class XsdGenerator {
 	}
 
 	def elementTotalDigits(AbstractElement it) {
-		getXsdBuiltinTypeWithDigits.digitsSpec.totalDigits
+		getXsdBuiltinTypeWithDigits.digitsSpec.digitsSpecTotalDigits
 	}
+
+	def dispatch digitsSpecTotalDigits(TotalAndFractionDigitsSpecification it) { totalDigits }
+
+	def dispatch digitsSpecTotalDigits(TotalDigitsSpecification it) { totalDigits }
 
 	def elementFractionDigits(AbstractElement it) {
-		getXsdBuiltinTypeWithDigits.digitsSpec.fractionDigits
+		getXsdBuiltinTypeWithDigits.digitsSpec.digitsSpecFractionDigits
 	}
 
-	def dispatch elementMultiplicity(SpecifiedMultiplicity it) '''minOccurs="«lower»" maxOccurs="«IF unbounded»unbounded«ELSE»«upper»«ENDIF»"'''
+	def dispatch digitsSpecFractionDigits(TotalAndFractionDigitsSpecification it) { fractionDigits }
 
-	def dispatch elementMultiplicity(UnspecifiedMultiplicity it) '''minOccurs="0" maxOccurs="unbounded"'''
+	def dispatch digitsSpecFractionDigits(FractionDigitsSpecification it) { fractionDigits }
 
-	def dispatch elementMultiplicity(Optional it) '''minOccurs="0"'''
+	def dispatch elementMultiplicity(SpecifiedMultiplicity it) '''«multiplicityMinOccurs»«multiplicityMaxOccurs»'''
+
+	def multiplicityMinOccurs(SpecifiedMultiplicity it) '''«IF lower != 1» minOccurs="«lower»"«ENDIF»'''
+
+	def multiplicityMaxOccurs(SpecifiedMultiplicity it) '''«IF upper != 1» maxOccurs="«IF unbounded»unbounded«ELSE»«upper»«ENDIF»"«ENDIF»'''
+
+	def multiplicityHasMin(SpecifiedMultiplicity it) { lower != 1 }
+
+	def multiplicityHasMax(SpecifiedMultiplicity it) { upper != 1 }
+
+	def dispatch elementMultiplicity(UnspecifiedMultiplicity it) ''' minOccurs="0" maxOccurs="unbounded"'''
+
+	def dispatch elementMultiplicity(Optional it) ''' minOccurs="0"'''
 
 	def importUsedInXsd(Import it, Mridl model) {
 		val thisImport = it

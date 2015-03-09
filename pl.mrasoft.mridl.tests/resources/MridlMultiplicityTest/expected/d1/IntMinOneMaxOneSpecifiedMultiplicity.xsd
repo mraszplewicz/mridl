@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema elementFormDefault="unqualified" 
 		   xmlns:xs="http://www.w3.org/2001/XMLSchema"
-		   xmlns:tns="http://mrasoft.pl/mridl/examples/d1/IntSpecifiedMultiplicity"
-		   targetNamespace="http://mrasoft.pl/mridl/examples/d1/IntSpecifiedMultiplicity">
+		   xmlns:tns="http://mrasoft.pl/mridl/examples/d1/IntMinOneMaxOneSpecifiedMultiplicity"
+		   targetNamespace="http://mrasoft.pl/mridl/examples/d1/IntMinOneMaxOneSpecifiedMultiplicity">
 	<xs:complexType name="TestComplex">
 		<xs:sequence>
-			<xs:element name="aaa" type="xs:string" minOccurs="2" maxOccurs="10"/>
+			<xs:element name="aaa" type="xs:string"/>
 		</xs:sequence>
 	</xs:complexType>
 </xs:schema>
