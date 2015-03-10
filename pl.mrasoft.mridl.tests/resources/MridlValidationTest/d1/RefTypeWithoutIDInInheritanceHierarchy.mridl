@@ -1,0 +1,13 @@
+namespace "http://mrasoft.pl/mridl/examples/d1/RefTypeWithoutIDInInheritanceHierarchy"
+
+complex ComplexType1 {
+	ref ComplexType2 a
+}
+
+complex ComplexType2 extends ComplexType3 {
+	
+}
+
+complex ComplexType3 {
+	
+}

@@ -1,0 +1,9 @@
+namespace "http://mrasoft.pl/mridl/examples/d1/RefMultiplicityMaxNotMoreThanOne"
+
+complex ComplexType1 {
+	ref ComplexType2[0..1] a
+}
+
+complex ComplexType2 {
+	ID id
+}

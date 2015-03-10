@@ -13,6 +13,11 @@ import pl.mrasoft.mridl.mridl.TopLevelComplexType
 import pl.mrasoft.mridl.mridl.TopLevelElement
 import pl.mrasoft.mridl.mridl.TopLevelEnumType
 import pl.mrasoft.mridl.mridl.TopLevelType
+import pl.mrasoft.mridl.mridl.RefElement
+import pl.mrasoft.mridl.mridl.SpecifiedMultiplicity
+import pl.mrasoft.mridl.mridl.TopLevelTypeReference
+import pl.mrasoft.mridl.mridl.XsdBuiltinTypeReference
+import pl.mrasoft.mridl.mridl.XsdBuiltinTypeDeclaration
 
 class MridlValidator extends AbstractMridlValidator {
 
@@ -67,7 +72,7 @@ class MridlValidator extends AbstractMridlValidator {
 		}
 
 	}
-	
+
 	@Check
 	def void checkOperationFaultNameIsUnique(Fault fault) {
 
@@ -83,11 +88,74 @@ class MridlValidator extends AbstractMridlValidator {
 
 	}
 
+	@Check
+	def void checkRefElementIsComplexType(RefElement element) {
+		if (!element.refElementIsComplexType) {
+			error("Reference to non complex type", MridlPackage.Literals::ABSTRACT_ELEMENT__TYPE_DECLARATION);
+		}
+	}
+
+	@Check
+	def void checkRefElementTypeHasID(RefElement element) {
+
+		val refElementType = element.getRefElementType
+
+		if (refElementType != null && !refElementType.topLevelComplexTypeHasID) {
+			error("Reference to type without ID", MridlPackage.Literals::ABSTRACT_ELEMENT__TYPE_DECLARATION);
+		}
+
+	}
+
+	@Check
+	def void checkRefMultiplicityUpperNotMoreThanOne(RefElement element) {
+		if (element.elementHasSpecifiedMultiplicity) {
+			val multiplicity = element.getSpecifiedMultiplicity
+			if (!multiplicity.unbounded && multiplicity.upper > 1) {
+				error("Only reference to unbounded elements collection is allowed",
+					MridlPackage.Literals::ABSTRACT_ELEMENT__TYPE_DECLARATION);
+			}
+		}
+	}
+
+	@Check
+	def void checkRefMultiplicityLowerNotMoreThanOne(RefElement element) {
+		if (element.elementHasSpecifiedMultiplicity) {
+			val multiplicity = element.getSpecifiedMultiplicity
+			if (multiplicity.lower > 1) {
+				error("Only reference to minimum 0 or 1 elements collection is allowed",
+					MridlPackage.Literals::ABSTRACT_ELEMENT__TYPE_DECLARATION);
+			}
+		}
+	}
+
+	def refElementIsComplexType(RefElement it) {
+		if (typeDeclaration.type instanceof TopLevelTypeReference) {
+			val typeReference = typeDeclaration.type as TopLevelTypeReference
+			return typeReference.ref instanceof TopLevelComplexType
+		}
+		false
+	}
+
+	def getRefElementType(RefElement it) {
+		if (refElementIsComplexType) {
+			val typeReference = typeDeclaration.type as TopLevelTypeReference
+			return typeReference.ref as TopLevelComplexType
+		}
+	}
+
+	def elementHasSpecifiedMultiplicity(RefElement it) {
+		typeDeclaration.multiplicity != null && typeDeclaration.multiplicity instanceof SpecifiedMultiplicity
+	}
+
+	def getSpecifiedMultiplicity(RefElement it) {
+		typeDeclaration.multiplicity as SpecifiedMultiplicity
+	}
+
 	def void checkElementNameIsUnique(EObject container, Element element) {
 
 		val elementName = element.name
 
-		val List<Element> containerElements = getContainerElements(container, element)
+		val List<Element> containerElements = getContainerElements(container)
 
 		if (container instanceof TopLevelComplexType) {
 			checkElementNameIsUniqueInSuperTypes(container, element)
@@ -95,18 +163,38 @@ class MridlValidator extends AbstractMridlValidator {
 
 		for (containerElement : containerElements) {
 			if (containerElement != element && elementName.equals(containerElement.name)) {
-				error("Duplicate element '" + elementName + "'", MridlPackage.Literals::ABSTRACT_ELEMENT__NAME);
+				error("Duplicate element '" + elementName + "'",
+					MridlPackage.Literals::ABSTRACT_ELEMENT__TYPE_DECLARATION);
 				return
 			}
 		}
 
 	}
 
-	def dispatch List<Element> getContainerElements(Operation container, Element element) {
+	def boolean topLevelComplexTypeHasID(TopLevelComplexType type) {
+
+		for (element : type.elements) {
+			if (element.typeDeclaration.type instanceof XsdBuiltinTypeReference) {
+				val elementType = element.typeDeclaration.type as XsdBuiltinTypeReference
+				if (elementType.ref.declaration == XsdBuiltinTypeDeclaration.ID) {
+					return true
+				}
+
+			}
+		}
+
+		if (type.^extends != null) {
+			return topLevelComplexTypeHasID(type.^extends.ref)
+		}
+		false
+
+	}
+
+	def dispatch List<Element> getContainerElements(Operation container) {
 		container.params
 	}
 
-	def dispatch List<Element> getContainerElements(TopLevelComplexType container, Element element) {
+	def dispatch List<Element> getContainerElements(TopLevelComplexType container) {
 		container.elements
 	}
 

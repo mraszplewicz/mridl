@@ -18,7 +18,7 @@ ImportMridlUri:
 
 Operation:
 	(documentation=Documentation)?
-	"operation" (returnType=Element | void?="void") name=ID
+	"operation" (returnType=NonRefElement | void?="void") name=ID
 	"(" (params+=Element
 	("," params+=Element)*)? ")"
 	("throws" (faults+=Fault ("," faults+=Fault)*))?;
@@ -45,8 +45,14 @@ ElementTypeDeclaration:
 AbstractElement:
 	Element | TopLevelElement;
 
-Element:
+NonRefElement:
 	(documentation=Documentation)? typeDeclaration=ElementTypeDeclaration name=ID;
+
+RefElement:
+	(documentation=Documentation)? "ref" typeDeclaration=ElementTypeDeclaration name=ID;
+
+Element:
+	NonRefElement | RefElement;
 
 Fault:
 	(documentation=Documentation)? element=TopLevelElementReference;

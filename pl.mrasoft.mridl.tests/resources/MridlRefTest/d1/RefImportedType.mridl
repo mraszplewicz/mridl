@@ -1,0 +1,7 @@
+namespace "http://mrasoft.pl/mridl/examples/d1/RefNoMultiplicity"
+
+import Imported.mridl as i
+
+complex ComplexType1 {
+	ref i:TestComplexType a
+}

@@ -22,6 +22,10 @@ import pl.mrasoft.mridl.mridl.XsdBuiltinTypeReference
 import pl.mrasoft.mridl.mridl.XsdBuiltinTypeWithDigits
 import pl.mrasoft.mridl.mridl.XsdBuiltinTypeWithMaxLength
 import pl.mrasoft.mridl.util.ResourceUtil
+import pl.mrasoft.mridl.mridl.NonRefElement
+import pl.mrasoft.mridl.mridl.TopLevelElement
+import pl.mrasoft.mridl.mridl.RefElement
+import pl.mrasoft.mridl.util.URIParserUtil
 
 class XsdGenerator {
 
@@ -160,13 +164,67 @@ class XsdGenerator {
 		documentation != null && documentation.doc != null
 	}
 
-	def element(AbstractElement it) '''
+	def dispatch element(NonRefElement it) { nonRefElement }
+
+	def dispatch element(TopLevelElement it) { nonRefElement }
+
+	def dispatch element(RefElement it) { refElement }
+
+	def nonRefElement(AbstractElement it) '''
 		«IF elementHasClosingTag»
 			«elementWithClosingTag»
 		«ELSE»
 			<xs:element name="«name»" type="«typeDeclaration.type.typeRef»"«conditionalElementMultiplicity»/>
 		«ENDIF»
 	'''
+
+	def refElement(RefElement it) '''
+		<xs:element name="«name»"«IF !elementHasSimpleTypeRestriction» type="«refElementType»"«ENDIF»«refConditionalElementMultiplicity»>
+			«IF elementHasDocumentation»
+				«documentation.xsdDocumentation»
+			«ENDIF»
+			<xs:appinfo>
+				<jaxb:property>
+					<jaxb:baseType name="«refElementBaseType»"/>
+				</jaxb:property>
+			</xs:appinfo>
+		</xs:element>
+	'''
+
+	def refElementType(RefElement it) {
+		if (refElementIsUnbounded) {
+			return "xs:IDREFS"
+		} else {
+			return "xs:IDREF"
+		}
+	}
+
+	def refElementIsUnbounded(RefElement it) {
+		if (typeDeclaration.multiplicity == null) {
+			return false
+		}
+		typeDeclaration.multiplicity.refElementMultiplicityIsUnbounded
+	}
+
+	def dispatch refElementMultiplicityIsUnbounded(Optional it) { false }
+
+	def dispatch refElementMultiplicityIsUnbounded(UnspecifiedMultiplicity it) { true }
+
+	def dispatch refElementMultiplicityIsUnbounded(SpecifiedMultiplicity it) {
+		if (unbounded) {
+			return true
+		}
+		if (upper <= 1) {
+			return false
+		}
+		true
+	}
+
+	def refElementBaseType(RefElement it) {
+		val nsUri = resolveNamespace(typeDeclaration.type)
+		val packageName = URIParserUtil.getPackageName(nsUri)
+		return packageName + "." + typeDeclaration.type.typeName
+	}
 
 	def elementHasClosingTag(AbstractElement it) {
 		elementHasLength || elementHasDigits || elementHasDocumentation
@@ -237,6 +295,9 @@ class XsdGenerator {
 	def conditionalElementMultiplicity(AbstractElement it) '''«IF typeDeclaration.multiplicity != null»«typeDeclaration.
 		multiplicity.elementMultiplicity»«ENDIF»'''
 
+	def refConditionalElementMultiplicity(AbstractElement it) '''«IF typeDeclaration.multiplicity != null»«typeDeclaration.
+		multiplicity.refElementMultiplicity»«ENDIF»'''
+
 	def elementHasLength(AbstractElement it) {
 		val ref = getXsdBuiltinTypeWithMaxLength
 		ref != null && ref.lengthSpec != null
@@ -301,14 +362,24 @@ class XsdGenerator {
 
 	def dispatch elementMultiplicity(Optional it) ''' minOccurs="0"'''
 
+	def dispatch refElementMultiplicity(SpecifiedMultiplicity it) '''«multiplicityMinOccurs»'''
+
+	def dispatch refElementMultiplicity(UnspecifiedMultiplicity it) ''' minOccurs="0"'''
+
+	def dispatch refElementMultiplicity(Optional it) ''' minOccurs="0"'''
+
 	def importUsedInXsd(Import it, Mridl model) {
 		val thisImport = it
 
 		val importedTypeReferences = model.eAllContents.filter(ImportedTopLevelTypeReference)
 		val thisTypeReference = importedTypeReferences.findFirst [
-			importRef.^import == thisImport
+			importRef.^import == thisImport && elementIsNotRef
 		]
 		thisTypeReference != null
+	}
+
+	def elementIsNotRef(ImportedTopLevelTypeReference it) {
+		(eContainer == null || eContainer.eContainer == null || !(eContainer.eContainer instanceof RefElement))
 	}
 
 }

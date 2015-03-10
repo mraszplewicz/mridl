@@ -110,7 +110,7 @@ class MridlValidationTest extends BaseMridlTest {
 		assertConstraints(
 			issues.sizeIs(2)
 		)
-		
+
 		assertConstraints(
 			issues.inLine(3).allOfThemContain("Duplicate type 'TestType'")
 		)
@@ -145,7 +145,7 @@ class MridlValidationTest extends BaseMridlTest {
 			issues.sizeIs(0)
 		)
 	}
-	
+
 	@Test
 	def void checkFaultElementNameIsUnique() {
 		val issues = testFile("d1/DuplicateFaultElementName.mridl")
@@ -162,7 +162,7 @@ class MridlValidationTest extends BaseMridlTest {
 			issues.inLine(9).allOfThemContain("Duplicate element 'TestFault'")
 		)
 	}
-	
+
 	@Test
 	def void checkOperationFaultNameIsUnique() {
 		val issues = testFile("d1/DuplicateOperationFaultName.mridl")
@@ -177,6 +177,100 @@ class MridlValidationTest extends BaseMridlTest {
 
 		assertConstraints(
 			issues.inLine(3).allOfThemContain("Duplicate fault 'TestFault'")
+		)
+	}
+
+	@Test
+	def void checkRefElementIsComplexType() {
+		val issues = testFile("d1/RefNonComplexType.mridl")
+
+		assertConstraints(
+			issues.sizeIs(1)
+		)
+
+		assertConstraints(
+			issues.inLine(4).sizeIs(1)
+		)
+
+		assertConstraints(
+			issues.inLine(4).allOfThemContain("Reference to non complex type")
+		)
+	}
+
+	@Test
+	def void checkRefElementTypeHasID() {
+		val issues = testFile("d1/RefTypeWithoutID.mridl")
+
+		assertConstraints(
+			issues.sizeIs(1)
+		)
+
+		assertConstraints(
+			issues.inLine(4).sizeIs(1)
+		)
+
+		assertConstraints(
+			issues.inLine(4).allOfThemContain("Reference to type without ID")
+		)
+	}
+
+	@Test
+	def void checkRefElementTypeHasIDInInheritanceHierarchy() {
+		val issues = testFile("d1/RefTypeWithoutIDInInheritanceHierarchy.mridl")
+
+		assertConstraints(
+			issues.sizeIs(1)
+		)
+
+		assertConstraints(
+			issues.inLine(4).sizeIs(1)
+		)
+
+		assertConstraints(
+			issues.inLine(4).allOfThemContain("Reference to type without ID")
+		)
+	}
+
+	@Test
+	def void checkRefElementTypeHasIDInInheritanceHierarchyOK() {
+		val issues = testFile("d1/RefTypeWithIDInInheritanceHierarchy.mridl")
+
+		assertConstraints(
+			issues.sizeIs(0)
+		)
+	}
+
+	@Test
+	def void checkRefMultiplicityUpperNotMoreThanOne() {
+		val issues = testFile("d1/RefMultiplicityUpperMoreThanOne.mridl")
+
+		assertConstraints(
+			issues.sizeIs(1)
+		)
+
+		assertConstraints(
+			issues.inLine(4).sizeIs(1)
+		)
+
+		assertConstraints(
+			issues.inLine(4).allOfThemContain("Only reference to unbounded elements collection is allowed")
+		)
+	}
+
+	@Test
+	def void checkRefMultiplicityLowerNotMoreThanOne() {
+		val issues = testFile("d1/RefMultiplicityLowerMoreThanOne.mridl")
+
+		assertConstraints(
+			issues.sizeIs(1)
+		)
+
+		assertConstraints(
+			issues.inLine(4).sizeIs(1)
+		)
+
+		assertConstraints(
+			issues.inLine(4).allOfThemContain("Only reference to minimum 0 or 1 elements collection is allowed")
 		)
 	}
 

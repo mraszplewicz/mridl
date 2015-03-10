@@ -1,0 +1,9 @@
+namespace "http://mrasoft.pl/mridl/examples/d1/RefNonComplexType"
+
+complex ComplexType1 {
+	ref SimpleType1 a
+}
+
+simple SimpleType1 {
+	base string
+}
