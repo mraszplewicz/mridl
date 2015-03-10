@@ -24,7 +24,7 @@ Operation:
 	("throws" (faults+=Fault ("," faults+=Fault)*))?;
 
 TopLevelComplexType:
-	"complex" name=ID ("extends" extends=TopLevelComplexTypeReference)?
+	(abstract?="abstract")? "complex" name=ID ("extends" extends=TopLevelComplexTypeReference)?
 	"{" (elements+=Element)* "}";
 
 TopLevelSimpleType:

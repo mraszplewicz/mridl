@@ -95,7 +95,7 @@ class XsdGenerator {
 	'''
 
 	def dispatch typeDeclaration(TopLevelComplexType it) '''
-		<xs:complexType name="«name»">
+		<xs:complexType«IF abstract» abstract="true"«ENDIF» name="«name»">
 			«IF extends != null»
 				<xs:complexContent>
 					<xs:extension base="«extends.typeRef»">

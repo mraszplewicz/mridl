@@ -37,11 +37,11 @@ class MridlFormatter extends AbstractDeclarativeFormatter {
 
 		c.setLinewrap(0, 1, 1).around(documentationRule)
 
-		c.setIndentationIncrement().after(topLevelComplexTypeAccess.leftCurlyBracketKeyword_3)
-		c.setIndentationDecrement().before(topLevelComplexTypeAccess.rightCurlyBracketKeyword_5)
-		c.setLinewrap().after(topLevelComplexTypeAccess.leftCurlyBracketKeyword_3)
-		c.setLinewrap().after(topLevelComplexTypeAccess.rightCurlyBracketKeyword_5)
-		c.setLinewrap(1, 1, 3).around(topLevelComplexTypeAccess.elementsAssignment_4)
+		c.setIndentationIncrement().after(topLevelComplexTypeAccess.leftCurlyBracketKeyword_4)
+		c.setIndentationDecrement().before(topLevelComplexTypeAccess.rightCurlyBracketKeyword_6)
+		c.setLinewrap().after(topLevelComplexTypeAccess.leftCurlyBracketKeyword_4)
+		c.setLinewrap().after(topLevelComplexTypeAccess.rightCurlyBracketKeyword_6)
+		c.setLinewrap(1, 1, 3).around(topLevelComplexTypeAccess.elementsAssignment_5)
 
 		c.setIndentationIncrement().after(topLevelEnumTypeAccess.leftCurlyBracketKeyword_2)
 		c.setIndentationDecrement().before(topLevelEnumTypeAccess.rightCurlyBracketKeyword_4)
