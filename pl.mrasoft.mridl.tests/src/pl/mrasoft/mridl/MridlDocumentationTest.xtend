@@ -54,7 +54,7 @@ class MridlDocumentationTest extends BaseMridlTest {
 	def void operationDocumentation() {
 		val fsa = generate("d1/OperationDocumentation.mridl")
 
-		assertEquals(2, fsa.allFiles.size)
+		assertEquals(3, fsa.allFiles.size)
 
 		assertEquals(
 			getExpected("d1/OperationDocumentation.xsd"),
@@ -66,13 +66,18 @@ class MridlDocumentationTest extends BaseMridlTest {
 			getActual(fsa, "d1/OperationDocumentation.wsdl")
 		)
 
+		assertEquals(
+			getExpected("d1/OperationDocumentation-soap.wsdl"),
+			getActual(fsa, "d1/OperationDocumentation-soap.wsdl")
+		)
+
 	}
 
 	@Test
 	def void faultDocumentation() {
 		val fsa = generate("d1/FaultDocumentation.mridl")
 
-		assertEquals(2, fsa.allFiles.size)
+		assertEquals(3, fsa.allFiles.size)
 
 		assertEquals(
 			getExpected("d1/FaultDocumentation.xsd"),
@@ -84,13 +89,18 @@ class MridlDocumentationTest extends BaseMridlTest {
 			getActual(fsa, "d1/FaultDocumentation.wsdl")
 		)
 
+		assertEquals(
+			getExpected("d1/FaultDocumentation-soap.wsdl"),
+			getActual(fsa, "d1/FaultDocumentation-soap.wsdl")
+		)
+
 	}
 
 	@Test
 	def void wsdlFileDocumentation() {
 		val fsa = generate("d1/WsdlFileDocumentation.mridl")
 
-		assertEquals(2, fsa.allFiles.size)
+		assertEquals(3, fsa.allFiles.size)
 
 		assertEquals(
 			getExpected("d1/WsdlFileDocumentation.xsd"),
@@ -100,6 +110,11 @@ class MridlDocumentationTest extends BaseMridlTest {
 		assertEquals(
 			getExpected("d1/WsdlFileDocumentation.wsdl"),
 			getActual(fsa, "d1/WsdlFileDocumentation.wsdl")
+		)
+
+		assertEquals(
+			getExpected("d1/WsdlFileDocumentation-soap.wsdl"),
+			getActual(fsa, "d1/WsdlFileDocumentation-soap.wsdl")
 		)
 
 	}

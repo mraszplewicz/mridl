@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions name="SimpleFault"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:tns="http://mrasoft.pl/mridl/examples/d1/SimpleFault"
+                  targetNamespace="http://mrasoft.pl/mridl/examples/d1/SimpleFault">
+    <wsdl:import namespace="http://mrasoft.pl/mridl/examples/d1/SimpleFault" location="SimpleFault.wsdl"/>
+    <wsdl:binding name="SimpleFaultSOAPBinding" type="tns:SimpleFault">
+    	<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="op1">
+			<soap:operation style="document"/>
+			<wsdl:input name="op1">
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output name="op1Response">
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="TestFault2Exception">
+				<soap:fault name="TestFault2Exception" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="SimpleFaultService">
+	     <wsdl:port name="SimpleFault" binding="tns:SimpleFaultSOAPBinding">
+	         <soap:address location="http://localhost/SimpleFault"/>
+	     </wsdl:port>
+	 </wsdl:service>
+</wsdl:definitions>

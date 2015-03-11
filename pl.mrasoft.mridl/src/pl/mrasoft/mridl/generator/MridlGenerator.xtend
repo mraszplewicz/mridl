@@ -11,6 +11,7 @@ import pl.mrasoft.mridl.util.ResourceUtil
 class MridlGenerator implements IGenerator {
 
 	@Inject WsdlGenerator wsdlGenerator
+	@Inject SoapWsdlGenerator soapWsdlGenerator
 	@Inject XsdGenerator xsdGenerator
 	@Inject GeneratorCommon common
 	@Inject extension ResourceUtil
@@ -25,6 +26,7 @@ class MridlGenerator implements IGenerator {
 
 		if (common.mridlHasWsdlFile(model)) {
 			fsa.generateFile(pathWithoutExtension + ".wsdl", wsdlGenerator.wsdlFile(model, modelName))
+			fsa.generateFile(pathWithoutExtension + "-soap.wsdl", soapWsdlGenerator.soapWsdlFile(model, modelName))
 		}
 		fsa.generateFile(pathWithoutExtension + ".xsd", xsdGenerator.xsdFile(model, modelName))
 	}
