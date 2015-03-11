@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature id="pl.mrasoft.mridl.sdk"
 	label="Mridl SDK Feature "
-	version="1.0.1.qualifier">
+	version="1.1.1.qualifier">
 	<plugin
 			id="pl.mrasoft.mridl"
 			download-size="0"
