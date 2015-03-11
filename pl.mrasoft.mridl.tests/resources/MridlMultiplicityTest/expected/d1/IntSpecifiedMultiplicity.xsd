@@ -5,7 +5,7 @@
 		   targetNamespace="http://mrasoft.pl/mridl/examples/d1/IntSpecifiedMultiplicity">
 	<xs:complexType name="TestComplex">
 		<xs:sequence>
-			<xs:element name="aaa" type="xs:string" minOccurs="1" maxOccurs="2"/>
+			<xs:element name="aaa" type="xs:string" minOccurs="2" maxOccurs="10"/>
 		</xs:sequence>
 	</xs:complexType>
 </xs:schema>

@@ -6,8 +6,10 @@ Mridl:
 	(documentation=Documentation)?
 	"namespace" nsUri=STRING
 	(imports+=Import)*
-	(operations+=Operation)*
-	(typeDeclarations+=TopLevelType)*;
+	((operations+=Operation)* &
+	(interfaces+=Interface)*)
+	((typeDeclarations+=TopLevelType)* &
+	(topLevelElements+=TopLevelElement)*);
 
 Import:
 	"import" importURI=ImportMridlUri "as" nsPrefix=ID;
@@ -17,29 +19,47 @@ ImportMridlUri:
 
 Operation:
 	(documentation=Documentation)?
-	"operation" (returnType=Element | void?="void") name=ID
+	"operation" (returnType=NonRefElement | void?="void") name=ID
 	"(" (params+=Element
 	("," params+=Element)*)? ")"
 	("throws" (faults+=Fault ("," faults+=Fault)*))?;
 
+Interface:
+	"interface" name=ID "{" (operations+=Operation)* "}";
+
 TopLevelComplexType:
-	"complex" name=ID ("extends" extends=TopLevelComplexTypeReference)?
+	(abstract?="abstract")? "complex" name=ID ("extends" extends=TopLevelComplexTypeReference)?
 	"{" (elements+=Element)* "}";
 
 TopLevelSimpleType:
-	"simple" name=ID (restriction=PatternRestriction);
+	"simple" name=ID (body=SimpleTypeBody);
 
 TopLevelEnumType:
 	"enum" name=ID "{" (values+=EnumValue)* "}";
 
+TopLevelElement:
+	(documentation=Documentation)? "element" typeDeclaration=ElementTypeDeclaration name=ID;
+
 EnumValue:
 	(documentation=Documentation)? value=ID;
 
+ElementTypeDeclaration:
+	type=NamedTypeReference (multiplicity=Multiplicity)?;
+
+AbstractElement:
+	Element | TopLevelElement;
+
+NonRefElement:
+	(documentation=Documentation)? typeDeclaration=ElementTypeDeclaration name=ID;
+
+RefElement:
+	(documentation=Documentation)? "ref" typeDeclaration=ElementTypeDeclaration name=ID;
+
 Element:
-	(documentation=Documentation)? type=NamedTypeReference (multiplicity=Multiplicity)? name=ID;
+	NonRefElement | RefElement;
 
 Fault:
-	(documentation=Documentation)? type=NamedTypeReference;
+	(documentation=Documentation)? element=TopLevelElementReference;
 
 NamedTypeReference:
 	TopLevelTypeReference | XsdBuiltinTypeReference;
@@ -55,6 +75,9 @@ TopLevelComplexTypeReference:
 
 XsdBuiltinTypeReference:
 	ref=XsdBuiltinType;
+
+TopLevelElementReference:
+	DirectTopLevelElementReference | ImportedTopLevelElementReference;
 
 DirectTopLevelTypeReferenceBase:
 	DirectTopLevelTypeReference | DirectTopLevelSimpleTypeReference | DirectTopLevelComplexTypeReference;
@@ -80,6 +103,12 @@ ImportedTopLevelSimpleTypeReference:
 ImportedTopLevelComplexTypeReference:
 	importRef=ImportReference ref=[TopLevelComplexType];
 
+DirectTopLevelElementReference:
+	ref=[TopLevelElement];
+
+ImportedTopLevelElementReference:
+	importRef=ImportReference ref=[TopLevelElement];
+
 ImportReference:
 	^import=[Import|ID] ":";
 
@@ -93,20 +122,19 @@ Multiplicity:
 	SpecifiedMultiplicity | UnspecifiedMultiplicity | Optional;
 
 SpecifiedMultiplicity:
-	{SpecifiedMultiplicity}
-	"[" (lower=INT "..") (upper=INT | unbounded?="*") "]";
+	{SpecifiedMultiplicity} "[" (lower=INT "..") (upper=INT | unbounded?="*") "]";
 
 UnspecifiedMultiplicity:
-	{UnspecifiedMultiplicity}
-	"[]";
+	{UnspecifiedMultiplicity} "[]";
 
 Optional:
-	{Optional}
-	"?";
+	{Optional} "?";
+
+SimpleTypeBody:
+	"{" "base" base=NamedSimpleTypeReference (patternRestriction=PatternRestriction)? "}";
 
 PatternRestriction:
-	"{" "base" "=" simpleType=NamedSimpleTypeReference
-	"pattern" "=" pattern=STRING "}";
+	"pattern" pattern=STRING;
 
 NamedSimpleTypeReference:
 	TopLevelSimpleTypeReference | XsdBuiltinTypeReference;
@@ -121,7 +149,16 @@ MaxLengthSpecification:
 	"(" maxLength=INT ")";
 
 DigitsSpecification:
+	TotalAndFractionDigitsSpecification | TotalDigitsSpecification | FractionDigitsSpecification;
+
+TotalAndFractionDigitsSpecification:
 	"(" totalDigits=INT "," fractionDigits=INT ")";
+
+TotalDigitsSpecification:
+	"(" totalDigits=INT ")";
+
+FractionDigitsSpecification:
+	"(" "," fractionDigits=INT ")";
 
 enum XsdBuiltinTypeDeclaration:
 	decimal
@@ -233,4 +270,7 @@ enum XsdBuiltinTypeCanHaveMaxLength returns XsdBuiltinTypeDeclaration:
 	| NMTOKENS;
 
 Documentation:
-	"@doc" "(" doc=STRING ")";
+	doc=DOCUMENTATION_TERMINAL;
+
+terminal DOCUMENTATION_TERMINAL:
+	'(*'->'*)';	

@@ -1,0 +1,8 @@
+namespace "http://mrasoft.pl/mridl/examples/d1/DecimalWithOnlyFractionDigits"
+
+complex TestComplex2 {
+	
+	decimal(,1) s
+
+}
+

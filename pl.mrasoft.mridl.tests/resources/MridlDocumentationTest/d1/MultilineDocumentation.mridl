@@ -2,8 +2,8 @@ namespace "http://mrasoft.pl/mridl/examples/d1/MultilineDocumentation"
 
 complex TestComplex2 {
 
-@doc("s do
-c")
+(*s do
+c*)
 	string s 
 
 }

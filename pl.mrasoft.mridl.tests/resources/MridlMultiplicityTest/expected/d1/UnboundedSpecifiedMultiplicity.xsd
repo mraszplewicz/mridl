@@ -5,7 +5,7 @@
 		   targetNamespace="http://mrasoft.pl/mridl/examples/d1/UnboundedSpecifiedMultiplicity">
 	<xs:complexType name="TestComplex">
 		<xs:sequence>
-			<xs:element name="aaa" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+			<xs:element name="aaa" type="xs:string" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 </xs:schema>

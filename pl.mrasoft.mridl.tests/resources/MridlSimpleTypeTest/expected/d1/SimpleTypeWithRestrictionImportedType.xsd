@@ -5,7 +5,7 @@
 		   targetNamespace="http://mrasoft.pl/mridl/examples/d1/SimpleTypeWithRestrictionImportedType">
 	<xs:simpleType name="TestSimple2">
 		<xs:restriction base="i:ImportedTestSimple">
-			<xs:pattern value="[a-zA-Z][a-zA-Z]"/>	    
+			<xs:pattern value="[a-zA-Z][a-zA-Z]"/>
 		</xs:restriction>
 	</xs:simpleType>
 </xs:schema>

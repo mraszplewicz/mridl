@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions name="WsdlFileDocumentation"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:tns="http://mrasoft.pl/mridl/examples/d1/WsdlFileDocumentation"
+                  targetNamespace="http://mrasoft.pl/mridl/examples/d1/WsdlFileDocumentation">
+	<wsdl:import namespace="http://mrasoft.pl/mridl/examples/d1/WsdlFileDocumentation" location="WsdlFileDocumentation.wsdl"/>
+	<wsdl:binding name="WsdlFileDocumentationSOAPBinding" type="tns:WsdlFileDocumentation">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="op1">
+			<soap:operation style="document"/>
+			<wsdl:input name="op1">
+				<soap:body use="literal"/>
+			</wsdl:input>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="WsdlFileDocumentationService">
+		<wsdl:port name="WsdlFileDocumentation" binding="tns:WsdlFileDocumentationSOAPBinding">
+			<soap:address location="http://localhost/WsdlFileDocumentation"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

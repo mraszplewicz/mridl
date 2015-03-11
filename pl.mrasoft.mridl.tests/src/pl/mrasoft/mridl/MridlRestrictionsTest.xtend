@@ -23,7 +23,7 @@ class MridlRestrictionsTest extends BaseMridlTest {
 		)
 
 	}
-	
+
 	@Test
 	def void stringArrayWithLength() {
 		val fsa = generate("d1/StringArrayWithMaxLength.mridl")
@@ -36,7 +36,7 @@ class MridlRestrictionsTest extends BaseMridlTest {
 		)
 
 	}
-	
+
 	@Test
 	def void stringWithLength() {
 		val fsa = generate("d1/StringWithMaxLength.mridl")
@@ -49,7 +49,7 @@ class MridlRestrictionsTest extends BaseMridlTest {
 		)
 
 	}
-	
+
 	@Test
 	def void enumeration() {
 		val fsa = generate("d1/Enum.mridl")
@@ -63,4 +63,29 @@ class MridlRestrictionsTest extends BaseMridlTest {
 
 	}
 
+	@Test
+	def void decimalWithOnlyTotalDigits() {
+		val fsa = generate("d1/DecimalWithOnlyTotalDigits.mridl")
+
+		assertEquals(1, fsa.allFiles.size)
+
+		assertEquals(
+			getExpected("d1/DecimalWithOnlyTotalDigits.xsd"),
+			getActual(fsa, "d1/DecimalWithOnlyTotalDigits.xsd")
+		)
+
+	}
+
+	@Test
+	def void decimalWithOnlyFractionDigits() {
+		val fsa = generate("d1/DecimalWithOnlyFractionDigits.mridl")
+
+		assertEquals(1, fsa.allFiles.size)
+
+		assertEquals(
+			getExpected("d1/DecimalWithOnlyFractionDigits.xsd"),
+			getActual(fsa, "d1/DecimalWithOnlyFractionDigits.xsd")
+		)
+
+	}
 }

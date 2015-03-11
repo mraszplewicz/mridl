@@ -11,13 +11,13 @@
 	<wsdl:message name="op1">
 		<wsdl:part element="tns:op1" name="parameters"/>
 	</wsdl:message>
-	<wsdl:message name="TestFaultException">
-		<wsdl:part name="TestFaultException" element="tns:TestFault"/>
+	<wsdl:message name="TestFault2Exception">
+		<wsdl:part name="TestFault2Exception" element="tns:TestFault2"/>
 	</wsdl:message>
 	<wsdl:portType name="FaultDocumentation">
 		<wsdl:operation name="op1">
 			<wsdl:input message="tns:op1" name="op1"/>
-			<wsdl:fault name="TestFaultException" message="tns:TestFaultException">
+			<wsdl:fault name="TestFault2Exception" message="tns:TestFault2Exception">
 				<wsdl:documentation>
 					fault doc
 				</wsdl:documentation>

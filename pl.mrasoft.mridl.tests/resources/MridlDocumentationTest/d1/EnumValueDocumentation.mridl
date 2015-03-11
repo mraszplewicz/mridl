@@ -2,7 +2,7 @@ namespace "http://mrasoft.pl/mridl/examples/d1/EnumValueDocumentation"
 
 enum TestEnum {
 	
-	@doc("ENUM1 doc") ENUM1
+	(*ENUM1 doc*) ENUM1
 	ENUM2
 
 }

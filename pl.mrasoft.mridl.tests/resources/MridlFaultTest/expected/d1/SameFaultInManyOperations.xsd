@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="unqualified" 
+		   xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		   xmlns:tns="http://mrasoft.pl/mridl/examples/d1/SameFaultInManyOperations"
+		   targetNamespace="http://mrasoft.pl/mridl/examples/d1/SameFaultInManyOperations">
+	<xs:element name="op1" type="tns:op1"/>
+	<xs:element name="op1Response" type="tns:op1Response"/>
+	<xs:element name="op2" type="tns:op2"/>
+	<xs:element name="op2Response" type="tns:op2Response"/>
+	<xs:element name="TestFault" type="xs:string"/>
+	<xs:complexType name="op1">
+		<xs:sequence>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="op1Response">
+		<xs:sequence>
+			<xs:element name="a" type="xs:int"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="op2">
+		<xs:sequence>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="op2Response">
+		<xs:sequence>
+			<xs:element name="a" type="xs:int"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

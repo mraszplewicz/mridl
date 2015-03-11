@@ -1,0 +1,67 @@
+(*
+	global doc
+*)
+namespace "http://mrasoft.pl/mridl/examples/d1/AllFeatures"
+
+import "Imported 2.mridl" as i
+import ../d2/Imported.mridl as i2
+
+(*op1 documentation*)
+operation
+	(*a doc*) int[] a op1((*f doc*) string? f,
+		TestComplex2 d,
+		string c) throws (*fault doc1*) TestFault, i:TestImportedFault
+
+operation void op3(string? f, TestComplex2 d) throws TestFault
+
+interface Interface2 {
+	operation void op2()
+}
+
+(*element doc*)
+element TestFault TestFault
+
+complex TestFault {
+
+	(*aaa*)
+	i2:TestComplexType2 b
+	(*aaa*)
+	TestEnum e
+	(*aaa*)
+	i:TestComplexType s
+	(*aaa*)
+	i:TestComplexType[1..*] ss
+	(*d docume
+	ntation*)
+	i:ImportedTestSimple d
+	ref TestComplex2 x
+	ref TestComplex2[] y
+}
+
+complex TestComplex2 extends i:TestComplexType {
+
+
+	i2:TestComplexType2[1..*] b
+	int[1..2] c
+	string(2) s
+	string s2
+	string(2)[] s3
+	decimal(2, 1) d
+	ID id
+}
+
+simple TestSimple2 {
+	base string
+	pattern "[a-zA-Z][a-zA-Z][a-zA-Z]"
+}
+
+simple TestSimple3 {
+	base i:ImportedTestSimple
+	pattern "[a-zA-Z][a-zA-Z][a-zA-Z]"
+}
+
+enum TestEnum {
+	(*ENUM1 documentation*) ENUM1
+	ENUM2
+} 
+

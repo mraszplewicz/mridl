@@ -22,12 +22,12 @@ class MridlBasicComplexTypeTest extends BaseMridlTest {
 			getActual(fsa, "hello/Hello.xsd")
 		)
 	}
-	
+
 	@Test
 	def void operationWithComplexTypeParameter() {
 		val fsa = generate("hello/HelloOperationComplexTypeParam.mridl")
 
-		assertEquals(2, fsa.allFiles.size)
+		assertEquals(3, fsa.allFiles.size)
 
 		assertEquals(
 			getExpected("hello/HelloOperationComplexTypeParam.xsd"),
@@ -38,8 +38,13 @@ class MridlBasicComplexTypeTest extends BaseMridlTest {
 			getExpected("hello/HelloOperationComplexTypeParam.wsdl"),
 			getActual(fsa, "hello/HelloOperationComplexTypeParam.wsdl")
 		)
+
+		assertEquals(
+			getExpected("hello/HelloOperationComplexTypeParam-soap.wsdl"),
+			getActual(fsa, "hello/HelloOperationComplexTypeParam-soap.wsdl")
+		)
 	}
-	
+
 	@Test
 	def void complexTypeWithComplexTypeElement() {
 		val fsa = generate("hello/HelloComplexTypeElement.mridl")
@@ -49,6 +54,18 @@ class MridlBasicComplexTypeTest extends BaseMridlTest {
 		assertEquals(
 			getExpected("hello/HelloComplexTypeElement.xsd"),
 			getActual(fsa, "hello/HelloComplexTypeElement.xsd")
+		)
+	}
+
+	@Test
+	def void abstractComplexType() {
+		val fsa = generate("hello/AbstractComplexType.mridl")
+
+		assertEquals(1, fsa.allFiles.size)
+
+		assertEquals(
+			getExpected("hello/AbstractComplexType.xsd"),
+			getActual(fsa, "hello/AbstractComplexType.xsd")
 		)
 	}
 

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions name="FaultDocumentation"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:tns="http://mrasoft.pl/mridl/examples/d1/FaultDocumentation"
+                  targetNamespace="http://mrasoft.pl/mridl/examples/d1/FaultDocumentation">
+	<wsdl:import namespace="http://mrasoft.pl/mridl/examples/d1/FaultDocumentation" location="FaultDocumentation.wsdl"/>
+	<wsdl:binding name="FaultDocumentationSOAPBinding" type="tns:FaultDocumentation">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="op1">
+			<soap:operation style="document"/>
+			<wsdl:input name="op1">
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:fault name="TestFault2Exception">
+				<soap:fault name="TestFault2Exception" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="FaultDocumentationService">
+		<wsdl:port name="FaultDocumentation" binding="tns:FaultDocumentationSOAPBinding">
+			<soap:address location="http://localhost/FaultDocumentation"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

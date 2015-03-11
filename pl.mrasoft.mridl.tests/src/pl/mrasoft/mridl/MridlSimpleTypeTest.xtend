@@ -37,5 +37,16 @@ class MridlSimpleTypeTest extends BaseMridlTest {
 
 	}
 	
-	
+	@Test
+	def void simpleTypeNoPattern() {
+		val fsa = generate("d1/SimpleTypeNoPattern.mridl")
+
+		assertEquals(1, fsa.allFiles.size)
+
+		assertEquals(
+			getExpected("d1/SimpleTypeNoPattern.xsd"),
+			getActual(fsa, "d1/SimpleTypeNoPattern.xsd")
+		)
+
+	}
 }

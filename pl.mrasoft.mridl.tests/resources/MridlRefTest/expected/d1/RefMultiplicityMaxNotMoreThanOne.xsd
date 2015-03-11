@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="unqualified" 
+		   xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		   xmlns:tns="http://mrasoft.pl/mridl/examples/d1/RefMultiplicityMaxNotMoreThanOne"
+		   targetNamespace="http://mrasoft.pl/mridl/examples/d1/RefMultiplicityMaxNotMoreThanOne">
+	<xs:complexType name="ComplexType1">
+		<xs:sequence>
+			<xs:element name="a" type="xs:IDREF" minOccurs="0">
+				<xs:appinfo>
+					<jaxb:property>
+						<jaxb:baseType name="pl.mrasoft.mridl.examples.d1.refmultiplicitymaxnotmorethanone.ComplexType2"/>
+					</jaxb:property>
+				</xs:appinfo>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ComplexType2">
+		<xs:sequence>
+			<xs:element name="id" type="xs:ID"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

@@ -1,0 +1,7 @@
+namespace "http://mrasoft.pl/mridl/examples/d1/SameFaultInManyOperations"
+
+operation int a op1() throws TestFault
+operation int a op2() throws TestFault
+
+element string TestFault
+
