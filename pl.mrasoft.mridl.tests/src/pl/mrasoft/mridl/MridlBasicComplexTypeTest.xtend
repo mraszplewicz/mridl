@@ -51,5 +51,17 @@ class MridlBasicComplexTypeTest extends BaseMridlTest {
 			getActual(fsa, "hello/HelloComplexTypeElement.xsd")
 		)
 	}
+	
+	@Test
+	def void abstractComplexType() {
+		val fsa = generate("hello/AbstractComplexType.mridl")
+
+		assertEquals(1, fsa.allFiles.size)
+
+		assertEquals(
+			getExpected("hello/AbstractComplexType.xsd"),
+			getActual(fsa, "hello/AbstractComplexType.xsd")
+		)
+	}
 
 }

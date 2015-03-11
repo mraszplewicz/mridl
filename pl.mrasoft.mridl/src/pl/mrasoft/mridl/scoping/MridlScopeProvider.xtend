@@ -47,7 +47,7 @@ class MridlScopeProvider extends AbstractDeclarativeScopeProvider {
 	}
 	
 	def scope_TopLevelElementReference_ref(TopLevelElementReference ref, EReference eRef) {
-		createFaultElementScope(ref, TopLevelElement)
+		createTopLevelElementScope(ref, TopLevelElement)
 	}
 	
 	def dispatch createTopLevelTypeScope(DirectTopLevelTypeReferenceBase ref, Class<? extends TopLevelType> clazz) {
@@ -60,12 +60,12 @@ class MridlScopeProvider extends AbstractDeclarativeScopeProvider {
 		Scopes::scopeFor(model.typeDeclarations.filter(clazz)) 
 	}
 	
-	def dispatch createFaultElementScope(DirectTopLevelElementReference ref, Class<? extends TopLevelElement> clazz) {
+	def dispatch createTopLevelElementScope(DirectTopLevelElementReference ref, Class<? extends TopLevelElement> clazz) {
 		val model = getRootModel(ref)
 		Scopes::scopeFor(model.topLevelElements.filter(clazz)) 
 	}	
 
-	def dispatch createFaultElementScope(ImportedTopLevelElementReference importedRef, Class<? extends TopLevelElement> clazz) {
+	def dispatch createTopLevelElementScope(ImportedTopLevelElementReference importedRef, Class<? extends TopLevelElement> clazz) {
 		val model = getImportedModel(importedRef, importedRef.importRef.^import.nsPrefix)
 		Scopes::scopeFor(model.topLevelElements.filter(clazz)) 
 	}

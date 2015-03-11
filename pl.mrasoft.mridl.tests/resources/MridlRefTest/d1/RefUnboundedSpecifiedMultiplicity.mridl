@@ -1,0 +1,9 @@
+namespace "http://mrasoft.pl/mridl/examples/d1/RefUnboundedSpecifiedMultiplicity"
+
+complex ComplexType1 {
+	ref ComplexType2[1..*] a
+}
+
+complex ComplexType2 {
+	ID id
+}

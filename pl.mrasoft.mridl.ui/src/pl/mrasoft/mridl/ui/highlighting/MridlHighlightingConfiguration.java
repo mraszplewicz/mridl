@@ -19,7 +19,7 @@ public class MridlHighlightingConfiguration extends
 
 	public TextStyle documentationTextStyle() {
 		TextStyle textStyle = defaultTextStyle().copy();
-		textStyle.setColor(new RGB(90, 180, 90));
+		textStyle.setColor(new RGB(63, 95, 191));
 		return textStyle;
 	}
 

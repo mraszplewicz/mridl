@@ -6,4 +6,4 @@ complex TestType {
 	
 }
 
-simple TestType {base=string pattern="[a-zA-Z][a-zA-Z][a-zA-Z]"}
+simple TestType {base string pattern "[a-zA-Z][a-zA-Z][a-zA-Z]"}

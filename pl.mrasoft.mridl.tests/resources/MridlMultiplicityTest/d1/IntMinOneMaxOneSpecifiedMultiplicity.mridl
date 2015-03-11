@@ -1,0 +1,7 @@
+namespace "http://mrasoft.pl/mridl/examples/d1/IntMinOneMaxOneSpecifiedMultiplicity"
+
+complex TestComplex {
+	
+	string[1..1] aaa
+
+}

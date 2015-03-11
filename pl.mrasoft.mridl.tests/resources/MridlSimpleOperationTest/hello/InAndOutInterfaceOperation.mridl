@@ -1,0 +1,7 @@
+namespace "http://mrasoft.pl/mridl/examples/hello/InAndOutInterfaceOperation"
+
+operation void op1()
+
+interface Interface1 {
+	operation void op2()
+}

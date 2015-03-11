@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="unqualified" 
+		   xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		   xmlns:tns="http://mrasoft.pl/mridl/examples"
+		   targetNamespace="http://mrasoft.pl/mridl/examples">
+	<xs:complexType abstract="true" name="TestComplexType">
+		<xs:sequence>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

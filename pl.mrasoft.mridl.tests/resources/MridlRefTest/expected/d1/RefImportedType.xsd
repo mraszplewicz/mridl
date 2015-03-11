@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="unqualified" 
+		   xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		   xmlns:tns="http://mrasoft.pl/mridl/examples/d1/RefNoMultiplicity"
+		   targetNamespace="http://mrasoft.pl/mridl/examples/d1/RefNoMultiplicity">
+	<xs:complexType name="ComplexType1">
+		<xs:sequence>
+			<xs:element name="a" type="xs:IDREF">
+				<xs:appinfo>
+					<jaxb:property>
+						<jaxb:baseType name="pl.mrasoft.mridl.examples.d1.imported.TestComplexType"/>
+					</jaxb:property>
+				</xs:appinfo>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

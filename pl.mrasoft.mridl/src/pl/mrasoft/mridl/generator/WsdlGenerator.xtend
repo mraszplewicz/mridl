@@ -1,23 +1,25 @@
 package pl.mrasoft.mridl.generator
 
+import java.util.ArrayList
+import java.util.HashSet
+import java.util.List
 import javax.inject.Inject
 import pl.mrasoft.mridl.mridl.Documentation
 import pl.mrasoft.mridl.mridl.Fault
 import pl.mrasoft.mridl.mridl.Import
+import pl.mrasoft.mridl.mridl.ImportedTopLevelElementReference
 import pl.mrasoft.mridl.mridl.Mridl
 import pl.mrasoft.mridl.mridl.Operation
-import pl.mrasoft.mridl.util.ResourceUtil
-import org.eclipse.emf.common.util.EList
-import java.util.HashSet
-import java.util.ArrayList
-import pl.mrasoft.mridl.mridl.ImportedTopLevelElementReference
 import pl.mrasoft.mridl.mridl.TopLevelElement
 import pl.mrasoft.mridl.mridl.TopLevelElementReference
+import pl.mrasoft.mridl.util.ResourceUtil
+import pl.mrasoft.mridl.util.MridlUtil
 
 class WsdlGenerator {
 
 	@Inject extension ResourceUtil
 	@Inject extension GeneratorCommon
+	@Inject extension MridlUtil
 
 	def wsdlFile(Mridl it, String modelName) '''
 		<?xml version="1.0" encoding="utf-8"?>
@@ -39,18 +41,25 @@ class WsdlGenerator {
 		        	«IF imp.importUsedInWsdl(it)»«imp.importSchemaInWsdl»«ENDIF»
 		        «ENDFOR»
 		    </wsdl:types>
-			«FOR operation : operations»				
+			«FOR operation : allOperations»				
 				«operation.operationMessages»
 			«ENDFOR»
-			«FOR faultElementReference : getUniqueFaultElementReferences(operations)»				
+			«FOR faultElementReference : getUniqueFaultElementReferences(allOperations)»				
 				«faultElementReference.faultMessage»
 			«ENDFOR»		
-			<wsdl:portType name="«modelName»">
-				«FOR operation : operations»
-					«operation.operationInPortType»
-				«ENDFOR»
-			</wsdl:portType>
+			«portType(modelName, operations)»
+			«FOR inter : interfaces»				
+				«portType(inter.name, inter.operations)»
+			«ENDFOR»
 		</wsdl:definitions>
+	'''
+
+	def portType(String name, List<Operation> operations) '''		
+		<wsdl:portType name="«name»">
+			«FOR operation : operations»
+				«operation.operationInPortType»
+			«ENDFOR»
+		</wsdl:portType>
 	'''
 
 	def importUsedInWsdl(Import it, Mridl model) {
@@ -85,7 +94,7 @@ class WsdlGenerator {
 		«ENDIF»		
 	'''
 
-	def getUniqueFaultElementReferences(EList<Operation> operations) {
+	def getUniqueFaultElementReferences(List<Operation> operations) {
 		val faultElements = new HashSet<TopLevelElement>
 		val faultElementReferences = new ArrayList<TopLevelElementReference>
 		for (it : operations) {

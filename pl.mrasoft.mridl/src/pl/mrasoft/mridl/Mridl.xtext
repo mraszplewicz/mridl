@@ -7,7 +7,8 @@ Mridl:
 	"namespace" nsUri=STRING
 	(imports+=Import)*
 	((operations+=Operation)* &
-	(typeDeclarations+=TopLevelType)* &
+	(interfaces+=Interface)*)
+	((typeDeclarations+=TopLevelType)* &
 	(topLevelElements+=TopLevelElement)*);
 
 Import:
@@ -18,17 +19,20 @@ ImportMridlUri:
 
 Operation:
 	(documentation=Documentation)?
-	"operation" (returnType=Element | void?="void") name=ID
+	"operation" (returnType=NonRefElement | void?="void") name=ID
 	"(" (params+=Element
 	("," params+=Element)*)? ")"
 	("throws" (faults+=Fault ("," faults+=Fault)*))?;
 
+Interface:
+	"interface" name=ID "{" (operations+=Operation)* "}";
+
 TopLevelComplexType:
-	"complex" name=ID ("extends" extends=TopLevelComplexTypeReference)?
+	(abstract?="abstract")? "complex" name=ID ("extends" extends=TopLevelComplexTypeReference)?
 	"{" (elements+=Element)* "}";
 
 TopLevelSimpleType:
-	"simple" name=ID (restriction=PatternRestriction);
+	"simple" name=ID (body=SimpleTypeBody);
 
 TopLevelEnumType:
 	"enum" name=ID "{" (values+=EnumValue)* "}";
@@ -45,8 +49,14 @@ ElementTypeDeclaration:
 AbstractElement:
 	Element | TopLevelElement;
 
-Element:
+NonRefElement:
 	(documentation=Documentation)? typeDeclaration=ElementTypeDeclaration name=ID;
+
+RefElement:
+	(documentation=Documentation)? "ref" typeDeclaration=ElementTypeDeclaration name=ID;
+
+Element:
+	NonRefElement | RefElement;
 
 Fault:
 	(documentation=Documentation)? element=TopLevelElementReference;
@@ -120,8 +130,11 @@ UnspecifiedMultiplicity:
 Optional:
 	{Optional} "?";
 
+SimpleTypeBody:
+	"{" "base" base=NamedSimpleTypeReference (patternRestriction=PatternRestriction)? "}";
+
 PatternRestriction:
-	"{" "base" "=" simpleType=NamedSimpleTypeReference "pattern" "=" pattern=STRING "}";
+	"pattern" pattern=STRING;
 
 NamedSimpleTypeReference:
 	TopLevelSimpleTypeReference | XsdBuiltinTypeReference;
@@ -136,7 +149,16 @@ MaxLengthSpecification:
 	"(" maxLength=INT ")";
 
 DigitsSpecification:
+	TotalAndFractionDigitsSpecification | TotalDigitsSpecification | FractionDigitsSpecification;
+
+TotalAndFractionDigitsSpecification:
 	"(" totalDigits=INT "," fractionDigits=INT ")";
+
+TotalDigitsSpecification:
+	"(" totalDigits=INT ")";
+
+FractionDigitsSpecification:
+	"(" "," fractionDigits=INT ")";
 
 enum XsdBuiltinTypeDeclaration:
 	decimal
