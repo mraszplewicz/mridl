@@ -1,14 +1,11 @@
 package pl.mrasoft.mridl.generator
 
-import javax.inject.Inject
+import java.util.List
 import pl.mrasoft.mridl.mridl.Fault
 import pl.mrasoft.mridl.mridl.Mridl
 import pl.mrasoft.mridl.mridl.Operation
-import pl.mrasoft.mridl.util.MridlUtil
 
 class SoapWsdlGenerator {
-
-	@Inject extension MridlUtil
 
 	def soapWsdlFile(Mridl it, String modelName) '''
 		<?xml version="1.0" encoding="utf-8"?>
@@ -17,22 +14,36 @@ class SoapWsdlGenerator {
 		                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
 		                  xmlns:tns="«nsUri»"
 		                  targetNamespace="«nsUri»">
-		    <wsdl:import namespace="«nsUri»" location="«modelName».wsdl"/>
-		    <wsdl:binding name="«modelName»SOAPBinding" type="tns:«modelName»">
-		    	<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
-				«FOR operation : allOperations»				
-					«operation.operationBindings»
-				«ENDFOR»
-			</wsdl:binding>
-			<wsdl:service name="«modelName»Service">
-			     <wsdl:port name="«modelName»" binding="tns:«modelName»SOAPBinding">
-			         <soap:address location="http://localhost/«modelName»"/>
-			     </wsdl:port>
-			 </wsdl:service>
+			<wsdl:import namespace="«nsUri»" location="«modelName».wsdl"/>
+			«binding(modelName, operations)»
+			«FOR inter : interfaces»
+				«binding(inter.name, inter.operations)»
+			«ENDFOR»
+			«service(modelName)»
+			«FOR inter : interfaces»
+				«service(inter.name)»
+			«ENDFOR»
 		</wsdl:definitions>
 	'''
 
-	def operationBindings(Operation it) '''
+	def binding(String name, List<Operation> operations) '''		
+		<wsdl:binding name="«name»SOAPBinding" type="tns:«name»">
+			<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+			«FOR operation : operations»
+				«operation.operationBinding»
+			«ENDFOR»
+		</wsdl:binding>
+	'''
+
+	def service(String name) '''		
+		<wsdl:service name="«name»Service">
+			<wsdl:port name="«name»" binding="tns:«name»SOAPBinding">
+				<soap:address location="http://localhost/«name»"/>
+			</wsdl:port>
+		</wsdl:service>
+	'''
+
+	def operationBinding(Operation it) '''
 		<wsdl:operation name="«name»">
 			<soap:operation style="document"/>
 			<wsdl:input name="«name»">

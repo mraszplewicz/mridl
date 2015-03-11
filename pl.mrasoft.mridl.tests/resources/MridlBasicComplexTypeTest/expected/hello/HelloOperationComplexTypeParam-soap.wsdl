@@ -4,9 +4,9 @@
                   xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
                   xmlns:tns="http://mrasoft.pl/mridl/examples"
                   targetNamespace="http://mrasoft.pl/mridl/examples">
-    <wsdl:import namespace="http://mrasoft.pl/mridl/examples" location="HelloOperationComplexTypeParam.wsdl"/>
-    <wsdl:binding name="HelloOperationComplexTypeParamSOAPBinding" type="tns:HelloOperationComplexTypeParam">
-    	<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+	<wsdl:import namespace="http://mrasoft.pl/mridl/examples" location="HelloOperationComplexTypeParam.wsdl"/>
+	<wsdl:binding name="HelloOperationComplexTypeParamSOAPBinding" type="tns:HelloOperationComplexTypeParam">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
 		<wsdl:operation name="op1">
 			<soap:operation style="document"/>
 			<wsdl:input name="op1">
@@ -18,8 +18,8 @@
 		</wsdl:operation>
 	</wsdl:binding>
 	<wsdl:service name="HelloOperationComplexTypeParamService">
-	     <wsdl:port name="HelloOperationComplexTypeParam" binding="tns:HelloOperationComplexTypeParamSOAPBinding">
-	         <soap:address location="http://localhost/HelloOperationComplexTypeParam"/>
-	     </wsdl:port>
-	 </wsdl:service>
+		<wsdl:port name="HelloOperationComplexTypeParam" binding="tns:HelloOperationComplexTypeParamSOAPBinding">
+			<soap:address location="http://localhost/HelloOperationComplexTypeParam"/>
+		</wsdl:port>
+	</wsdl:service>
 </wsdl:definitions>

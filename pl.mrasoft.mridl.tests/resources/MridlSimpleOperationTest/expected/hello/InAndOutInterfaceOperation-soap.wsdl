@@ -4,15 +4,18 @@
                   xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
                   xmlns:tns="http://mrasoft.pl/mridl/examples/hello/InAndOutInterfaceOperation"
                   targetNamespace="http://mrasoft.pl/mridl/examples/hello/InAndOutInterfaceOperation">
-    <wsdl:import namespace="http://mrasoft.pl/mridl/examples/hello/InAndOutInterfaceOperation" location="InAndOutInterfaceOperation.wsdl"/>
-    <wsdl:binding name="InAndOutInterfaceOperationSOAPBinding" type="tns:InAndOutInterfaceOperation">
-    	<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+	<wsdl:import namespace="http://mrasoft.pl/mridl/examples/hello/InAndOutInterfaceOperation" location="InAndOutInterfaceOperation.wsdl"/>
+	<wsdl:binding name="InAndOutInterfaceOperationSOAPBinding" type="tns:InAndOutInterfaceOperation">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
 		<wsdl:operation name="op1">
 			<soap:operation style="document"/>
 			<wsdl:input name="op1">
 				<soap:body use="literal"/>
 			</wsdl:input>
 		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:binding name="Interface1SOAPBinding" type="tns:Interface1">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
 		<wsdl:operation name="op2">
 			<soap:operation style="document"/>
 			<wsdl:input name="op2">
@@ -21,8 +24,13 @@
 		</wsdl:operation>
 	</wsdl:binding>
 	<wsdl:service name="InAndOutInterfaceOperationService">
-	     <wsdl:port name="InAndOutInterfaceOperation" binding="tns:InAndOutInterfaceOperationSOAPBinding">
-	         <soap:address location="http://localhost/InAndOutInterfaceOperation"/>
-	     </wsdl:port>
-	 </wsdl:service>
+		<wsdl:port name="InAndOutInterfaceOperation" binding="tns:InAndOutInterfaceOperationSOAPBinding">
+			<soap:address location="http://localhost/InAndOutInterfaceOperation"/>
+		</wsdl:port>
+	</wsdl:service>
+	<wsdl:service name="Interface1Service">
+		<wsdl:port name="Interface1" binding="tns:Interface1SOAPBinding">
+			<soap:address location="http://localhost/Interface1"/>
+		</wsdl:port>
+	</wsdl:service>
 </wsdl:definitions>
