@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions name="ImportedFault"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:tns="http://mrasoft.pl/mridl/examples/d1/ImportedFault"
+                  targetNamespace="http://mrasoft.pl/mridl/examples/d1/ImportedFault">
+    <wsdl:import namespace="http://mrasoft.pl/mridl/examples/d1/ImportedFault" location="ImportedFault.wsdl"/>
+    <wsdl:binding name="ImportedFaultSOAPBinding" type="tns:ImportedFault">
+    	<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="op1">
+			<soap:operation style="document"/>
+			<wsdl:input name="op1">
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output name="op1Response">
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="TestComplexType2Exception">
+				<soap:fault name="TestComplexType2Exception" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="ImportedFaultService">
+	     <wsdl:port name="ImportedFault" binding="tns:ImportedFaultSOAPBinding">
+	         <soap:address location="http://localhost/ImportedFault"/>
+	     </wsdl:port>
+	 </wsdl:service>
+</wsdl:definitions>

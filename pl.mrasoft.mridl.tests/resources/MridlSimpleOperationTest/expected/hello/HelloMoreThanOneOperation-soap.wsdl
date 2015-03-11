@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions name="HelloMoreThanOneOperation"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:tns="http://mrasoft.pl/mridl/examples"
+                  targetNamespace="http://mrasoft.pl/mridl/examples">
+    <wsdl:import namespace="http://mrasoft.pl/mridl/examples" location="HelloMoreThanOneOperation.wsdl"/>
+    <wsdl:binding name="HelloMoreThanOneOperationSOAPBinding" type="tns:HelloMoreThanOneOperation">
+    	<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="op1">
+			<soap:operation style="document"/>
+			<wsdl:input name="op1">
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output name="op1Response">
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="op2">
+			<soap:operation style="document"/>
+			<wsdl:input name="op2">
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output name="op2Response">
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="op3">
+			<soap:operation style="document"/>
+			<wsdl:input name="op3">
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output name="op3Response">
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="HelloMoreThanOneOperationService">
+	     <wsdl:port name="HelloMoreThanOneOperation" binding="tns:HelloMoreThanOneOperationSOAPBinding">
+	         <soap:address location="http://localhost/HelloMoreThanOneOperation"/>
+	     </wsdl:port>
+	 </wsdl:service>
+</wsdl:definitions>

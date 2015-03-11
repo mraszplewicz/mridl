@@ -15,7 +15,7 @@ class MridlSimpleOperationTest extends BaseMridlTest {
 	def void oneOperationManyParameters() {
 		val fsa = generate("hello/Hello.mridl")
 
-		assertEquals(2, fsa.allFiles.size)
+		assertEquals(3, fsa.allFiles.size)
 
 		assertEquals(
 			getExpected("hello/Hello.xsd"),
@@ -26,13 +26,18 @@ class MridlSimpleOperationTest extends BaseMridlTest {
 			getExpected("hello/Hello.wsdl"),
 			getActual(fsa, "hello/Hello.wsdl")
 		)
+		
+		assertEquals(
+			getExpected("hello/Hello-soap.wsdl"),
+			getActual(fsa, "hello/Hello-soap.wsdl")
+		)
 	}
 
 	@Test
 	def void oneOperationParameterLess() {
 		val fsa = generate("hello/HelloParameterLess.mridl")
 
-		assertEquals(2, fsa.allFiles.size)
+		assertEquals(3, fsa.allFiles.size)
 
 		assertEquals(
 			getExpected("hello/HelloParameterLess.xsd"),
@@ -43,13 +48,18 @@ class MridlSimpleOperationTest extends BaseMridlTest {
 			getExpected("hello/HelloParameterLess.wsdl"),
 			getActual(fsa, "hello/HelloParameterLess.wsdl")
 		)
+		
+		assertEquals(
+			getExpected("hello/HelloParameterLess-soap.wsdl"),
+			getActual(fsa, "hello/HelloParameterLess-soap.wsdl")
+		)
 	}
 	
 	@Test
 	def void moreThanOneOperation() {
 		val fsa = generate("hello/HelloMoreThanOneOperation.mridl")
 
-		assertEquals(2, fsa.allFiles.size)
+		assertEquals(3, fsa.allFiles.size)
 
 		assertEquals(
 			getExpected("hello/HelloMoreThanOneOperation.xsd"),
@@ -60,13 +70,18 @@ class MridlSimpleOperationTest extends BaseMridlTest {
 			getExpected("hello/HelloMoreThanOneOperation.wsdl"),
 			getActual(fsa, "hello/HelloMoreThanOneOperation.wsdl")
 		)
+		
+		assertEquals(
+			getExpected("hello/HelloMoreThanOneOperation-soap.wsdl"),
+			getActual(fsa, "hello/HelloMoreThanOneOperation-soap.wsdl")
+		)
 	}
 	
 	@Test
 	def void voidOperation() {
 		val fsa = generate("hello/VoidOperation.mridl")
 
-		assertEquals(2, fsa.allFiles.size)
+		assertEquals(3, fsa.allFiles.size)
 
 		assertEquals(
 			getExpected("hello/VoidOperation.xsd"),
@@ -77,13 +92,18 @@ class MridlSimpleOperationTest extends BaseMridlTest {
 			getExpected("hello/VoidOperation.wsdl"),
 			getActual(fsa, "hello/VoidOperation.wsdl")
 		)
+		
+		assertEquals(
+			getExpected("hello/VoidOperation-soap.wsdl"),
+			getActual(fsa, "hello/VoidOperation-soap.wsdl")
+		)
 	}
 	
 	@Test
 	def void inAndOutInterfaceOperation() {
 		val fsa = generate("hello/InAndOutInterfaceOperation.mridl")
 
-		assertEquals(2, fsa.allFiles.size)
+		assertEquals(3, fsa.allFiles.size)
 
 		assertEquals(
 			getExpected("hello/InAndOutInterfaceOperation.xsd"),
@@ -93,6 +113,11 @@ class MridlSimpleOperationTest extends BaseMridlTest {
 		assertEquals(
 			getExpected("hello/InAndOutInterfaceOperation.wsdl"),
 			getActual(fsa, "hello/InAndOutInterfaceOperation.wsdl")
+		)
+		
+		assertEquals(
+			getExpected("hello/InAndOutInterfaceOperation-soap.wsdl"),
+			getActual(fsa, "hello/InAndOutInterfaceOperation-soap.wsdl")
 		)
 	}
 
