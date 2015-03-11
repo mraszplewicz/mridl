@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: pl.mrasoft.mridl
 Bundle-Vendor: My Company
-Bundle-Version: 1.1.1.RELEASE
+Bundle-Version: 1.2.0.qualifier
 Bundle-SymbolicName: pl.mrasoft.mridl; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: pl.mrasoft.mridl.fragments;visibility:=reexport,
