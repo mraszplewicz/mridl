@@ -41,14 +41,14 @@ class WsdlGenerator {
 		        	«IF imp.importUsedInWsdl(it)»«imp.importSchemaInWsdl»«ENDIF»
 		        «ENDFOR»
 		    </wsdl:types>
-			«FOR operation : allOperations»				
+			«FOR operation : allOperations»
 				«operation.operationMessages»
 			«ENDFOR»
-			«FOR faultElementReference : getUniqueFaultElementReferences(allOperations)»				
+			«FOR faultElementReference : getUniqueFaultElementReferences(allOperations)»
 				«faultElementReference.faultMessage»
-			«ENDFOR»		
+			«ENDFOR»
 			«portType(modelName, operations)»
-			«FOR inter : interfaces»				
+			«FOR inter : interfaces»
 				«portType(inter.name, inter.operations)»
 			«ENDFOR»
 		</wsdl:definitions>
