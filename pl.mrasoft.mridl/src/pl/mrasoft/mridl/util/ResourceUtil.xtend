@@ -44,7 +44,8 @@ class ResourceUtil {
 	}
 	
 	def modelName(Resource resource) {
-		resource.URI.trimFileExtension.lastSegment
+		//naive implementation doesn't handle other characters
+		resource.URI.trimFileExtension.lastSegment.replaceAll("%20", " ")
 	}
 	
 	def model(Resource it) {
