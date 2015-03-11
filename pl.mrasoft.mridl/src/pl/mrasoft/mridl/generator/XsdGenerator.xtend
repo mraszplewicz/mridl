@@ -42,6 +42,8 @@ class XsdGenerator {
 				   «FOR imp : imports»
 				   	«IF imp.importUsedInXsd(it)»«imp.importNS»«ENDIF»
 				   «ENDFOR»
+				   «IF hasRefElement»jaxb:version="2.1"
+				   xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"«ENDIF»
 				   targetNamespace="«nsUri»">
 			«xsdFileDocumentation»
 			«FOR imp : imports»
@@ -382,6 +384,11 @@ class XsdGenerator {
 
 	def elementIsNotRef(ImportedTopLevelTypeReference it) {
 		(eContainer == null || eContainer.eContainer == null || !(eContainer.eContainer instanceof RefElement))
+	}
+
+	def hasRefElement(Mridl it) {
+		val refElements = eAllContents.filter(RefElement)
+		refElements.size > 0
 	}
 
 }
