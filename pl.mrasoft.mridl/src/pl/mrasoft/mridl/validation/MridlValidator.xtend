@@ -18,8 +18,15 @@ import pl.mrasoft.mridl.mridl.SpecifiedMultiplicity
 import pl.mrasoft.mridl.mridl.TopLevelTypeReference
 import pl.mrasoft.mridl.mridl.XsdBuiltinTypeReference
 import pl.mrasoft.mridl.mridl.XsdBuiltinTypeDeclaration
+import pl.mrasoft.mridl.mridl.Interface
+import pl.mrasoft.mridl.util.ResourceUtil
+import javax.inject.Inject
+import pl.mrasoft.mridl.util.MridlUtil
 
 class MridlValidator extends AbstractMridlValidator {
+
+	@Inject extension ResourceUtil
+	@Inject extension MridlUtil
 
 	@Check
 	def void checkElementNameIsUnique(Element element) {
@@ -36,7 +43,7 @@ class MridlValidator extends AbstractMridlValidator {
 
 		for (containerEnumValue : ^enum.values) {
 			if (containerEnumValue != enumValue && enumValueName.equals(containerEnumValue.value)) {
-				error("Duplicate enum value '" + enumValueName + "'", MridlPackage.Literals::ENUM_VALUE__VALUE);
+				error("Duplicate enum value '" + enumValueName + "'", MridlPackage.Literals::ENUM_VALUE__VALUE)
 				return
 			}
 		}
@@ -51,7 +58,7 @@ class MridlValidator extends AbstractMridlValidator {
 
 		for (containerTopLevelType : model.typeDeclarations) {
 			if (containerTopLevelType != topLevelType && topLevelTypeName.equals(containerTopLevelType.name)) {
-				error("Duplicate type '" + topLevelTypeName + "'", MridlPackage.Literals::TOP_LEVEL_TYPE__NAME);
+				error("Duplicate type '" + topLevelTypeName + "'", MridlPackage.Literals::TOP_LEVEL_TYPE__NAME)
 				return
 			}
 		}
@@ -66,7 +73,7 @@ class MridlValidator extends AbstractMridlValidator {
 
 		for (containerTopLevelElement : model.topLevelElements) {
 			if (containerTopLevelElement != topLevelElement && topLevelElementName.equals(containerTopLevelElement.name)) {
-				error("Duplicate element '" + topLevelElementName + "'", MridlPackage.Literals::ABSTRACT_ELEMENT__NAME);
+				error("Duplicate element '" + topLevelElementName + "'", MridlPackage.Literals::ABSTRACT_ELEMENT__NAME)
 				return
 			}
 		}
@@ -81,7 +88,7 @@ class MridlValidator extends AbstractMridlValidator {
 
 		for (containerFault : operation.faults) {
 			if (containerFault != fault && faultName.equals(containerFault.element.ref.name)) {
-				error("Duplicate fault '" + faultName + "'", MridlPackage.Literals::FAULT__ELEMENT);
+				error("Duplicate fault '" + faultName + "'", MridlPackage.Literals::FAULT__ELEMENT)
 				return
 			}
 		}
@@ -91,7 +98,7 @@ class MridlValidator extends AbstractMridlValidator {
 	@Check
 	def void checkRefElementIsComplexType(RefElement element) {
 		if (!element.refElementIsComplexType) {
-			error("Reference to non complex type", MridlPackage.Literals::ABSTRACT_ELEMENT__TYPE_DECLARATION);
+			error("Reference to non complex type", MridlPackage.Literals::ABSTRACT_ELEMENT__TYPE_DECLARATION)
 		}
 	}
 
@@ -101,7 +108,7 @@ class MridlValidator extends AbstractMridlValidator {
 		val refElementType = element.getRefElementType
 
 		if (refElementType != null && !refElementType.topLevelComplexTypeHasID) {
-			error("Reference to type without ID", MridlPackage.Literals::ABSTRACT_ELEMENT__TYPE_DECLARATION);
+			error("Reference to type without ID", MridlPackage.Literals::ABSTRACT_ELEMENT__TYPE_DECLARATION)
 		}
 
 	}
@@ -112,7 +119,7 @@ class MridlValidator extends AbstractMridlValidator {
 			val multiplicity = element.getSpecifiedMultiplicity
 			if (!multiplicity.unbounded && multiplicity.upper > 1) {
 				error("Only reference to unbounded elements collection is allowed",
-					MridlPackage.Literals::ABSTRACT_ELEMENT__TYPE_DECLARATION);
+					MridlPackage.Literals::ABSTRACT_ELEMENT__TYPE_DECLARATION)
 			}
 		}
 	}
@@ -123,7 +130,44 @@ class MridlValidator extends AbstractMridlValidator {
 			val multiplicity = element.getSpecifiedMultiplicity
 			if (multiplicity.lower > 1) {
 				error("Only reference to minimum 0 or 1 elements collection is allowed",
-					MridlPackage.Literals::ABSTRACT_ELEMENT__TYPE_DECLARATION);
+					MridlPackage.Literals::ABSTRACT_ELEMENT__TYPE_DECLARATION)
+			}
+		}
+	}
+
+	@Check
+	def void checkInterfaceNameDifferentThanModelName(Interface inter) {
+		val modelName = inter.eResource.modelName
+		val interfaceName = inter.name
+
+		if (modelName.equals(interfaceName)) {
+			error("Named interface '" + interfaceName + "' should have different name than file",
+				MridlPackage.Literals::INTERFACE__NAME)
+		}
+	}
+
+	@Check
+	def void checkInterfaceNameIsUnique(Interface inter) {
+		val interfaceName = inter.name
+		val model = inter.eContainer as Mridl
+
+		for (containerInterface : model.interfaces) {
+			if (containerInterface != inter && interfaceName.equals(containerInterface.name)) {
+				error("Duplicate interface '" + interfaceName + "'", MridlPackage.Literals::INTERFACE__NAME)
+				return
+			}
+		}
+	}
+
+	@Check
+	def void checkOperationNameIsUnique(Operation operation) {
+		val operationName = operation.name
+		val List<Operation> operations = operation.eResource.model.allOperations
+
+		for (containerOperation : operations) {
+			if (containerOperation != operation && operationName.equals(containerOperation.name)) {
+				error("Duplicate operation '" + operationName + "'", MridlPackage.Literals::OPERATION__NAME)
+				return
 			}
 		}
 	}
@@ -164,7 +208,7 @@ class MridlValidator extends AbstractMridlValidator {
 		for (containerElement : containerElements) {
 			if (containerElement != element && elementName.equals(containerElement.name)) {
 				error("Duplicate element '" + elementName + "'",
-					MridlPackage.Literals::ABSTRACT_ELEMENT__TYPE_DECLARATION);
+					MridlPackage.Literals::ABSTRACT_ELEMENT__TYPE_DECLARATION)
 				return
 			}
 		}

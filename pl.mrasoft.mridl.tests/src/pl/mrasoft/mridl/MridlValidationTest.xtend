@@ -274,4 +274,56 @@ class MridlValidationTest extends BaseMridlTest {
 		)
 	}
 
+	@Test
+	def void checkOperationNameIsUnique() {
+		val issues = testFile("d1/DuplicateOperationName.mridl")
+
+		assertConstraints(
+			issues.sizeIs(2)
+		)
+
+		assertConstraints(
+			issues.inLine(3).allOfThemContain("Duplicate operation 'op1'")
+		)
+		
+		assertConstraints(
+			issues.inLine(5).allOfThemContain("Duplicate operation 'op1'")
+		)
+	}
+
+	@Test
+	def void checkInterfaceNameIsUnique() {
+		val issues = testFile("d1/DuplicateInterfaceName.mridl")
+
+		assertConstraints(
+			issues.sizeIs(2)
+		)
+
+		assertConstraints(
+			issues.inLine(3).allOfThemContain("Duplicate interface 'Interface1'")
+		)
+
+		assertConstraints(
+			issues.inLine(7).allOfThemContain("Duplicate interface 'Interface1'")
+		)
+	}
+
+	@Test
+	def void checkInterfaceNameDifferentThanModelName() {
+		val issues = testFile("d1/InterfaceNameSameAsModelName.mridl")
+
+		assertConstraints(
+			issues.sizeIs(1)
+		)
+
+		assertConstraints(
+			issues.inLine(3).sizeIs(1)
+		)
+
+		assertConstraints(
+			issues.inLine(3).allOfThemContain(
+				"Named interface 'InterfaceNameSameAsModelName' should have different name than file")
+		)
+	}
+
 }

@@ -1,0 +1,5 @@
+namespace "http://mrasoft.pl/mridl/examples/hello/DuplicateInterfaceName"
+
+operation void op1()
+
+operation void op1()

@@ -6,7 +6,8 @@ Mridl:
 	(documentation=Documentation)?
 	"namespace" nsUri=STRING
 	(imports+=Import)*
-	(operations+=Operation)*
+	((operations+=Operation)* &
+	(interfaces+=Interface)*)
 	((typeDeclarations+=TopLevelType)* &
 	(topLevelElements+=TopLevelElement)*);
 
@@ -22,6 +23,9 @@ Operation:
 	"(" (params+=Element
 	("," params+=Element)*)? ")"
 	("throws" (faults+=Fault ("," faults+=Fault)*))?;
+
+Interface:
+	"interface" name=ID "{" (operations+=Operation)* "}";
 
 TopLevelComplexType:
 	(abstract?="abstract")? "complex" name=ID ("extends" extends=TopLevelComplexTypeReference)?

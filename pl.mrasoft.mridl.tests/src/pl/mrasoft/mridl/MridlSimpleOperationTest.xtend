@@ -78,5 +78,22 @@ class MridlSimpleOperationTest extends BaseMridlTest {
 			getActual(fsa, "hello/VoidOperation.wsdl")
 		)
 	}
+	
+	@Test
+	def void inAndOutInterfaceOperation() {
+		val fsa = generate("hello/InAndOutInterfaceOperation.mridl")
+
+		assertEquals(2, fsa.allFiles.size)
+
+		assertEquals(
+			getExpected("hello/InAndOutInterfaceOperation.xsd"),
+			getActual(fsa, "hello/InAndOutInterfaceOperation.xsd")
+		)
+
+		assertEquals(
+			getExpected("hello/InAndOutInterfaceOperation.wsdl"),
+			getActual(fsa, "hello/InAndOutInterfaceOperation.wsdl")
+		)
+	}
 
 }

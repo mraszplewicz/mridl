@@ -26,11 +26,13 @@ import pl.mrasoft.mridl.mridl.NonRefElement
 import pl.mrasoft.mridl.mridl.TopLevelElement
 import pl.mrasoft.mridl.mridl.RefElement
 import pl.mrasoft.mridl.util.URIParserUtil
+import pl.mrasoft.mridl.util.MridlUtil
 
 class XsdGenerator {
 
 	@Inject extension ResourceUtil
 	@Inject extension GeneratorCommon
+	@Inject extension MridlUtil
 
 	def xsdFile(Mridl it, String modelName) '''
 		<?xml version="1.0" encoding="utf-8"?>
@@ -45,13 +47,13 @@ class XsdGenerator {
 			«FOR imp : imports»
 				«IF imp.importUsedInXsd(it)»«imp.importSchema»«ENDIF»
 			«ENDFOR»
-			«FOR operation : operations»
+			«FOR operation : allOperations»
 				«operation.operationRootElements»
 			«ENDFOR»
 			«FOR topLevelElement : topLevelElements»				
 				«topLevelElement.element»
 			«ENDFOR»
-			«FOR operation : operations»
+			«FOR operation : allOperations»
 				«operation.operationComplexTypes»
 			«ENDFOR»		
 			«FOR typeDeclaration : typeDeclarations»				

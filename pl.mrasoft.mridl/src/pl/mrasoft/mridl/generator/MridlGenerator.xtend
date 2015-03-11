@@ -6,17 +6,19 @@ import org.eclipse.xtext.generator.IFileSystemAccess
 import org.eclipse.xtext.generator.IFileSystemAccessExtension2
 import org.eclipse.xtext.generator.IGenerator
 import pl.mrasoft.mridl.mridl.Mridl
+import pl.mrasoft.mridl.util.ResourceUtil
 
 class MridlGenerator implements IGenerator {
 
 	@Inject WsdlGenerator wsdlGenerator
 	@Inject XsdGenerator xsdGenerator
 	@Inject GeneratorCommon common
+	@Inject extension ResourceUtil
 
 	final static val CLASSPATH_PREFIX = "classpath:/"
 
 	override void doGenerate(Resource resource, IFileSystemAccess fsa) {
-		val modelName = resource.URI.trimFileExtension.lastSegment;
+		val modelName = resource.modelName
 		val model = resource.contents.head as Mridl
 
 		val pathWithoutExtension = resource.containingFolder(fsa) + "/" + modelName

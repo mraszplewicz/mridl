@@ -1,0 +1,5 @@
+namespace "http://mrasoft.pl/mridl/examples/hello/InterfaceNameSameAsModelName"
+
+interface InterfaceNameSameAsModelName {
+	operation void op2()
+}

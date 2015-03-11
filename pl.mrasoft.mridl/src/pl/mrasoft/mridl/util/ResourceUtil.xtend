@@ -10,8 +10,7 @@ import pl.mrasoft.mridl.mridl.Mridl
 class ResourceUtil {
 
 	def dispatch resolveNamespace(DirectTopLevelTypeReferenceBase typeReference) {
-		val model = typeReference.eResource.contents.head as Mridl
-		model.nsUri
+		typeReference.eResource.model.nsUri
 	}
 
 	def dispatch resolveNamespace(ImportedTopLevelTypeReferenceBase typeReference) {
@@ -29,7 +28,7 @@ class ResourceUtil {
 
 	def resolveImport(Resource resource, String uri) {
 		val importResource = EcoreUtil2::getResource(resource, removeImportQuotation(uri))
-		importResource.contents.head as Mridl
+		importResource.model
 	}
 
 	def trimMridlExtension(String uri) {
@@ -42,5 +41,13 @@ class ResourceUtil {
 		} else {
 			importURI
 		}
+	}
+	
+	def modelName(Resource resource) {
+		resource.URI.trimFileExtension.lastSegment
+	}
+	
+	def model(Resource it) {
+		contents.head as Mridl
 	}
 }
