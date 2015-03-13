@@ -31,10 +31,6 @@ class ResourceUtil {
 		importResource.model
 	}
 
-	def trimMridlExtension(String uri) {
-		uri.substring(0, uri.length - 6)
-	}
-
 	def removeImportQuotation(String importURI) {
 		if (importURI.startsWith("\"") && importURI.endsWith("\"")) {
 			importURI.substring(1, importURI.length() - 1)
@@ -42,12 +38,13 @@ class ResourceUtil {
 			importURI
 		}
 	}
-	
+
 	def modelName(Resource resource) {
+
 		//naive implementation doesn't handle other characters
 		resource.URI.trimFileExtension.lastSegment.replaceAll("%20", " ")
 	}
-	
+
 	def model(Resource it) {
 		contents.head as Mridl
 	}

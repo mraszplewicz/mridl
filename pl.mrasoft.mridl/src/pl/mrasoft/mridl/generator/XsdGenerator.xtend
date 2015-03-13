@@ -65,7 +65,7 @@ class XsdGenerator {
 	'''
 
 	def importSchema(Import it) '''
-		<xs:import namespace="«resolveImport.nsUri»" schemaLocation="«trimMridlExtension(removeImportQuotation(importURI))».xsd"/>
+		<xs:import namespace="«resolveImport.nsUri»" schemaLocation="«importedSchemaFilename(importURI)»"/>
 	'''
 
 	def xsdFileDocumentation(Mridl it) '''
