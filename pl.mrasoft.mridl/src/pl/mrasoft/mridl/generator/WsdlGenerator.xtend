@@ -165,7 +165,7 @@ class WsdlGenerator {
 
 	def importSchemaInWsdl(Import it) '''
 		<schema xmlns="http://www.w3.org/2001/XMLSchema">
-			<import namespace="«resolveImport.nsUri»" schemaLocation="«trimMridlExtension(importURI)».xsd"/>
+			<import namespace="«resolveImport.nsUri»" schemaLocation="«importedSchemaFilename(importURI)»"/>
 		</schema>
 	'''
 }
