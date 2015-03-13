@@ -22,7 +22,7 @@ class GeneratorCommon {
 
 	def mridlHasWsdlFile(Mridl it) {
 		!operations.empty
-	}	
+	}
 
 	def importNS(Import it) '''
 		xmlns:«nsPrefix»="«resolveImport.nsUri»"
@@ -57,4 +57,11 @@ class GeneratorCommon {
 		XSD
 	}
 
+	def importedSchemaFilename(String importURI) {
+		trimMridlExtension(removeImportQuotation(importURI)) + ".xsd"
+	}
+
+	def trimMridlExtension(String uri) {
+		uri.substring(0, uri.length - 6)
+	}
 }
