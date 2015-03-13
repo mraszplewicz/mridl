@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: pl.mrasoft.mridl.fragments
 Bundle-SymbolicName: pl.mrasoft.mridl.fragments; singleton:=true
-Bundle-Version: 1.1.1.RELEASE
+Bundle-Version: 1.1.2.qualifier
 Bundle-Vendor: My Company
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
